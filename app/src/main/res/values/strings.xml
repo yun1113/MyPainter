@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Painter</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_personal_setting">PersonalSetting</string>
+    <string name="title_activity_gallery">Gallery</string>
+    <string name="title_activity_multiple_connection">MultipleConnection</string>
+    <string name="title_activity_log_in_v2">LogIn_v2</string>
+    <string name="title_activity_sign_in">Sign_in</string>
+    <string name="title_activity_sign_up">Sign_up</string>
+    <string name="title_activity_friends">Friends</string>
+    <string name="title_activity_friend_list">FriendList</string>
+    <string name="title_activity_friendlist">Friendlist</string>
+    <string name="title_activity_listactivity">Listactivity</string>
+    <string name="title_activity_gallery_detail">GalleryDetail</string>
+
+</resources>

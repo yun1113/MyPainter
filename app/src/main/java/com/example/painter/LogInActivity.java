@@ -19,7 +19,7 @@ public class LogInActivity extends ActionBarActivity {
             @Override
             public void onClick(View arg0) {
                 // canvas
-                setContentView(R.layout.friendlist);
+                setContentView(R.layout.activity_canvas);
             }
         });
 

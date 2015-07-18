@@ -1,5 +1,6 @@
 package com.example.painter;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -19,8 +20,10 @@ public class Sign_up extends ActionBarActivity {
         signUpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                // canvas
-                setContentView(R.layout.activity_sign_up);
+                // go to canvas
+                Intent intent = new Intent();
+                intent.setClass(Sign_up.this, FriendTest.class);
+                startActivity(intent);
             }
         });
 
@@ -28,7 +31,9 @@ public class Sign_up extends ActionBarActivity {
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                setContentView(R.layout.activity_log_in);
+                Intent intent = new Intent();
+                intent.setClass(Sign_up.this, LogInActivity.class);
+                startActivity(intent);
             }
         });
     }

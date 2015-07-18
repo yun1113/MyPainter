@@ -15,5 +15,8 @@
     <string name="title_activity_friendlist">Friendlist</string>
     <string name="title_activity_listactivity">Listactivity</string>
     <string name="title_activity_gallery_detail">GalleryDetail</string>
+    <string name="title_activity_friend_test">FriendTest</string>
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
 
 </resources>

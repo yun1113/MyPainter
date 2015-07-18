@@ -26,7 +26,7 @@
             android:layout_gravity="center_vertical|center_horizontal"
             android:layout_weight="4"
             android:paddingRight="5dip"
-            android:src="@android:drawable/ic_dialog_email" />
+            android:src="@drawable/ic_account_box_grey600_24dp" />
 
         <com.wrapp.floatlabelededittext.FloatLabeledEditText
             android:layout_width="match_parent"
@@ -93,7 +93,7 @@
             android:layout_gravity="center_vertical|center_horizontal"
             android:layout_weight="4"
             android:paddingRight="5dip"
-            android:src="@android:drawable/ic_dialog_email" />
+            android:src="@drawable/ic_keyboard_control_grey600_24dp" />
 
         <com.wrapp.floatlabelededittext.FloatLabeledEditText
             android:layout_width="match_parent"

@@ -1,5 +1,6 @@
 package com.example.painter;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -11,6 +12,7 @@ public class LogInActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
 
@@ -19,7 +21,9 @@ public class LogInActivity extends ActionBarActivity {
             @Override
             public void onClick(View arg0) {
                 // canvas
-                setContentView(R.layout.friendlist);
+                Intent intent = new Intent();
+                intent.setClass(LogInActivity.this, FriendTest.class);
+                startActivity(intent);
             }
         });
 
@@ -27,7 +31,9 @@ public class LogInActivity extends ActionBarActivity {
         signUpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                setContentView(R.layout.activity_sign_up);
+                Intent intent = new Intent();
+                intent.setClass(LogInActivity.this, Sign_up.class);
+                startActivity(intent);
             }
         });
 
@@ -51,6 +57,4 @@ public class LogInActivity extends ActionBarActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
-
 }

@@ -7,8 +7,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import sidemenu.ContentFragment;
 import slidingtab.SlidingTabLayout;
 import slidingtab.ViewPagerAdapter;
+import yalantis.com.sidemenu.model.SlideMenuItem;
+import yalantis.com.sidemenu.util.ViewAnimator;
 
 
 public class Friends extends ActionBarActivity {
@@ -21,6 +27,9 @@ public class Friends extends ActionBarActivity {
     SlidingTabLayout tabs;
     CharSequence Titles[] = {"Friends", "Multiconnection", "Invitation", "Add Friends"};
     int Numboftabs = 4;
+    private List<SlideMenuItem> list = new ArrayList<>();
+    private ContentFragment contentFragment;
+    private ViewAnimator viewAnimator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

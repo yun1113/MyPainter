@@ -18,7 +18,7 @@ import android.widget.ImageButton;
 import android.widget.PopupWindow;
 
 
-public class Canvas extends ActionBarActivity  {
+public class Canvas extends ActionBarActivity {
     ImageButton btn;
     PopupWindow popupwindow;
 
@@ -26,7 +26,7 @@ public class Canvas extends ActionBarActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_canvas);
-        btn = (ImageButton)findViewById(R.id.settingbtn);
+        btn = (ImageButton) findViewById(R.id.settingbtn);
         btn.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -44,7 +44,7 @@ public class Canvas extends ActionBarActivity  {
 
                 popupwindow.setTouchable(true);
                 popupwindow.setOutsideTouchable(true);
-                popupwindow.setBackgroundDrawable(new BitmapDrawable(getResources(), (Bitmap)null));
+                popupwindow.setBackgroundDrawable(new BitmapDrawable(getResources(), (Bitmap) null));
 
             }
 
@@ -52,8 +52,6 @@ public class Canvas extends ActionBarActivity  {
         });
 
     }
-
-
 
 
     @Override

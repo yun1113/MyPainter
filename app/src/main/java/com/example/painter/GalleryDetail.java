@@ -19,12 +19,22 @@ public class GalleryDetail extends BaseActivity {
 
     public static final String EXTRA_IMAGE = "DetailActivity:image";
 
+    public static void launch(FragmentActivity activity, View transitionView, String url) {
+        ActivityOptionsCompat options =
+                ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        activity, transitionView, EXTRA_IMAGE);
+        Intent intent = new Intent(activity, GalleryDetail.class);
+        intent.putExtra(EXTRA_IMAGE, url);
+        ActivityCompat.startActivity(activity, intent, options.toBundle());
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        toolbar.setNavigationIcon(R.drawable.ic_launcher);
+
+        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //setSupportActionBar(toolbar);
+        //toolbar.setNavigationIcon(R.drawable.ic_launcher);
 
         ImageView image = (ImageView) findViewById(R.id.image);
         ViewCompat.setTransitionName(image, EXTRA_IMAGE);
@@ -35,7 +45,6 @@ public class GalleryDetail extends BaseActivity {
     protected int getLayoutResource() {
         return R.layout.activity_gallery_detail;
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -54,14 +63,5 @@ public class GalleryDetail extends BaseActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    public static void launch(FragmentActivity activity, View transitionView, String url) {
-        ActivityOptionsCompat options =
-                ActivityOptionsCompat.makeSceneTransitionAnimation(
-                        activity, transitionView, EXTRA_IMAGE);
-        Intent intent = new Intent(activity, GalleryDetail.class);
-        intent.putExtra(EXTRA_IMAGE, url);
-        ActivityCompat.startActivity(activity, intent, options.toBundle());
     }
 }

@@ -25,15 +25,17 @@ import textdrawable.TextDrawable;
 /**
  * Created by hp1 on 21-01-2015.
  */
-public class Tab extends Fragment implements AdapterView.OnItemClickListener {
+public class FriendListTab extends Fragment implements AdapterView.OnItemClickListener {
 
     public static final String TYPE = "TYPE";
     private static final int HIGHLIGHT_COLOR = 0x999be6ff;
     private DataSource mDataSource;
     private ListView mListView;
+
     // declare the color generator and drawable builder
     private ColorGenerator mColorGenerator = ColorGenerator.MATERIAL;
     private TextDrawable.IBuilder mDrawableBuilder;
+
     // list of data items
     private List<ListData> mDataList = Arrays.asList(
             new ListData("Iron Man"),

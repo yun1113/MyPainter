@@ -20,7 +20,6 @@ import com.example.painter.R;
 import java.util.Arrays;
 import java.util.List;
 
-import friendlist.DataSource;
 import textdrawable.TextDrawable;
 import yalantis.com.sidemenu.interfaces.ScreenShotable;
 

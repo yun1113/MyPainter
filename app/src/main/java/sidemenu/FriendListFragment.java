@@ -24,9 +24,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import db_connect.DBConnector;
 import friendlist.DataSource;
+import db_connect.DBConnector;
 import textdrawable.TextDrawable;
 
 /**

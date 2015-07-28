@@ -21,7 +21,6 @@ import sidemenu.ContentFragment;
 import io.codetail.animation.SupportAnimator;
 import io.codetail.animation.ViewAnimationUtils;
 import sidemenu.FriendPagerAdapter;
-import slidingtab.ViewPagerAdapter;
 import yalantis.com.sidemenu.interfaces.Resourceble;
 import yalantis.com.sidemenu.interfaces.ScreenShotable;
 import yalantis.com.sidemenu.model.SlideMenuItem;

@@ -1,27 +1,14 @@
 package com.example.painter;
 
 import android.os.Bundle;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import com.squareup.picasso.Picasso;
 
 import gallerymaterial.BaseActivity;
 import slidingtab.GalleryViewPageAdapter;
 import slidingtab.SlidingTabLayout;
-import slidingtab.ViewPagerAdapter;
 
 public class Gallery extends BaseActivity {
 

@@ -28,7 +28,8 @@
 
         <activity
             android:name=".LogInActivity"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -36,16 +37,25 @@
         </activity>
         <activity
             android:name=".PersonalSetting"
-            android:label="@string/title_activity_personal_setting" />
+            android:label="@string/title_activity_personal_setting"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Gallery"
-            android:label="@string/title_activity_gallery" />
+            android:label="@string/title_activity_gallery"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Sign_up"
-            android:label="@string/title_activity_sign_up" />
+            android:label="@string/title_activity_sign_up"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Friends"
-            android:label="@string/title_activity_friends" />
+            android:label="@string/title_activity_friends"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Canvas"
+            android:label="@string/title_activity_canvas"
+            android:screenOrientation="landscape"/>
+
 
         <!--須設定ParentActivity才能返回parent-->
         <activity
@@ -54,6 +64,7 @@
             android:parentActivityName=".Gallery" />
         <activity
             android:name=".FriendTest"
-            android:label="@string/title_activity_friend_test"></activity>
+            android:label="@string/title_activity_friend_test"
+            android:parentActivityName=".Friends"></activity>
     </application>
 </manifest>

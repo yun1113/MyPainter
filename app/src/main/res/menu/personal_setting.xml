@@ -9,4 +9,18 @@
         android:title="@string/action_settings"
         app:showAsAction="never"/>
 
+    <item
+        android:id="@+id/save"
+        android:title="@string/save"
+        app:showAsAction="always"
+        android:orderInCategory="3"
+        app:titleTextAppearance="@style/Toolbar.TextSize"
+        />
+    <item
+        android:id="@+id/changPic"
+        android:title="@string/change_pic"
+        app:showAsAction="always"
+        android:orderInCategory="2"
+        />
+
 </menu>

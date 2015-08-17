@@ -16,7 +16,21 @@
     <string name="title_activity_listactivity">Listactivity</string>
     <string name="title_activity_gallery_detail">GalleryDetail</string>
     <string name="title_activity_friend_test">FriendTest</string>
+    <string name="title_activity_canvas">Canvas</string>
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
+    <string name="sign_up_success">註冊成功</string>
+    <string name="sign_up_existed">此信箱已註冊過，請前往登入頁面</string>
+    <string name="sign_up_fail">註冊失敗</string>
+    <string name="wrong_password">密碼錯誤</string>
+    <string name="account_doesnt_exist">帳號不存在</string>
+    <string name="ok">確定</string>
+    <string name="cancel">取消</string>
+    <string name="sign_up">註冊</string>
+    <string name="log_in">登入</string>
+    <string name="save">儲存</string>
+    <string name="change_pic">修改圖片</string>
+    <string name="personal_setting">個人設定</string>
+
 
 </resources>

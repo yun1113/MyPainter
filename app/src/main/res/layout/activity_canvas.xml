@@ -1,6 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/LinearLayout1"
+    android:id="@+id/RelativeLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
@@ -25,10 +25,10 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="false"
         android:layout_alignParentRight="true"
-        android:layout_marginBottom="5dp"
         android:background="#FFFFFF"
         android:clickable="true"
-        android:src="@drawable/ic_settings_grey600_36dp" />
+        android:src="@drawable/setting"
+        android:layout_marginBottom="8dp" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -45,83 +45,79 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
             android:background="#FFFFFF"
-            android:src="@android:drawable/ic_menu_revert" />
+            android:src="@drawable/undo"
+            android:layout_marginLeft="10dp" />
 
         <ImageButton
             android:id="@+id/ImageButton03"
             android:layout_width="wrap_content"
-            android:layout_height="27dp"
-            android:layout_marginLeft="10dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
             android:background="#FFFFFF"
-            android:src="@android:drawable/ic_menu_edit" />
+            android:src="@drawable/pencil" />
 
         <ImageButton
             android:id="@+id/ImageButton02"
             android:layout_width="wrap_content"
-            android:layout_height="27dp"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:background="#FFFFFF"
-            android:src="@android:drawable/ic_menu_edit" />
+            android:src="@drawable/brush" />
 
         <ImageButton
             android:id="@+id/ImageButton01"
             android:layout_width="wrap_content"
-            android:layout_height="27dp"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:background="#FFFFFF"
-            android:src="@android:drawable/ic_menu_edit" />
-
-        <ImageButton
-            android:id="@+id/imageButton3"
-            android:layout_width="wrap_content"
-            android:layout_height="27dp"
-            android:layout_marginLeft="10dp"
-            android:adjustViewBounds="false"
-            android:background="#FFFFFF"
-            android:src="@android:drawable/ic_menu_edit" />
+            android:src="@drawable/marker" />
 
         <ImageButton
             android:id="@+id/imageButton10"
-            android:layout_width="27dp"
-            android:layout_height="27dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:background="#ffdddddd"
-            android:src="#ffdddddd" />
+            android:background="@drawable/eraser" />
 
         <ImageButton
             android:id="@+id/imageButton9"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:background="@drawable/blackbutton" />
+            android:layout_marginLeft="20dp"
+            android:background="@drawable/blackbutton"
+            android:layout_marginTop="2dp" />
 
         <ImageButton
             android:id="@+id/imageButton"
             android:layout_width="27dp"
             android:layout_height="27dp"
             android:layout_marginLeft="10dp"
-            android:background="@drawable/redbutton" />
+            android:background="@drawable/redbutton"
+            android:layout_marginTop="2dp" />
 
         <ImageButton
             android:id="@+id/imageButton4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:background="@drawable/orangebutton" />
+            android:background="@drawable/orangebutton"
+            android:layout_marginTop="2dp" />
 
         <ImageButton
             android:id="@+id/imageButton5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:background="@drawable/yellowbutton" />
+            android:background="@drawable/yellowbutton"
+            android:layout_marginTop="2dp" />
 
         <ImageButton
             android:id="@+id/imageButton6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:background="@drawable/greenbutton" />
+            android:background="@drawable/greenbutton"
+            android:layout_marginTop="2dp" />
 
         <ImageButton
             android:id="@+id/imageButton7"
@@ -130,14 +126,17 @@
             android:layout_alignBottom="@+id/view1"
             android:layout_centerHorizontal="true"
             android:layout_marginLeft="10dp"
-            android:background="@drawable/bulebutton" />
+            android:background="@drawable/bulebutton"
+            android:layout_marginTop="2dp" />
 
         <ImageButton
             android:id="@+id/imageButton8"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:background="@drawable/purplebutton" />
+            android:background="@drawable/purplebutton"
+            android:layout_marginTop="2dp" />
+
 
     </LinearLayout>
 

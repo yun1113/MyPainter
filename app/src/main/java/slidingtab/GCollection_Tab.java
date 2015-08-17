@@ -34,7 +34,7 @@ public class GCollection_Tab extends Fragment {
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String url = (String) view.getTag();
+                int url = (int) view.getTag();
                 GalleryDetail.launch(getActivity(), view.findViewById(R.id.image), url);
             }
         });

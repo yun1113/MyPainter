@@ -7,14 +7,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+
 
 public class LogInActivity extends ActionBarActivity {
-
+    EditText accountEdt;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
+
+        accountEdt = (EditText) findViewById(R.id.accountEdit);
 
         Button logInBtn = (Button) findViewById(R.id.logInBtn);
         logInBtn.setOnClickListener(new View.OnClickListener() {
@@ -22,6 +26,11 @@ public class LogInActivity extends ActionBarActivity {
             public void onClick(View arg0) {
                 // canvas
                 Intent intent = new Intent();
+                Bundle bundle=new Bundle(); //建立一個bundle實體，將intent裡的所有資訊放在裡面
+
+                bundle.putString("account", accountEdt.getText().toString());
+                intent.putExtras(bundle); //透過這我們將bundle附在intent上，隨著intent送出而送出
+
                 intent.setClass(LogInActivity.this, FriendTest.class);
                 startActivity(intent);
             }

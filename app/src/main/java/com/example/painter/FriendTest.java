@@ -8,6 +8,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -38,6 +39,7 @@ public class FriendTest extends ActionBarActivity implements ViewAnimator.ViewAn
     private ContentFragment contentFragment;
     private ViewAnimator viewAnimator;
     private LinearLayout linearLayout;
+    Bundle bundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,9 +47,13 @@ public class FriendTest extends ActionBarActivity implements ViewAnimator.ViewAn
 
         setContentView(R.layout.activity_friend_test);
 
+        bundle = getIntent().getExtras();
+        String account = bundle.getString("account");
+
         // initial view
         adapter = new FriendPagerAdapter(getSupportFragmentManager(), Titles, Numboftabs);
         contentFragment = FriendPagerAdapter.newInstance(0);
+        contentFragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.content_frame, contentFragment)
                 .commit();
@@ -79,12 +85,6 @@ public class FriendTest extends ActionBarActivity implements ViewAnimator.ViewAn
         list.add(menuItem3);
         SlideMenuItem menuItem4 = new SlideMenuItem(ContentFragment.CASE, R.drawable.icn_4);
         list.add(menuItem4);
-        SlideMenuItem menuItem5 = new SlideMenuItem(ContentFragment.SHOP, R.drawable.icn_5);
-        list.add(menuItem5);
-        SlideMenuItem menuItem6 = new SlideMenuItem(ContentFragment.PARTY, R.drawable.icn_6);
-        list.add(menuItem6);
-        SlideMenuItem menuItem7 = new SlideMenuItem(ContentFragment.MOVIE, R.drawable.icn_7);
-        list.add(menuItem7);
     }
 
 
@@ -173,6 +173,8 @@ public class FriendTest extends ActionBarActivity implements ViewAnimator.ViewAn
         // change fragment
         ContentFragment contentFragment = (ContentFragment) adapter.getItem(topPosition);
         getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, contentFragment).commit();
+        Log.d("CY","Change fragment");
+        contentFragment.setArguments(bundle);
 
         return contentFragment;
     }

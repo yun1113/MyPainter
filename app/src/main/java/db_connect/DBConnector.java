@@ -1,9 +1,5 @@
 package db_connect;
 
-/**
- * Created by user on 2015/7/21.
- */
-
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -23,12 +19,18 @@ import org.apache.http.protocol.HTTP;
 
 public class DBConnector {
 
+    static String connectPHP;
+
+    public DBConnector(String connectPHP){
+        this.connectPHP = connectPHP;
+    }
+
     public static String executeQuery(String query_string) {
         String result = "";
         try {
             // ㄏノ琌ApacheミHttpClient龟砰ㄏノPostよΑ
             HttpClient httpClient = new DefaultHttpClient();
-            HttpPost httpPost = new HttpPost("http://140.115.80.233/android_connect/connectDB.php");
+            HttpPost httpPost = new HttpPost(String.format("http://140.115.80.233/android_connect/%s",connectPHP));
 
             //盢ぇ璶POST把计㎝把计甧竟い
             ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -52,7 +54,7 @@ public class DBConnector {
             inputStream.close();
             result = builder.toString();
         } catch (Exception e) {
-            Log.e("log_tag", e.toString());
+            Log.e("log_tag1", e.toString());
         }
         return result;
     }

@@ -180,6 +180,7 @@
     <string name="preferences_volume_shortcuts">preferencesVolumeShortcuts</string>
     <string name="preferences_volume_shortcuts_title">Volume buttons</string>
     <string name="preferences_volume_shortcuts_summary">Set action for volume buttons</string>
+    <string name="title_activity_test">Test</string>
     <!-- Pretty Painter End-->
     
 </resources>

@@ -25,7 +25,6 @@
         <item name="android:textSize">18sp</item>
     </style>
 
-<<<<<<< HEAD
     <!--Pretty Painter Start-->
     <style name="BrushProperties"></style>
     <style name="BrushProperties.Wrapper">
@@ -87,7 +86,4 @@
         <item name="android:visibility">gone</item>
     </style>
     <!--Pretty Painter End-->
-=======
-
->>>>>>> 19c152d8959cf8efb6fe4ee1be3234581b531982
 </resources>

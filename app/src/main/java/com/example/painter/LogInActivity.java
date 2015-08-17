@@ -15,8 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-<<<<<<< HEAD
-=======
+
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,13 +38,9 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
->>>>>>> 19c152d8959cf8efb6fe4ee1be3234581b531982
-
-
-<<<<<<< HEAD
 public class LogInActivity extends ActionBarActivity {
     EditText accountEdt;
-=======
+
     private final mHandler myHandler = new mHandler(this);
     private static class mHandler extends Handler {
         private final WeakReference<LogInActivity> mActivity;
@@ -112,7 +107,6 @@ public class LogInActivity extends ActionBarActivity {
     String result = "";
     private Thread mthread;
 
->>>>>>> 19c152d8959cf8efb6fe4ee1be3234581b531982
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -130,7 +124,7 @@ public class LogInActivity extends ActionBarActivity {
         logInBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-<<<<<<< HEAD
+
                 // canvas
                 Intent intent = new Intent();
                 Bundle bundle=new Bundle(); //建立一個bundle實體，將intent裡的所有資訊放在裡面
@@ -140,10 +134,9 @@ public class LogInActivity extends ActionBarActivity {
 
                 intent.setClass(LogInActivity.this, FriendTest.class);
                 startActivity(intent);
-=======
-                mthread = new Thread(runnable);
+        mthread = new Thread(runnable);
                 mthread.start();
->>>>>>> 19c152d8959cf8efb6fe4ee1be3234581b531982
+
             }
         });
 

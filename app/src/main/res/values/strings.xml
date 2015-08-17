@@ -17,20 +17,15 @@
     <string name="title_activity_listactivity">Listactivity</string>
     <string name="title_activity_gallery_detail">GalleryDetail</string>
     <string name="title_activity_friend_test">FriendTest</string>
-    <string name="title_activity_canvas">Canvas</string>
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
-<<<<<<< HEAD
+
     <!-- Pretty Painter Start-->
     <string name="app_version">Version: %1$s</string>
     <string name="about_text">Free open source graphics
     editor under MIT License</string>
-    <string name="app_developers">Developer:
-    \nArthur Bikmullin (@devolonter)
-    \n\nCo-developers:
-    \nConstantine Chartomatzis, Lioncash
-    \n\nLocalization:
-    \nOlga Bikmullina (@AhNinniah)</string>
+    <string name="app_developers">Developer:</string>
+
     <!--  dialog -->
     <string name="yes">Yes</string>
     <string name="no">No</string>
@@ -51,7 +46,7 @@
     <string name="share_image_title">Share via</string>
     <string name="select_language_title">Select language</string>
     <string name="copy_file_title">Copy files</string>
-=======
+
     <string name="sign_up_success">註冊成功</string>
     <string name="sign_up_existed">此信箱已註冊過，請前往登入頁面</string>
     <string name="sign_up_fail">註冊失敗</string>
@@ -65,7 +60,7 @@
     <string name="change_pic">修改圖片</string>
     <string name="personal_setting">個人設定</string>
 
->>>>>>> 19c152d8959cf8efb6fe4ee1be3234581b531982
+
 
     <!-- menu -->
     <string name="menu_brush">Brush</string>

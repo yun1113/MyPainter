@@ -27,7 +27,6 @@
         android:label="@string/app_name"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity
-
             android:name=".LogInActivity"
             android:label="@string/app_name">
         <!--android:name=".FriendTest"-->
@@ -38,31 +37,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!-- <activity -->
-        <!-- android:name=".Canvas" -->
-        <!-- android:label="@string/title_activity_canvas" /> -->
         <activity
             android:name=".PersonalSetting"
             android:label="@string/title_activity_personal_setting" />
-        <!-- <activity -->
-        <!-- android:name=".Gallery" -->
-        <!-- android:label="@string/title_activity_gallery" /> -->
-        <activity
-            android:name=".Sign_up"
-            android:label="@string/title_activity_sign_up" />
-            android:label="@string/title_activity_personal_setting"
-            android:screenOrientation="portrait"/>
-        <activity
-            android:name=".Gallery"
-            android:label="@string/title_activity_gallery"
-            android:screenOrientation="portrait"/>
         <activity
             android:name=".Sign_up"
             android:label="@string/title_activity_sign_up"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".Friends"
-            android:label="@string/title_activity_friends"
+            android:name=".Gallery"
+            android:label="@string/title_activity_gallery"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".Canvas"
@@ -76,14 +60,7 @@
          <activity
          android:name=".FriendTest"
          android:label="@string/title_activity_friend_test"></activity>
-        <!--<activity-->
-        <!--android:name=".Test"-->
-        <!--android:label="@string/title_activity_test" >-->
-        <!--</activity>-->
-        <activity
-            android:name=".FriendTest"
-            android:label="@string/title_activity_friend_test"
-            android:parentActivityName=".Friends"></activity>
+
     </application>
 
 </manifest>

@@ -38,10 +38,8 @@ public class FriendTest extends ActionBarActivity implements ViewAnimator.ViewAn
     private List<SlideMenuItem> list = new ArrayList<>();
     private ContentFragment contentFragment;
     private ViewAnimator viewAnimator;
-<<<<<<< HEAD
-=======
+
     //private int posiion = R.drawable.content_music;
->>>>>>> 19c152d8959cf8efb6fe4ee1be3234581b531982
     private LinearLayout linearLayout;
     Bundle bundle;
 

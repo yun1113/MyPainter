@@ -60,12 +60,14 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.Toast;
+
 import painter.BrushPreset;
 import painter.ColorPickerDialog;
 import painter.FileSystem;
 import painter.PainterCanvas;
 import painter.PainterPreferences;
 import painter.PainterSettings;
+
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
@@ -326,25 +328,26 @@ public class Canvas extends ActionBarActivity {
         mVolumeButtonsShortcuts = Integer.parseInt(preferences.getString(
                 getString(R.string.preferences_volume_shortcuts),
                 String.valueOf(SHORTCUTS_VOLUME_BRUSH_SIZE)));
-    }
 
-=======
+        ImageButton btn = (ImageButton) findViewById(R.id.settingbtn2);
+        btn.setOnClickListener(new View.OnClickListener()
 
-        btn = (ImageButton) findViewById(R.id.settingbtn);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                               {
+                                   @Override
+                                   public void onClick(View v) {
 
-                getPopupWindow();
-            }
-        });
+                                       getPopupWindow();
+                                   }
+                               }
+
+        );
     }
 
     private void getPopupWindow() {
 
         LayoutInflater inflater = (LayoutInflater) Canvas.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View layout = inflater.inflate(R.layout.popup, null);
-        popupwindow = new PopupWindow(layout, 350, 300, true);
+        PopupWindow popupwindow = new PopupWindow(layout, 350, 300, true);
         popupwindow.setTouchable(true);
         popupwindow.setOutsideTouchable(true);
         popupwindow.setFocusable(true);
@@ -357,7 +360,7 @@ public class Canvas extends ActionBarActivity {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_OUTSIDE) {
-                    popupwindow.dismiss();
+                    //popupwindow.dismiss();
                     return true;
                 }
                 return false;
@@ -395,7 +398,6 @@ public class Canvas extends ActionBarActivity {
         });
     }
 
->>>>>>> 19c152d8959cf8efb6fe4ee1be3234581b531982
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);

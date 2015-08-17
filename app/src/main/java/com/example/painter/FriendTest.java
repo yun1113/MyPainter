@@ -31,13 +31,17 @@ import yalantis.com.sidemenu.util.ViewAnimator;
 public class FriendTest extends ActionBarActivity implements ViewAnimator.ViewAnimatorListener {
 
     FriendPagerAdapter adapter;
-    CharSequence Titles[] = {"Friends", "Multiconnection", "Invitation", "Add Friends"};
+    CharSequence Titles[] = {"好友列表", "加入好友", "多人連線", "好友邀請"};
     int Numboftabs = 4;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
     private List<SlideMenuItem> list = new ArrayList<>();
     private ContentFragment contentFragment;
     private ViewAnimator viewAnimator;
+<<<<<<< HEAD
+=======
+    //private int posiion = R.drawable.content_music;
+>>>>>>> 19c152d8959cf8efb6fe4ee1be3234581b531982
     private LinearLayout linearLayout;
     Bundle bundle;
 
@@ -77,13 +81,13 @@ public class FriendTest extends ActionBarActivity implements ViewAnimator.ViewAn
     private void createMenuList() {
         SlideMenuItem menuItem0 = new SlideMenuItem(ContentFragment.CLOSE, R.drawable.icn_close);
         list.add(menuItem0);
-        SlideMenuItem menuItem = new SlideMenuItem(ContentFragment.BUILDING, R.drawable.icn_1);
+        SlideMenuItem menuItem = new SlideMenuItem(ContentFragment.BUILDING, R.drawable.ic_people_white_36dp);
         list.add(menuItem);
-        SlideMenuItem menuItem2 = new SlideMenuItem(ContentFragment.BOOK, R.drawable.icn_2);
+        SlideMenuItem menuItem2 = new SlideMenuItem(ContentFragment.BOOK, R.drawable.ic_person_add_white_36dp);
         list.add(menuItem2);
-        SlideMenuItem menuItem3 = new SlideMenuItem(ContentFragment.PAINT, R.drawable.icn_3);
+        SlideMenuItem menuItem3 = new SlideMenuItem(ContentFragment.PAINT, R.drawable.sidemenu_group);
         list.add(menuItem3);
-        SlideMenuItem menuItem4 = new SlideMenuItem(ContentFragment.CASE, R.drawable.icn_4);
+        SlideMenuItem menuItem4 = new SlideMenuItem(ContentFragment.CASE, R.drawable.sidemenu_invitation);
         list.add(menuItem4);
     }
 

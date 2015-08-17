@@ -14,6 +14,7 @@ import android.app.WallpaperManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
@@ -27,17 +28,29 @@ import android.graphics.Color;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.AsyncTask;
+
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.PaintDrawable;
+
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
+
 import android.view.Display;
 import android.view.KeyEvent;
+
+import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
@@ -53,6 +66,13 @@ import painter.FileSystem;
 import painter.PainterCanvas;
 import painter.PainterPreferences;
 import painter.PainterSettings;
+import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.PopupWindow;
+import android.widget.Toast;
+
 
 public class Canvas extends ActionBarActivity {
 
@@ -182,6 +202,7 @@ public class Canvas extends ActionBarActivity {
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
         setContentView(R.layout.activity_canvas);
+
         mCanvas = (PainterCanvas) findViewById(R.id.canvas);
 
         try {
@@ -307,6 +328,74 @@ public class Canvas extends ActionBarActivity {
                 String.valueOf(SHORTCUTS_VOLUME_BRUSH_SIZE)));
     }
 
+=======
+
+        btn = (ImageButton) findViewById(R.id.settingbtn);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                getPopupWindow();
+            }
+        });
+    }
+
+    private void getPopupWindow() {
+
+        LayoutInflater inflater = (LayoutInflater) Canvas.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View layout = inflater.inflate(R.layout.popup, null);
+        popupwindow = new PopupWindow(layout, 350, 300, true);
+        popupwindow.setTouchable(true);
+        popupwindow.setOutsideTouchable(true);
+        popupwindow.setFocusable(true);
+        popupwindow.setBackgroundDrawable(new BitmapDrawable());
+        popupwindow.update();
+
+        popupwindow.showAtLocation(layout, Gravity.CENTER, 0, 0);
+
+        popupwindow.setTouchInterceptor(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_OUTSIDE) {
+                    popupwindow.dismiss();
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        ImageButton personalsettingBtn = (ImageButton) layout.findViewById(R.id.personalSettingBtn);
+        personalsettingBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(Canvas.this, PersonalSetting.class);
+                startActivity(intent);
+            }
+        });
+
+        ImageButton friendBtn = (ImageButton) layout.findViewById(R.id.friendListBtn);
+        friendBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(Canvas.this, FriendTest.class);
+                startActivity(intent);
+            }
+        });
+
+        ImageButton galleryBtn = (ImageButton) layout.findViewById(R.id.galleryBtn);
+        galleryBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(Canvas.this, Gallery.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+>>>>>>> 19c152d8959cf8efb6fe4ee1be3234581b531982
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);

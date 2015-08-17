@@ -7,135 +7,6 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"/>
 
-    <LinearLayout
-        android:id="@+id/paint_colors"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="false"
-        android:orientation="horizontal"
-        android:weightSum="1">
-
-        <ImageButton
-            android:id="@+id/imageButton1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:background="#FFFFFF"
-            android:src="@android:drawable/ic_menu_revert" />
-
-        <ImageButton
-            android:id="@+id/ImageButton03"
-            android:layout_width="wrap_content"
-            android:layout_height="27dp"
-            android:layout_marginLeft="10dp"
-            android:background="#FFFFFF"
-            android:src="@android:drawable/ic_menu_edit" />
-
-        <ImageButton
-            android:id="@+id/ImageButton02"
-            android:layout_width="wrap_content"
-            android:layout_height="27dp"
-            android:layout_marginLeft="10dp"
-            android:background="#FFFFFF"
-            android:src="@android:drawable/ic_menu_edit" />
-
-        <ImageButton
-            android:id="@+id/ImageButton01"
-            android:layout_width="wrap_content"
-            android:layout_height="27dp"
-            android:layout_marginLeft="10dp"
-            android:background="#FFFFFF"
-            android:src="@android:drawable/ic_menu_edit" />
-
-        <ImageButton
-            android:id="@+id/imageButton3"
-            android:layout_width="wrap_content"
-            android:layout_height="27dp"
-            android:layout_marginLeft="10dp"
-            android:adjustViewBounds="false"
-            android:background="#FFFFFF"
-            android:src="@android:drawable/ic_menu_edit" />
-
-        <ImageButton
-            android:id="@+id/imageButton10"
-            android:layout_width="27dp"
-            android:layout_height="27dp"
-            android:layout_marginLeft="10dp"
-            android:background="#ffdddddd"
-            android:src="#ffdddddd" />
-
-        <ImageButton
-            android:id="@+id/imageButton9"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:onClick="paintClicked"
-            android:background="@drawable/blackbutton" />
-
-        <ImageButton
-            android:id="@+id/imageButton"
-            android:layout_width="27dp"
-            android:layout_height="27dp"
-            android:layout_marginLeft="10dp"
-            android:onClick="paintClicked"
-            android:background="@drawable/redbutton" />
-
-        <ImageButton
-            android:id="@+id/imageButton4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:onClick="paintClicked"
-            android:background="@drawable/orangebutton" />
-
-        <ImageButton
-            android:id="@+id/imageButton5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:onClick="paintClicked"
-            android:background="@drawable/yellowbutton" />
-
-        <ImageButton
-            android:id="@+id/imageButton6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:onClick="paintClicked"
-            android:background="@drawable/greenbutton" />
-
-        <ImageButton
-            android:id="@+id/imageButton7"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/view1"
-            android:layout_centerHorizontal="true"
-            android:layout_marginLeft="10dp"
-            android:onClick="paintClicked"
-            android:background="@drawable/bulebutton" />
-
-        <ImageButton
-            android:id="@+id/imageButton8"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:onClick="paintClicked"
-            android:background="@drawable/purplebutton" />
-
-        <ImageButton
-            android:id="@+id/settingbtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="false"
-            android:layout_alignParentRight="true"
-            android:layout_marginBottom="5dp"
-            android:background="#FFFFFF"
-            android:clickable="true"
-            android:src="@drawable/ic_settings_grey600_36dp" />
-    </LinearLayout>
     <RelativeLayout android:id="@+id/settings_layout"
         style="@style/Settings">
 
@@ -195,5 +66,152 @@
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/paint_colors"
+        android:layout_width="377dp"
+        android:layout_height="111dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="false"
+        android:orientation="horizontal"
+        android:weightSum="1"
+        android:layout_gravity="center_horizontal|bottom">
+
+        <!--<ImageButton-->
+        <!--android:id="@+id/imageButton1"-->
+        <!--android:onClick="setPreset"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginBottom="5dp"-->
+        <!--android:background="#FFFFFF"-->
+        <!--android:src="@android:drawable/ic_menu_revert" />-->
+
+        <Button
+            android:layout_width="39dp"
+            android:layout_height="wrap_content"
+            android:text="S"
+            android:id="@+id/SaveButton" />
+
+        <Button
+            android:layout_width="38dp"
+            android:layout_height="wrap_content"
+            android:text="U"
+            android:id="@+id/UndoButton" />
+
+        <ImageButton
+            android:id="@+id/Pencil"
+            android:onClick="setPreset"
+            android:layout_width="wrap_content"
+            android:layout_height="27dp"
+            android:layout_marginLeft="10dp"
+            android:background="#FFFFFF"
+            android:src="@android:drawable/ic_menu_edit" />
+
+        <ImageButton
+            android:id="@+id/Brush"
+            android:onClick="setPreset"
+            android:layout_width="wrap_content"
+            android:layout_height="27dp"
+            android:layout_marginLeft="10dp"
+            android:background="#FFFFFF"
+            android:src="@android:drawable/ic_menu_edit" />
+
+        <ImageButton
+            android:id="@+id/Marker"
+            android:onClick="setPreset"
+            android:layout_width="wrap_content"
+            android:layout_height="27dp"
+            android:layout_marginLeft="10dp"
+            android:background="#FFFFFF"
+            android:src="@android:drawable/ic_menu_edit" />
+
+        <ImageButton
+            android:id="@+id/Eraser"
+            android:onClick="setPreset"
+            android:layout_width="wrap_content"
+            android:layout_height="27dp"
+            android:layout_marginLeft="10dp"
+            android:adjustViewBounds="false"
+            android:background="#FFFFFF"
+            android:src="@android:drawable/ic_menu_edit" />
+
+        <ImageButton
+            android:id="@+id/Black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:onClick="setPreset"
+            android:src="@drawable/black"
+            android:background="@drawable/blackbutton" />
+
+        <ImageButton
+            android:id="@+id/Red"
+            android:layout_width="27dp"
+            android:layout_height="27dp"
+            android:layout_marginLeft="10dp"
+            android:onClick="setPreset"
+            android:src="@drawable/red"
+            android:background="@drawable/redbutton" />
+
+        <ImageButton
+            android:id="@+id/Orange"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:onClick="setPreset"
+            android:src="@drawable/orange"
+            android:background="@drawable/orangebutton" />
+
+        <ImageButton
+            android:id="@+id/Yellow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:onClick="setPreset"
+            android:src="@drawable/yellow"
+            android:background="@drawable/yellowbutton" />
+
+        <ImageButton
+            android:id="@+id/Green"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:onClick="setPreset"
+            android:src="@drawable/green"
+            android:background="@drawable/greenbutton" />
+
+        <ImageButton
+            android:id="@+id/Blue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/view1"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="10dp"
+            android:onClick="setPreset"
+            android:src="@drawable/blue"
+            android:background="@drawable/bulebutton" />
+
+        <ImageButton
+            android:id="@+id/Purple"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:onClick="setPreset"
+            android:src="@drawable/purple"
+            android:background="@drawable/purplebutton" />
+
+        <ImageButton
+            android:id="@+id/settingbtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="false"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="5dp"
+            android:background="#FFFFFF"
+            android:clickable="true"
+            android:src="@drawable/ic_settings_grey600_36dp" />
+    </LinearLayout>
 
 </FrameLayout>

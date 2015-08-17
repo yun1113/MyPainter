@@ -195,30 +195,29 @@ public class Canvas extends ActionBarActivity {
         loadSettings();
 
         mBrushSize = (SeekBar) findViewById(R.id.brush_size);
-        mBrushSize
-                .setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        mBrushSize.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
-                    public void onStopTrackingTouch(SeekBar seekBar) {
-                        if (seekBar.getProgress() > 0) {
-                            mCanvas.setPresetSize(seekBar.getProgress());
-                        }
-                    }
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                if (seekBar.getProgress() > 0) {
+                    mCanvas.setPresetSize(seekBar.getProgress());
+                }
+            }
 
-                    public void onStartTrackingTouch(SeekBar seekBar) {
-                        resetPresets();
-                    }
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                resetPresets();
+            }
 
-                    public void onProgressChanged(SeekBar seekBar,
-                                                  int progress, boolean fromUser) {
-                        if (progress > 0) {
-                            if (fromUser) {
-                                mCanvas.setPresetSize(seekBar.getProgress());
-                            }
-                        } else {
-                            mBrushSize.setProgress(1);
-                        }
+            public void onProgressChanged(SeekBar seekBar,
+                                          int progress, boolean fromUser) {
+                if (progress > 0) {
+                    if (fromUser) {
+                        mCanvas.setPresetSize(seekBar.getProgress());
                     }
-                });
+                } else {
+                    mBrushSize.setProgress(1);
+                }
+            }
+        });
 
         mBrushBlurRadius = (SeekBar) findViewById(R.id.brush_blur_radius);
         mBrushBlurRadius
@@ -322,7 +321,7 @@ public class Canvas extends ActionBarActivity {
             case R.id.menu_brush:
                 enterBrushSetup();
                 break;
-            case R.id.menu_save:
+            case R.id.SaveButton:
                 savePicture(ACTION_SAVE_AND_RETURN);
                 break;
             case R.id.menu_clear:
@@ -341,7 +340,7 @@ public class Canvas extends ActionBarActivity {
             case R.id.menu_open:
                 open();
                 break;
-            case R.id.menu_undo:
+            case R.id.UndoButton:
                 mCanvas.undo();
                 break;
             case R.id.menu_preferences:
@@ -358,18 +357,18 @@ public class Canvas extends ActionBarActivity {
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
 
-        MenuItem undo = menu.findItem(R.id.menu_undo);
+        MenuItem undo = menu.findItem(R.id.UndoButton);
         if (mCanvas.canUndo()) {
-            undo.setTitle(R.string.menu_undo);
-            undo.setIcon(R.drawable.ic_menu_undo);
+//            undo.setTitle(R.string.menu_undo);
+//            undo.setIcon(R.drawable.ic_menu_undo);
             undo.setEnabled(true);
         } else if (mCanvas.canRedo()) {
-            undo.setTitle(R.string.menu_redo);
-            undo.setIcon(R.drawable.ic_menu_redo);
+//            undo.setTitle(R.string.menu_redo);
+//            undo.setIcon(R.drawable.ic_menu_redo);
             undo.setEnabled(true);
         } else {
-            undo.setTitle(R.string.menu_undo);
-            undo.setIcon(R.drawable.ic_menu_undo);
+//            undo.setTitle(R.string.menu_undo);
+//            undo.setIcon(R.drawable.ic_menu_undo);
             undo.setEnabled(false);
         }
         return true;
@@ -625,20 +624,48 @@ public class Canvas extends ActionBarActivity {
 
     public void setPreset(View v) {
         switch (v.getId()) {
-            case R.id.preset_pencil:
+            case R.id.Pencil:
                 mCanvas.setPreset(new BrushPreset(BrushPreset.PENCIL, mCanvas
                         .getCurrentPreset().color));
                 break;
-            case R.id.preset_brush:
+            case R.id.Brush:
                 mCanvas.setPreset(new BrushPreset(BrushPreset.BRUSH, mCanvas
                         .getCurrentPreset().color));
                 break;
-            case R.id.preset_marker:
+            case R.id.Marker:
                 mCanvas.setPreset(new BrushPreset(BrushPreset.MARKER, mCanvas
                         .getCurrentPreset().color));
                 break;
-            case R.id.preset_pen:
-                mCanvas.setPreset(new BrushPreset(BrushPreset.PEN, mCanvas
+            case R.id.Eraser:
+                mCanvas.setPreset(new BrushPreset(BrushPreset.ERASER, mCanvas
+                        .getCurrentPreset().color));
+                break;
+            case R.id.Black:
+                mCanvas.setPreset(new BrushPreset(BrushPreset.BLACK, mCanvas
+                        .getCurrentPreset().color));
+                break;
+            case R.id.Red:
+                mCanvas.setPreset(new BrushPreset(BrushPreset.RED, mCanvas
+                        .getCurrentPreset().color));
+                break;
+            case R.id.Orange:
+                mCanvas.setPreset(new BrushPreset(BrushPreset.ORANGE, mCanvas
+                        .getCurrentPreset().color));
+                break;
+            case R.id.Yellow:
+                mCanvas.setPreset(new BrushPreset(BrushPreset.YELLOW, mCanvas
+                        .getCurrentPreset().color));
+                break;
+            case R.id.Green:
+                mCanvas.setPreset(new BrushPreset(BrushPreset.GREEN, mCanvas
+                        .getCurrentPreset().color));
+                break;
+            case R.id.Blue:
+                mCanvas.setPreset(new BrushPreset(BrushPreset.BLUE, mCanvas
+                        .getCurrentPreset().color));
+                break;
+            case R.id.Purple:
+                mCanvas.setPreset(new BrushPreset(BrushPreset.PURPLE, mCanvas
                         .getCurrentPreset().color));
                 break;
         }
@@ -1032,7 +1059,7 @@ public class Canvas extends ActionBarActivity {
                 getString(R.string.settings_last_picture), null);
 
         int type = settings.getInt(getString(R.string.settings_brush_type),
-                BrushPreset.PEN);
+                BrushPreset.PENCIL);
 
         if (type == BrushPreset.CUSTOM) {
             mSettings.preset = new BrushPreset(settings.getFloat(

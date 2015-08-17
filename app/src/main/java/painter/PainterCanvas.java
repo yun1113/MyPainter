@@ -41,7 +41,7 @@ public class PainterCanvas extends SurfaceView implements Callback {
 		SurfaceHolder holder = getHolder();
 		holder.addCallback(this);
 
-		mPreset = new BrushPreset(BrushPreset.PEN, Color.BLACK);
+		mPreset = new BrushPreset(BrushPreset.PENCIL, Color.BLACK);
 		mThreadState = new State();
 
 		setFocusable(true);
@@ -60,7 +60,7 @@ public class PainterCanvas extends SurfaceView implements Callback {
 	}
 
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,
-			int height) {
+							   int height) {
 		if (mBitmap == null) {
 			mBitmap = Bitmap.createBitmap(width, height,
 					Bitmap.Config.ARGB_8888);
@@ -155,18 +155,18 @@ public class PainterCanvas extends SurfaceView implements Callback {
 		}
 
 		switch (event.getAction()) {
-		case MotionEvent.ACTION_DOWN:
-			mIsChanged = true;
-			getThread().drawBegin();
-			mUndo = false;
-			break;
-		case MotionEvent.ACTION_MOVE:
-			getThread().draw((int) event.getX(), (int) event.getY());
-			break;
-		case MotionEvent.ACTION_UP:
-		case MotionEvent.ACTION_CANCEL:
-			getThread().drawEnd();
-			break;
+			case MotionEvent.ACTION_DOWN:
+				mIsChanged = true;
+				getThread().drawBegin();
+				mUndo = false;
+				break;
+			case MotionEvent.ACTION_MOVE:
+				getThread().draw((int) event.getX(), (int) event.getY());
+				break;
+			case MotionEvent.ACTION_UP:
+			case MotionEvent.ACTION_CANCEL:
+				getThread().drawEnd();
+				break;
 		}
 		return true;
 	}
@@ -241,7 +241,7 @@ public class PainterCanvas extends SurfaceView implements Callback {
 
 	public void setup(boolean setup) {
 		mIsSetup = setup;
-		
+
 		if (mIsSetup) {
 			getThread().setup();
 		} else {

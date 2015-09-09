@@ -65,31 +65,24 @@ public class BrushPreset {
 				setColor(color);
 				break;
 			case BLACK:
-				setSize(this.size);
 				setColor(0xFF000000);
 				break;
 			case RED:
-				setSize(this.size);
 				setColor(0xFFFF0000);
 				break;
 			case ORANGE:
-				setSize(this.size);
 				setColor(0xFFFFA500);
 				break;
 			case YELLOW:
-				setSize(this.size);
 				setColor(0xFFFFFF00);
 				break;
 			case GREEN:
-				setSize(this.size);
 				setColor(0xFF008000);
 				break;
 			case BLUE:
-				setSize(this.size);
 				setColor(0xFF0000FF);
 				break;
 			case PURPLE:
-				setSize(this.size);
 				setColor(0xFF8b008b);
 				break;
 		}

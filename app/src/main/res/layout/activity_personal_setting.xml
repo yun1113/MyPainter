@@ -1,6 +1,7 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+﻿<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:float="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+
     android:id="@+id/LogIn"
     android:layout_width="fill_parent"
     android:layout_height="match_parent"
@@ -34,6 +35,16 @@
         android:layout_marginTop="30dp"
         android:src="@drawable/ic_launcher"
         />
+
+    android:id="@+id/personalSetting"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="3"
+    tools:context="com.example.painter.PersonalSetting"
+    android:background="#ccFFFFFF"
+
+    >
 
 
     <LinearLayout
@@ -156,6 +167,161 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="left|top" />
         </LinearLayout>
+
+    </LinearLayout>
+
+    <!--
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="2"
+        >
+
+        <com.github.siyamed.shapeimageview.CircularImageView
+            android:id="@+id/pic"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/picture_100"
+            android:layout_gravity="center"
+            float:siBorderWidth="2dp"
+            float:siBorderColor="@color/pink"
+            />
+
+
+        <!--
+                float:siBorderWidth="6dp"
+                float:siBorderColor="@color/pink" -->
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/changePic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/change_pic"
+        android:textColor="#EF767A"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="20dp"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/name_setting" />
+
+            <EditText
+                android:id="@+id/nickNameEdt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|top"
+                android:textColor="#9A8F97"
+                android:layout_marginStart="10dp"
+                android:ems="10" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/email_setting" />
+
+
+            <EditText
+                android:id="@+id/emailEdt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|top"
+                android:layout_marginStart="10dp"
+                android:ems="10"
+                android:inputType="textEmailAddress"
+                android:clickable="false"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:autoText="false" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/password_setting" />
+
+            <EditText
+                android:id="@+id/passEdit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center_vertical"
+                android:layout_marginStart="10dp"
+                android:ems="10"
+                android:inputType="textPassword" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="5dp">
+
+
+
+            <TextView
+                android:id="@+id/gallerySharingTxv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|top"
+                android:textColor="#EF767A"
+                android:ems="10"
+                android:text="@string/setting_gallery"
+                android:textSize="20sp" />
+
+            <Switch
+                android:id="@+id/gSharingSwitch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center_vertical" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/saveSetting"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="#EF767A"
+            android:text="@string/save"
+            android:textSize="18sp"
+            android:textColor="#FFFFFF"/>
+
 
     </LinearLayout>
 

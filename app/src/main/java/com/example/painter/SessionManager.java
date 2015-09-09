@@ -5,7 +5,6 @@ package com.example.painter;
  */
 
 import java.util.HashMap;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -48,8 +47,8 @@ public class SessionManager {
         editor = pref.edit();
     }
 
+    public void createLoginSession(String email, String password, String name, String galleryID, String galleryPublic) {
 
-    public void createLoginSession(String email, String password, String name, String galleryPublic) {
 //       , String name, String galleryID, String galleryPublic, String friendlistID
 
         // Storing login value as TRUE
@@ -62,6 +61,7 @@ public class SessionManager {
         editor.putString(KEY_PASSWORD, password);
 
         editor.putString(KEY_NAME, name);
+
         editor.putString(KEY_GALLERYPUBLIC, galleryPublic);
 //        editor.putString(KEY_FriendListID, friendlistID);
 
@@ -129,8 +129,8 @@ public class SessionManager {
     }
 
     // Quick check for login
-    // Get Login State
-    public boolean isLoggedIn() {
+
+    public boolean isLoggedIn(){
         return pref.getBoolean(IS_LOGIN, false);
     }
 }

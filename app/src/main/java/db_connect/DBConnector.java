@@ -32,24 +32,6 @@ public class DBConnector {
     public static String executeQuery(String query_string) {
         String result = "";
         try {
-            // 使用的是Apache的功能，首先建立一個HttpClient的實體，並且使用Post的方式
-            HttpClient httpClient = new DefaultHttpClient();
-            HttpPost httpPost = new HttpPost(String.format("http://140.115.87.44/android_connect/%s",connectPHP));
-
-            //將之後要POST的參數名和參數值放入容器中
-            ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
-            params.add(new BasicNameValuePair("query_string", query_string));
-
-            //實際送出請求，並取得傳回狀態等資訊。
-            httpPost.setEntity(new UrlEncodedFormEntity(params, HTTP.UTF_8));
-            HttpResponse httpResponse = httpClient.execute(httpPost);
-
-            //取得收到的內容。
-            HttpEntity httpEntity = httpResponse.getEntity();
-            InputStream inputStream = httpEntity.getContent();
-
-            //所取得的Content利用StringBuilder轉換為字串
-
             // 嚙誕用迎蕭嚙瞌Apache嚙踝蕭嚙穀嚙踝蕭A嚙踝蕭嚙踝蕭嚙諍立一嚙踝蕭HttpClient嚙踝蕭嚙踝蕭嚙踝蕭A嚙衛且嚙誕伐蕭Post嚙踝蕭嚙質式
             HttpClient httpClient = new DefaultHttpClient();
             HttpPost httpPost = new HttpPost(String.format("http://140.115.87.44/android_connect/%s",connectPHP));

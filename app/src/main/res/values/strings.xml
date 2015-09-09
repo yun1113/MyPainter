@@ -62,140 +62,124 @@
     <string name="personal_setting">個人設定</string>
     <string name="setting_gallery">Gallery分享</string>
 
+    <!--&lt;!&ndash;  brush setup &ndash;&gt;-->
+    <!--<string name="brush_size">Brush size</string>-->
+    <!--<string name="blur_radius">Blur radius</string>-->
+    <!--<string name="blur_style">Blur style</string>-->
+    <!--<string name="blur_type_select">Select blur type</string>-->
+    <!--<string-array name="blur_types">-->
+        <!--<item>None</item>-->
+        <!--<item>Normal</item>-->
+        <!--<item>Solid</item>-->
+        <!--<item>Outer</item>-->
+        <!--<item>Inner</item>-->
+    <!--</string-array>-->
+    <!--<string name="brush_color">Brush color</string>-->
+    <!--<string name="color_pick">Pick a color</string>-->
 
+    <!--&lt;!&ndash; toasts &ndash;&gt;-->
+    <!--<string name="invalid_file">File format is invalid</string>-->
+    <!--<string name="file_not_found">File not found</string>-->
+    <!--<string name="sd_card_not_writeable">SD card not available for recording</string>-->
+    <!--<string name="sd_card_not_available">SD card not available</string>-->
+    <!--<string name="wallpaper_setted">Wallpaper was successfully setted</string>-->
+    <!--<string name="wallpaper_error">Wallpaper was not setted. Error occured</string>-->
 
-    <!-- menu -->
-    <string name="menu_brush">Brush</string>
-    <string name="menu_rotate">Rotate</string>
-    <string name="menu_clear">Clear</string>
-    <string name="menu_save">Save</string>
-    <string name="menu_share">Share</string>
-    <string name="menu_about">About</string>
-    <string name="menu_undo">Undo</string>
-    <string name="menu_redo">Redo</string>
-    <string name="menu_open">Open</string>
-    <string name="menu_preferences">Preferences</string>
-    <string name="menu_set_wallpaper">Set as Wallpaper</string>
-    <string name="menu_file">File</string>
+    <!--&lt;!&ndash; settings &ndash;&gt;-->
+    <!--<string name="settings_version">version</string>-->
+    <!--<string name="settings_orientation">orientation</string>-->
+    <!--<string name="settings_last_picture">lastPicture</string>-->
+    <!--<string name="settings_brush_size">brushSize</string>-->
+    <!--<string name="settings_brush_color">brushColor</string>-->
+    <!--<string name="settings_brush_blur_style">brushBlurStyle</string>-->
+    <!--<string name="settings_brush_blur_radius">brushBlurRadius</string>-->
+    <!--<string name="settings_brush_type">brushType</string>-->
+    <!--<string name="settings_force_open_file">forceOpenFile</string>-->
 
-    <!--  brush setup -->
-    <string name="brush_size">Brush size</string>
-    <string name="blur_radius">Blur radius</string>
-    <string name="blur_style">Blur style</string>
-    <string name="blur_type_select">Select blur type</string>
-    <string-array name="blur_types">
-        <item>None</item>
-        <item>Normal</item>
-        <item>Solid</item>
-        <item>Outer</item>
-        <item>Inner</item>
-    </string-array>
-    <string name="brush_color">Brush color</string>
-    <string name="color_pick">Pick a color</string>
+    <!--&lt;!&ndash; language &ndash;&gt;-->
+    <!--<string-array name="languages">-->
+        <!--<item>English</item>-->
+        <!--<item>Русский</item>-->
+    <!--</string-array>-->
+    <!--<string-array name="locales">-->
+        <!--<item>en</item>-->
+        <!--<item>ru</item>-->
+    <!--</string-array>-->
 
-    <!-- toasts -->
-    <string name="invalid_file">File format is invalid</string>
-    <string name="file_not_found">File not found</string>
-    <string name="sd_card_not_writeable">SD card not available for recording</string>
-    <string name="sd_card_not_available">SD card not available</string>
-    <string name="wallpaper_setted">Wallpaper was successfully setted</string>
-    <string name="wallpaper_error">Wallpaper was not setted. Error occured</string>
+    <!--&lt;!&ndash; backup options &ndash;&gt;-->
+    <!--<string-array name="backup_opened_options">-->
+        <!--<item>Only from other folders</item>-->
+        <!--<item>Always</item>-->
+        <!--<item>Never</item>-->
+    <!--</string-array>-->
+    <!--<string-array name="backup_opened_options_codes">-->
+        <!--<item>10</item>-->
+        <!--<item>20</item>-->
+        <!--<item>100</item>-->
+    <!--</string-array>-->
 
-    <!-- settings -->
-    <string name="settings_version">version</string>
-    <string name="settings_orientation">orientation</string>
-    <string name="settings_last_picture">lastPicture</string>
-    <string name="settings_brush_size">brushSize</string>
-    <string name="settings_brush_color">brushColor</string>
-    <string name="settings_brush_blur_style">brushBlurStyle</string>
-    <string name="settings_brush_blur_radius">brushBlurRadius</string>
-    <string name="settings_brush_type">brushType</string>
-    <string name="settings_force_open_file">forceOpenFile</string>
+    <!--&lt;!&ndash; exit options &ndash;&gt;-->
+    <!--<string-array name="before_exit_options">-->
+        <!--<item>Submit to save file</item>-->
+        <!--<item>Save working file</item>-->
+        <!--<item>No action</item>-->
+    <!--</string-array>-->
+    <!--<string-array name="before_exit_options_codes">-->
+        <!--<item>10</item>-->
+        <!--<item>20</item>-->
+        <!--<item>100</item>-->
+    <!--</string-array>-->
 
-    <!-- language -->
-    <string-array name="languages">
-        <item>English</item>
-        <item>Русский</item>
-    </string-array>
-    <string-array name="locales">
-        <item>en</item>
-        <item>ru</item>
-    </string-array>
+    <!--&lt;!&ndash; volume shortcuts options &ndash;&gt;-->
+    <!--<string-array name="volume_buttons_options">-->
+        <!--<item>Change brush size</item>-->
+        <!--<item>Undo/Redo</item>-->
+    <!--</string-array>-->
+    <!--<string-array name="volume_buttons_options_codes">-->
+        <!--<item>10</item>-->
+        <!--<item>20</item>-->
+    <!--</string-array>-->
 
-    <!-- backup options -->
-    <string-array name="backup_opened_options">
-        <item>Only from other folders</item>
-        <item>Always</item>
-        <item>Never</item>
-    </string-array>
-    <string-array name="backup_opened_options_codes">
-        <item>10</item>
-        <item>20</item>
-        <item>100</item>
-    </string-array>
+    <!--&lt;!&ndash; preferences &ndash;&gt;-->
+    <!--<string name="preferences_interface_category">Interface</string>-->
+    <!--<string name="preferences_behavior_category">Behavior</string>-->
+    <!--<string name="preferences_shortcuts_category">Shortcuts</string>-->
+    <!--<string name="preferences_backup_category">Backup</string>-->
+    <!--<string name="preferences_about_category">About</string>-->
 
-    <!-- exit options -->
-    <string-array name="before_exit_options">
-        <item>Submit to save file</item>
-        <item>Save working file</item>
-        <item>No action</item>
-    </string-array>
-    <string-array name="before_exit_options_codes">
-        <item>10</item>
-        <item>20</item>
-        <item>100</item>
-    </string-array>
+    <!--<string name="preferences_language">preferencesLanguage</string>-->
+    <!--<string name="preferences_language_title">Language</string>-->
+    <!--<string name="preferences_language_summary">Set interface language. Restart needed</string>-->
 
-    <!-- volume shortcuts options -->
-    <string-array name="volume_buttons_options">
-        <item>Change brush size</item>
-        <item>Undo/Redo</item>
-    </string-array>
-    <string-array name="volume_buttons_options_codes">
-        <item>10</item>
-        <item>20</item>
-    </string-array>
+    <!--<string name="preferences_last_file">lastFile</string>-->
+    <!--<string name="preferences_last_file_title">Open last file</string>-->
+    <!--<string name="preferences_last_file_summary">Open last working file on startup</string>-->
 
-    <!-- preferences -->
-    <string name="preferences_interface_category">Interface</string>
-    <string name="preferences_behavior_category">Behavior</string>
-    <string name="preferences_shortcuts_category">Shortcuts</string>
-    <string name="preferences_backup_category">Backup</string>
-    <string name="preferences_about_category">About</string>
+    <!--<string name="preferences_backup_openeded_file">backupOpenningFile</string>-->
+    <!--<string name="preferences_backup_openeded_file_title">Opened files backup</string>-->
+    <!--<string name="preferences_backup_openeded_file_summary">Copy opened files in the application folder</string>-->
 
-    <string name="preferences_language">preferencesLanguage</string>
-    <string name="preferences_language_title">Language</string>
-    <string name="preferences_language_summary">Set interface language. Restart needed</string>
+    <!--<string name="preferences_tooltips">preferencesTooltips</string>-->
+    <!--<string name="preferences_tooltips_title">Show tooltips</string>-->
+    <!--<string name="preferences_tooltips_summary">Show tricks and tips on startup</string>-->
 
-    <string name="preferences_last_file">lastFile</string>
-    <string name="preferences_last_file_title">Open last file</string>
-    <string name="preferences_last_file_summary">Open last working file on startup</string>
+    <!--<string name="preferences_shake">preferencesShake</string>-->
+    <!--<string name="preferences_shake_title">Shake to clear</string>-->
+    <!--<string name="preferences_shake_summary">Clear canvas during device shaking</string>-->
 
-    <string name="preferences_backup_openeded_file">backupOpenningFile</string>
-    <string name="preferences_backup_openeded_file_title">Opened files backup</string>
-    <string name="preferences_backup_openeded_file_summary">Copy opened files in the application folder</string>
+    <!--<string name="preferences_about">preferencesAbout</string>-->
+    <!--<string name="preferences_about_title">About</string>-->
+    <!--<string name="preferences_about_summary">Information about application</string>-->
 
-    <string name="preferences_tooltips">preferencesTooltips</string>
-    <string name="preferences_tooltips_title">Show tooltips</string>
-    <string name="preferences_tooltips_summary">Show tricks and tips on startup</string>
+    <!--<string name="preferences_before_exit">preferencesBeforeExit</string>-->
+    <!--<string name="preferences_before_exit_title">Action before exit</string>-->
+    <!--<string name="preferences_before_exit_summary">Action before application exit</string>-->
 
-    <string name="preferences_shake">preferencesShake</string>
-    <string name="preferences_shake_title">Shake to clear</string>
-    <string name="preferences_shake_summary">Clear canvas during device shaking</string>
-
-    <string name="preferences_about">preferencesAbout</string>
-    <string name="preferences_about_title">About</string>
-    <string name="preferences_about_summary">Information about application</string>
-
-    <string name="preferences_before_exit">preferencesBeforeExit</string>
-    <string name="preferences_before_exit_title">Action before exit</string>
-    <string name="preferences_before_exit_summary">Action before application exit</string>
-
-    <string name="preferences_volume_shortcuts">preferencesVolumeShortcuts</string>
-    <string name="preferences_volume_shortcuts_title">Volume buttons</string>
-    <string name="preferences_volume_shortcuts_summary">Set action for volume buttons</string>
-    <string name="title_activity_test">Test</string>
-    <!-- Pretty Painter End-->
+    <!--<string name="preferences_volume_shortcuts">preferencesVolumeShortcuts</string>-->
+    <!--<string name="preferences_volume_shortcuts_title">Volume buttons</string>-->
+    <!--<string name="preferences_volume_shortcuts_summary">Set action for volume buttons</string>-->
+    <!--<string name="title_activity_test">Test</string>-->
+    <!--&lt;!&ndash; Pretty Painter End&ndash;&gt;-->
 
     <!-- HomeScreen Menu-->
     <string name="home_menu_challenge">出題</string>

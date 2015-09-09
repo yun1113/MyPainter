@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="350dp" android:layout_height="300dp"
     android:background="@drawable/settingbackground"
@@ -131,6 +131,24 @@
                     />
             </com.andexert.library.RippleView>
 
+
+            <com.andexert.library.RippleView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                rv_centered="true">
+
+                <ImageButton
+                    android:id="@+id/keepdrawing"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/keepdrawing"
+                    android:background="@drawable/button_in_setting"
+                    android:layout_marginRight="30dp"
+                    android:elevation="2dp"
+                    />
+            </com.andexert.library.RippleView>
+
+
         </TableRow>
 
         <TableRow>
@@ -151,6 +169,13 @@
                 android:id="@+id/importpictxt"
                 android:text="匯入圖片"
                 android:layout_marginTop="5dp"/>
+
+
+            <TextView
+                android:id="@+id/keeptxt"
+                android:text="繼續畫"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="40dp"/>
         </TableRow>
 
         <TableRow
@@ -202,6 +227,25 @@
                     android:layout_marginRight="30dp"
                     android:elevation="2dp"
                     />
+
+
+            </com.andexert.library.RippleView>
+
+            <com.andexert.library.RippleView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                rv_centered="true">
+
+                <ImageButton
+                    android:id="@+id/uploadBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/pass"
+                    android:background="@drawable/button_in_setting"
+                    android:layout_marginRight="30dp"
+                    android:elevation="2dp"
+                    />
+
             </com.andexert.library.RippleView>
 
         </TableRow>
@@ -223,10 +267,12 @@
                 android:id="@+id/cleartxt"
                 android:text="清除畫布"
                 android:layout_marginTop="5dp"/>
+
+            <TextView
+                android:id="@+id/uploadtxt"
+                android:text="傳給下一人"
+                android:layout_marginTop="5dp"/>
         </TableRow>
     </TableLayout>
-
-
-
 
 </LinearLayout>

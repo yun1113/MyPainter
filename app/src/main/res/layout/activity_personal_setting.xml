@@ -1,124 +1,184 @@
-<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:float="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/GridLayout"
-    android:layout_width="match_parent"
+    android:id="@+id/personalSetting"
+    android:layout_width="fill_parent"
     android:layout_height="match_parent"
-    android:columnCount="6"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:rowCount="14"
-    android:background="@drawable/personalsetting_bg"
+    android:weightSum="3"
     tools:context="com.example.painter.PersonalSetting"
-    android:gravity="center_vertical|center_horizontal">
+    android:background="#ccFFFFFF"
+
+    >
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="2"
+        >
+
+        <com.github.siyamed.shapeimageview.CircularImageView
+            android:id="@+id/pic"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/picture_100"
+            android:layout_gravity="center"
+            float:siBorderWidth="2dp"
+            float:siBorderColor="@color/pink"
+            />
+
+
+        <!--
+                float:siBorderWidth="6dp"
+                float:siBorderColor="@color/pink" -->
+
+    </LinearLayout>
 
     <TextView
-        android:id="@+id/nickNameTxv"
-        android:layout_column="4"
-        android:layout_gravity="left|top"
-        android:layout_row="0"
-        android:text="暱稱："
-        android:textSize="20sp" />
-
-    <TextView
-        android:id="@+id/emailTxv"
-        android:layout_column="4"
-        android:layout_gravity="left|top"
-        android:layout_row="1"
-        android:text="E-mail："
-        android:textSize="20sp" />
-
-    <TextView
-        android:id="@+id/passwordTxv"
-        android:layout_column="4"
-        android:layout_gravity="left|top"
-        android:layout_row="2"
-        android:text="密碼："
-        android:textSize="20sp" />
-
-    <EditText
-        android:id="@+id/nickNameEdt"
-        android:layout_column="5"
-        android:layout_gravity="left|top"
-        android:layout_row="0"
-        android:ems="10" >
-
-        <requestFocus />
-    </EditText>
-
-    <EditText
-        android:id="@+id/emailEdt"
-        android:layout_column="5"
-        android:layout_gravity="left|top"
-        android:layout_row="1"
-        android:ems="10"
-        android:inputType="textEmailAddress" />
-
-    <EditText
-        android:id="@+id/editText3"
-        android:layout_column="5"
-        android:layout_gravity="left|center_vertical"
-        android:layout_row="2"
-        android:ems="10"
-        android:inputType="textPassword" />
-
-    <TextView
-        android:id="@+id/gallerySharingTxv"
-        android:layout_column="4"
-        android:layout_gravity="left|top"
-        android:layout_row="3"
-        android:text="Gallery分享"
-        android:textSize="20sp" />
-
-    <TextView
-        android:id="@+id/videoDisplayTxv"
-        android:layout_column="4"
-        android:layout_gravity="left|top"
-        android:layout_row="4"
-        android:text="影音顯示頭像"
-        android:textSize="20sp" />
-
-    <Switch
-        android:id="@+id/gSharingSwitch"
-        android:layout_column="5"
-        android:layout_gravity="left|center_vertical"
-        android:layout_row="3" />
-
-    <Switch
-        android:id="@+id/vSDisplaySwitch"
-        android:layout_column="5"
-        android:layout_gravity="left|top"
-        android:layout_row="4" />
-
-    <Button
-        android:id="@+id/saveBtn"
-        android:layout_height="wrap_content"
-        android:layout_column="5"
-        android:layout_gravity="right|fill_vertical"
-        android:layout_row="5"
-        android:text="儲存" />
-
-    <Button
-        android:id="@+id/changeImgBtn"
-        android:layout_column="0"
-        android:layout_gravity="left|top"
-        android:layout_marginRight="10dp"
-        android:paddingRight="10dip"
-        android:layout_row="3"
-        android:minHeight="20dp"
-        android:text="修改圖片" />
-
-    <ImageView
-        android:id="@+id/quickContactBadge1"
-        android:layout_column="0"
-        android:layout_gravity="center_vertical|center_horizontal"
-        android:layout_row="0"
-        android:layout_rowSpan="3"
-        android:src="@drawable/ic_launcher"
+        android:id="@+id/changePic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingRight="10dip"/>
+        android:text="@string/change_pic"
+        android:textColor="#EF767A"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        />
 
-</GridLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="20dp"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/name_setting" />
+
+            <EditText
+                android:id="@+id/nickNameEdt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|top"
+                android:textColor="#9A8F97"
+                android:layout_marginStart="10dp"
+                android:ems="10" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/email_setting" />
+
+
+            <EditText
+                android:id="@+id/emailEdt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|top"
+                android:layout_marginStart="10dp"
+                android:ems="10"
+                android:inputType="textEmailAddress"
+                android:clickable="false"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:autoText="false" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/password_setting" />
+
+            <EditText
+                android:id="@+id/passEdit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center_vertical"
+                android:layout_marginStart="10dp"
+                android:ems="10"
+                android:inputType="textPassword" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="5dp">
+
+
+
+            <TextView
+                android:id="@+id/gallerySharingTxv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|top"
+                android:textColor="#EF767A"
+                android:ems="10"
+                android:text="@string/setting_gallery"
+                android:textSize="20sp" />
+
+            <Switch
+                android:id="@+id/gSharingSwitch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center_vertical" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/saveSetting"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="#EF767A"
+            android:text="@string/save"
+            android:textSize="18sp"
+            android:textColor="#FFFFFF"/>
+
+
+    </LinearLayout>
+
+    <!--
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/saveBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_gravity="right|fill_vertical"
+            android:text="儲存"
+            android:background="@drawable/button"
+            android:textSize="18dp"/>
+    </LinearLayout>
+     -->
+</LinearLayout>

@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.example.painter.GalleryDetail;
 import com.example.painter.R;
+import com.example.painter.SessionManager;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -32,6 +33,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import db_connect.DBConnector;
@@ -43,6 +45,12 @@ import db_connect.DBConnector;
 public class Gallery_Tab extends Fragment {
 
     private DrawerLayout drawer;
+    Bundle bundle;
+    int state;
+    String gallery_id;
+    SessionManager session;
+    HashMap user;
+
 
     // list of data items
     List<Bitmap> mDataList = new ArrayList();
@@ -51,13 +59,26 @@ public class Gallery_Tab extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.mygallery_tab, container, false);
         //getListData();
+        bundle = getArguments();
+        state = bundle.getInt("state");
+        Log.d("G_State", "" + state);
+
+        session = new SessionManager(getActivity().getApplicationContext());
+        user = session.getUserDetails();
+
+        if (state == 2)
+            gallery_id = bundle.getString("friend_account");
+        else
+            gallery_id = (String) user.get(SessionManager.KEY_EMAIL);
+        Log.d("Gallery_id", gallery_id);
+
 
         GridView gridView = (GridView) v.findViewById(R.id.gridView);
         gridView.setAdapter(new GridViewAdapter());
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                int index = (int)view.getTag();
+                int index = (int) view.getTag();
                 GalleryDetail.launch(getActivity(), view.findViewById(R.id.image), index);
             }
         });
@@ -69,7 +90,7 @@ public class Gallery_Tab extends Fragment {
 
     private class ImageDownloadTask extends AsyncTask<String, Void, Bitmap> {
         ImageView imageView;
-        int index ;
+        int index;
 
         // Constructor
         public ImageDownloadTask(ImageView imageView, int i) {
@@ -87,15 +108,20 @@ public class Gallery_Tab extends Fragment {
         protected Bitmap doInBackground(String... addresses) {
             Bitmap bitmap = null;
             try {
-                String result = DBConnector.executeQuery("SELECT * FROM test1");
+
+                String result = DBConnector.executeQuery(String.format("SELECT * FROM gallery_list where gallery_id = '%s'", gallery_id));
                 Log.d("Test", result);
 
                 JSONArray jsonArray = new JSONArray(result);
                 //for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject jsonData = jsonArray.getJSONObject(index);
+                JSONObject jsonData = jsonArray.getJSONObject(index);
 
-                    byte[] decodedString = Base64.decode(jsonData.getString("image"), Base64.DEFAULT);
-                    bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+//                BitmapFactory.Options options = new BitmapFactory.Options();
+//                options.inSampleSize = 2;//?片高?度都?原?的二分之一，即?片大小?原?的大小的四分之一
+//                options.inTempStorage = new byte[5 * 1024]; //?置16MB的??存?空?（不?作用??看出?，待??）
+
+                byte[] decodedString = Base64.decode(jsonData.getString("image"), Base64.DEFAULT);
+                bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
                 //}
 
@@ -116,8 +142,7 @@ public class Gallery_Tab extends Fragment {
 
         @Override
         public int getCount() {
-            Log.d("CY","here");
-            return 10;
+            return 2;
         }
 
         @Override
@@ -139,7 +164,7 @@ public class Gallery_Tab extends Fragment {
             }
 
             ImageView image = (ImageView) view.findViewById(R.id.image);
-            new ImageDownloadTask(image,index).execute();
+            new ImageDownloadTask(image, index).execute();
             view.setTag(index);
             return view;
         }

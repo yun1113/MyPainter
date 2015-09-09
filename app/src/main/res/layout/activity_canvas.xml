@@ -70,7 +70,7 @@
     <LinearLayout
         android:id="@+id/paint_colors"
         android:layout_width="377dp"
-        android:layout_height="111dp"
+        android:layout_height="35dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="false"
@@ -87,17 +87,32 @@
         <!--android:background="#FFFFFF"-->
         <!--android:src="@android:drawable/ic_menu_revert" />-->
 
-        <Button
-            android:layout_width="39dp"
-            android:layout_height="wrap_content"
-            android:text="S"
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="27dp"
+            android:src="@drawable/save_canvas"
+            android:background="#FFFFFF"
             android:id="@+id/SaveButton" />
 
-        <Button
-            android:layout_width="38dp"
+        <ImageButton
+            android:id="@+id/settingbtn"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="U"
-            android:id="@+id/UndoButton" />
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="false"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="5dp"
+            android:background="#FFFFFF"
+            android:clickable="true"
+            android:src="@drawable/ic_settings_grey600_36dp" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="27dp"
+            android:src="@drawable/undo"
+            android:background="#FFFFFF"
+            android:id="@+id/UndoButton"
+            />
 
         <ImageButton
             android:id="@+id/Pencil"
@@ -106,7 +121,7 @@
             android:layout_height="27dp"
             android:layout_marginLeft="10dp"
             android:background="#FFFFFF"
-            android:src="@android:drawable/ic_menu_edit" />
+            android:src="@drawable/pencil" />
 
         <ImageButton
             android:id="@+id/Brush"
@@ -115,7 +130,7 @@
             android:layout_height="27dp"
             android:layout_marginLeft="10dp"
             android:background="#FFFFFF"
-            android:src="@android:drawable/ic_menu_edit" />
+            android:src="@drawable/brush" />
 
         <ImageButton
             android:id="@+id/Marker"
@@ -124,7 +139,7 @@
             android:layout_height="27dp"
             android:layout_marginLeft="10dp"
             android:background="#FFFFFF"
-            android:src="@android:drawable/ic_menu_edit" />
+            android:src="@drawable/marker" />
 
         <ImageButton
             android:id="@+id/Eraser"
@@ -134,7 +149,7 @@
             android:layout_marginLeft="10dp"
             android:adjustViewBounds="false"
             android:background="#FFFFFF"
-            android:src="@android:drawable/ic_menu_edit" />
+            android:src="@drawable/eraser" />
 
         <ImageButton
             android:id="@+id/Black"
@@ -201,17 +216,7 @@
             android:src="@drawable/purple"
             android:background="@drawable/purplebutton" />
 
-        <ImageButton
-            android:id="@+id/settingbtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="false"
-            android:layout_alignParentRight="true"
-            android:layout_marginBottom="5dp"
-            android:background="#FFFFFF"
-            android:clickable="true"
-            android:src="@drawable/ic_settings_grey600_36dp" />
+
     </LinearLayout>
 
 </FrameLayout>

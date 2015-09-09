@@ -61,7 +61,7 @@ public class Sign_up extends ActionBarActivity {
                         @Override
                         public void onClick(DialogInterface arg0, int arg1) {
                             Intent intent = new Intent();
-                            intent.setClass(activity, FriendTest.class);
+                            intent.setClass(activity, Canvas.class);
                             activity.startActivity(intent);
                         }
                     });

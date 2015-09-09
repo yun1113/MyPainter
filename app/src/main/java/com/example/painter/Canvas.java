@@ -55,6 +55,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
@@ -328,7 +329,7 @@ public class Canvas extends ActionBarActivity {
                 getString(R.string.preferences_volume_shortcuts),
                 String.valueOf(SHORTCUTS_VOLUME_BRUSH_SIZE)));
 
-        ImageButton btn = (ImageButton) findViewById(R.id.settingbtn2);
+        ImageButton btn = (ImageButton) findViewById(R.id.settingbtn);
         btn.setOnClickListener(new View.OnClickListener()
 
                                {
@@ -380,7 +381,19 @@ public class Canvas extends ActionBarActivity {
         friendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+            /*    EditText accountEdt;
+                accountEdt = (EditText) findViewById(R.id.accountEdit);
+
                 Intent intent = new Intent();
+                Bundle bundle=new Bundle(); //建立一個bundle實體，將intent裡的所有資訊放在裡面
+
+                bundle.putString("account", accountEdt.getText().toString());
+                intent.putExtras(bundle); //透過這我們將bundle附在intent上，隨著intent送出而送出
+
+                intent.setClass(Canvas.this, FriendTest.class);
+                startActivity(intent);*/
+
+            Intent intent = new Intent();
                 intent.setClass(Canvas.this, FriendTest.class);
                 startActivity(intent);
             }
@@ -1142,7 +1155,7 @@ public class Canvas extends ActionBarActivity {
                 getString(R.string.settings_orientation),
                 ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        if (getRequestedOrientation() != mSettings.orientation) {
+        if (getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
             setRequestedOrientation(mSettings.orientation);
         }
 

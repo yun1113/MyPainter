@@ -30,7 +30,7 @@ public class DBConnector {
         try {
             // ㄏノ琌ApacheミHttpClient龟砰ㄏノPostよΑ
             HttpClient httpClient = new DefaultHttpClient();
-            HttpPost httpPost = new HttpPost(String.format("http://140.115.80.233/android_connect/%s",connectPHP));
+            HttpPost httpPost = new HttpPost(String.format("http://140.115.87.44/android_connect/%s",connectPHP));
 
             //盢ぇ璶POST把计㎝把计甧竟い
             ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();

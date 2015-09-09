@@ -30,30 +30,30 @@
         android:layout_weight="1"
         android:gravity="center_vertical" />
 
-    <FrameLayout
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginLeft="16dp">
+    <!--<FrameLayout-->
+        <!--android:layout_width="60dp"-->
+        <!--android:layout_height="60dp"-->
+        <!--android:layout_marginLeft="16dp">-->
 
-        <ImageView
-            android:id="@+id/offline"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@drawable/offline"/>
+        <!--<ImageView-->
+            <!--android:id="@+id/offline"-->
+            <!--android:layout_width="30dp"-->
+            <!--android:layout_height="30dp"-->
+            <!--android:src="@drawable/offline"/>-->
 
-        <ImageView
-            android:id="@+id/busy"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@drawable/busy"/>
+        <!--<ImageView-->
+            <!--android:id="@+id/busy"-->
+            <!--android:layout_width="30dp"-->
+            <!--android:layout_height="30dp"-->
+            <!--android:src="@drawable/busy"/>-->
 
-        <ImageView
-            android:id="@+id/online"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@drawable/online"
-            android:visibility="gone" />
+        <!--<ImageView-->
+            <!--android:id="@+id/online"-->
+            <!--android:layout_width="30dp"-->
+            <!--android:layout_height="30dp"-->
+            <!--android:src="@drawable/online"-->
+            <!--android:visibility="gone" />-->
 
-    </FrameLayout>
+    <!--</FrameLayout>-->
 
 </LinearLayout>

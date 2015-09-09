@@ -175,7 +175,7 @@ public class FriendTest extends ActionBarActivity implements ViewAnimator.ViewAn
         // change fragment
         ContentFragment contentFragment = (ContentFragment) adapter.getItem(topPosition);
         getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, contentFragment).commit();
-        Log.d("CY","Change fragment");
+        Log.d("CY", "Change fragment");
         contentFragment.setArguments(bundle);
 
         return contentFragment;

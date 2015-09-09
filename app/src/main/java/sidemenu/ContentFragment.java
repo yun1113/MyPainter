@@ -1,26 +1,15 @@
 package sidemenu;
 
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
 
-import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.example.painter.R;
 
-import java.util.Arrays;
-import java.util.List;
-
-import textdrawable.TextDrawable;
 import yalantis.com.sidemenu.interfaces.ScreenShotable;
 
 /**
@@ -66,7 +55,7 @@ public class ContentFragment extends Fragment implements ScreenShotable {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // change xml layout to view
-        View v = inflater.inflate(R.layout.contentframe, container, false);
+        View v = inflater.inflate(R.layout.friend_connect_frame, container, false);
         return v;
     }
 

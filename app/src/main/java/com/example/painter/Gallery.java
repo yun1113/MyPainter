@@ -3,6 +3,7 @@ package com.example.painter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -18,6 +19,7 @@ public class Gallery extends BaseActivity {
 	SlidingTabLayout tabs;
 	CharSequence Titles[] = {"My Gallery", "Collections"};
 	int Numboftabs = 2;
+	Bundle bundle;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -28,8 +30,12 @@ public class Gallery extends BaseActivity {
 		toolbar = (Toolbar) findViewById(R.id.tool_bar);
 		setSupportActionBar(toolbar);
 
+		bundle = getIntent().getExtras();
+		String account = bundle.getString("account");
+		Log.d("Gallery_bundle",account);
+
 		// Creating The ViewPagerAdapter and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs.
-		adapter = new GalleryViewPageAdapter(getSupportFragmentManager(), Titles, Numboftabs);
+		adapter = new GalleryViewPageAdapter(getSupportFragmentManager(), Titles, Numboftabs,bundle);
 
 		// Assigning ViewPager View and setting the adapter
 		pager = (ViewPager) findViewById(R.id.view_pager);

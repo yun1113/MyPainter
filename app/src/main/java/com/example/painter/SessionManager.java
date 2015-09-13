@@ -1,7 +1,7 @@
 package com.example.painter;
 
 /**
- * Created by §d¶®µ® on 2015/8/20.
+ * Created by ï¿½dï¿½ï¿½ï¿½ï¿½ on 2015/8/20.
  */
 
 import java.util.HashMap;
@@ -36,7 +36,6 @@ public class SessionManager {
     public static final String KEY_PASSWORD = "password";
 
     public static final String KEY_NAME = "name";
-    public static final String KEY_GALLERYID = "galleryID";
     public static final String KEY_GALLERYPUBLIC = "galleryPublic";
     public static final String KEY_FriendListID = "friendListID";
 
@@ -47,7 +46,7 @@ public class SessionManager {
         editor = pref.edit();
     }
 
-    public void createLoginSession(String email, String password, String name, String galleryID, String galleryPublic) {
+    public void createLoginSession(String email, String password, String name, String galleryPublic) {
 
 //       , String name, String galleryID, String galleryPublic, String friendlistID
 
@@ -100,7 +99,6 @@ public class SessionManager {
         user.put(KEY_PASSWORD, pref.getString(KEY_PASSWORD, null));
 
         user.put(KEY_NAME, pref.getString(KEY_NAME, null));
-        user.put(KEY_GALLERYID, pref.getString(KEY_GALLERYID, null));
         user.put(KEY_GALLERYPUBLIC, pref.getString(KEY_GALLERYPUBLIC, null));
 //        user.put(KEY_FriendListID, pref.getString(KEY_FriendListID, null));
 

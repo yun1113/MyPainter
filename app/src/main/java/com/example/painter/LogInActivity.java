@@ -47,31 +47,21 @@ import slidingtab.Gallery_Tab;
 public class LogInActivity extends ActionBarActivity {
     EditText accountEdt;
     SessionManager session;
-
     EditText inputemail, inputpassword;
     String result = "";
     private Thread mthread;
 
     private final mHandler myHandler = new mHandler(this);
-
     private static class mHandler extends Handler {
         private final WeakReference<LogInActivity> mActivity;
-
-        public mHandler(LogInActivity activity) {
+        public mHandler(LogInActivity activity){
             mActivity = new WeakReference<LogInActivity>(activity);
         }
 
-        public void handleMessage(Message msg) {
+        public void handleMessage(Message msg){
 
             final LogInActivity activity = mActivity.get();
             AlertDialog.Builder dialog = new AlertDialog.Builder(activity);
-
-            switch (msg.what) {
-//                case 0x0001:
-//                    Intent intent = new Intent();
-//                    intent.setClass(activity, Canvas.class);
-//                    activity.startActivity(intent);
-//                    break;
 
             switch(msg.what){
                 case 0x0001:
@@ -122,19 +112,11 @@ public class LogInActivity extends ActionBarActivity {
         }
     }
 
-    EditText inputemail, inputpassword;
-    String result = "";
-    private Thread mthread;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d("CY_Test", "Start");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
         Typeface font = Typeface.createFromAsset(LogInActivity.this.getAssets(), "NotoSansCJKtc-Light.otf");
-
-        session = new SessionManager(getApplicationContext());
-
         inputemail = (EditText) findViewById(R.id.accountEdit);
         inputpassword = (EditText) findViewById(R.id.passwordEdit);
         inputemail.setTypeface(font);
@@ -149,6 +131,17 @@ public class LogInActivity extends ActionBarActivity {
         logInBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
+
+//                Intent intent = new Intent();
+//                Bundle bundle = new Bundle(); //å»ºç«‹ä¸€å€‹bundleå¯¦é«”ï¼Œå°‡intentè£¡çš„æ‰€æœ‰è³‡è¨Šæ”¾åœ¨è£¡é¢
+//
+//                bundle.putString("account", inputemail.getText().toString());
+//                intent.putExtras(bundle); //é€éé€™æˆ‘å€‘å°‡bundleé™„åœ¨intentä¸Šï¼Œéš¨è‘—intenté€å‡ºè€Œé€å‡º
+//
+//                intent.setClass(LogInActivity.this, Gallery.class);
+//                startActivity(intent);
+
+
                 mthread = new Thread(runnable);
                 mthread.start();
 
@@ -173,7 +166,6 @@ public class LogInActivity extends ActionBarActivity {
         @Override
         public void run() {
 
-            String email = inputemail.getText().toString();
             email = inputemail.getText().toString();
             String password = inputpassword.getText().toString();
             String name = "";
@@ -182,72 +174,6 @@ public class LogInActivity extends ActionBarActivity {
             String friendListID="";
             InputStream is = null;
             Message msg = new Message();
-
-            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
-            nameValuePairs.add(new BasicNameValuePair("email", email));
-            nameValuePairs.add(new BasicNameValuePair("password", password));
-
-            try {
-                HttpClient httpClient = new DefaultHttpClient();
-                HttpPost httpPost = new HttpPost("http://140.115.87.44/android_connect/login.php");
-                httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-                HttpResponse response = httpClient.execute(httpPost);
-                HttpEntity entity = response.getEntity();
-                is = entity.getContent();
-
-                BufferedReader bufReader = new BufferedReader(new InputStreamReader(is, "utf-8"), 8);
-                StringBuilder builder = new StringBuilder();
-                String line = null;
-                while ((line = bufReader.readLine()) != null) {
-                    builder.append(line + "\n");
-                }
-                is.close();
-                result = builder.toString();
-                Log.d("CY_Test",result);
-                try {
-                    JSONObject jObj = new JSONObject(result);
-                    int LOGIN_RESULT = jObj.getInt("response");
-                    Message msg = new Message();
-                    if (LOGIN_RESULT == 1) {
-                        //µn¤J¦¨¥\
-                        DBConnector dbConnector = new DBConnector("connect1.php");
-                        String data = dbConnector.executeQuery(String.format("SELECT * FROM user_list WHERE user_email= '%s' ", email));
-                        Log.d("Test", data);
-
-                        String user_name = new JSONArray(data).getJSONObject(0).getString("user_name");
-                        String user_galleryPublic = new JSONArray(data).getJSONObject(0).getString("gallery_public");
-                        Log.d("Data", user_name);
-                        Log.d("Data", email);
-                        Log.d("Data", password);;
-                        Log.d("Data", user_galleryPublic);
-                        session.createLoginSession(email, password, user_name, user_galleryPublic);
-
-                        // canvas
-                        Intent intent = new Intent();
-                        Bundle bundle = new Bundle(); //«Ø¥ß¤@­Óbundle¹êÅé¡A±Nintent¸Ìªº©Ò¦³¸ê°T©ñ¦b¸Ì­±
-
-                        bundle.putString("account", inputemail.getText().toString());
-                        intent.putExtras(bundle); //³z¹L³o§Ú­Ì±Nbundleªş¦bintent¤W¡AÀHµÛintent°e¥X¦Ó°e¥X
-
-                        bundle.putInt("state", 1); // test
-
-                        intent.setClass(LogInActivity.this, FriendTest.class);
-                        startActivity(intent);
-
-                        msg.what = 0x0001;
-                        myHandler.sendMessage(msg);
-                    } else if (LOGIN_RESULT == 2) {
-                        msg.what = 0x0002;
-                        myHandler.sendMessage(msg);
-                    } else if (LOGIN_RESULT == 3) {
-                        msg.what = 0x0003;
-                        myHandler.sendMessage(msg);
-                    } else {
-                        msg.what = 0x0004;
-                        myHandler.sendMessage(msg);
-                    }
-                } catch (Exception e) {
-                    Log.e("log_tag", e.toString());
 
             if(email.trim().length() > 0 && password.trim().length() > 0){
 
@@ -285,27 +211,13 @@ public class LogInActivity extends ActionBarActivity {
                             Log.d("Test", data);
 
                             String user_name = new JSONArray(data).getJSONObject(0).getString("user_name");
-                            String user_galleryID = new JSONArray(data).getJSONObject(0).getString("gallery_id");
                             String user_galleryPublic = new JSONArray(data).getJSONObject(0).getString("gallery_public");
                             Log.d("Data", user_name);
                             Log.d("Data", email);
                             Log.d("Data", password);
-                            Log.d("Data", user_galleryID);
                             Log.d("Data", user_galleryPublic);
-  session.createLoginSession(email, password, user_name, user_galleryPublic);
 
-                        // canvas
-                        Intent intent = new Intent();
-                        Bundle bundle = new Bundle(); //«Ø¥ß¤@­Óbundle¹êÅé¡A±Nintent¸Ìªº©Ò¦³¸ê°T©ñ¦b¸Ì­±
-
-                        bundle.putString("account", inputemail.getText().toString());
-                        intent.putExtras(bundle); //³z¹L³o§Ú­Ì±Nbundleªş¦bintent¤W¡AÀHµÛintent°e¥X¦Ó°e¥X
-
-                        bundle.putInt("state", 1); // test
-
-                        intent.setClass(LogInActivity.this, FriendTest.class);
-                        startActivity(intent);
-
+                            session.createLoginSession(email, password, user_name, user_galleryPublic);
                             msg.what = 0x0001;
                             myHandler.sendMessage(msg);
                         }else if(LOGIN_RESULT == 2){

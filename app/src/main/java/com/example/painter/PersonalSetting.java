@@ -1,4 +1,4 @@
-﻿package com.example.painter;
+package com.example.painter;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -63,7 +63,6 @@ public class PersonalSetting extends ActionBarActivity {
 	SharedPreferences pref;
 	Switch gShare;
 
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -85,7 +84,6 @@ public class PersonalSetting extends ActionBarActivity {
 		password = user.get(SessionManager.KEY_PASSWORD);
 		name = user.get(SessionManager.KEY_NAME);
 		galleryPublic = user.get(SessionManager.KEY_GALLERYPUBLIC);
-		galleryID = user.get(SessionManager.KEY_GALLERYID);
 
 		Log.d("Switch", galleryPublic);
 		userName.setText(name);
@@ -289,35 +287,7 @@ public class PersonalSetting extends ActionBarActivity {
 			}
 		});
 		builder.show();
-		setActionBar();
 	}
-
-
-	private void setActionBar() {
-		Toolbar toolBar = (Toolbar) findViewById(R.id.toolbar);
-		toolBar.setTitle(R.string.personal_setting);
-
-		setSupportActionBar(toolBar);
-		toolBar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
-		toolBar.setOnMenuItemClickListener(onMenuItemClick);
-		//getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-	}
-
-	private Toolbar.OnMenuItemClickListener onMenuItemClick = new Toolbar.OnMenuItemClickListener(){
-
-		public boolean onMenuItemClick(MenuItem menuItem){
-			switch (menuItem.getItemId()){
-				case R.id.save:
-					Log.e("TEST","save");
-					break;
-				case R.id.changPic:
-					Log.e("TEST","changePic");
-					break;
-			}
-			return true;
-		}
-	};
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -400,8 +370,7 @@ public class PersonalSetting extends ActionBarActivity {
 		if (id == R.id.action_settings) {
 			return true;
 		}
-
-		switch(item.getItemId()){
+		switch (item.getItemId()) {
 			case android.R.id.home:
 				this.finish();
 				break;

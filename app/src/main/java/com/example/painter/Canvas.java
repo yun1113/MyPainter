@@ -6,7 +6,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 import android.app.Activity;
@@ -22,6 +21,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -30,7 +30,6 @@ import android.graphics.Color;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.AsyncTask;
-
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -79,12 +78,14 @@ import painter.PainterSettings;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
+<<<<<<< HEAD
 import android.widget.ImageButton;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import android.widget.ImageButton;
 import android.widget.PopupWindow;
+import android.widget.Toast;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -130,9 +131,6 @@ public class Canvas extends ActionBarActivity {
     private LinearLayout mPresetsBar;
     private LinearLayout mPropertiesBar;
     private RelativeLayout mSettingsLayout;
-
-    private String upLoadServerUri = "http://140.115.87.44//android_connect/UploadToServer.php";
-    private String imagepath=null;
 
     private PainterSettings mSettings;
     private boolean mIsNewFile = true;
@@ -409,11 +407,12 @@ public class Canvas extends ActionBarActivity {
                 accountEdt = (EditText) findViewById(R.id.accountEdit);
 
                 Intent intent = new Intent();
+
                 Bundle bundle=new Bundle(); //建立一個bundle實體，將intent裡的所有資訊放在裡面
 
                 bundle.putString("account", accountEdt.getText().toString());
                 intent.putExtras(bundle); //透過這我們將bundle附在intent上，隨著intent送出而送出
-
+              
                 intent.setClass(Canvas.this, FriendTest.class);
                 startActivity(intent);*/
 
@@ -449,9 +448,6 @@ public class Canvas extends ActionBarActivity {
             case R.id.menu_brush:
                 enterBrushSetup();
                 break;
-            case R.id.menu_save:
-                savePicture(ACTION_SAVE_AND_RETURN);
-                break;
             case R.id.menu_clear:
                 if (mCanvas.isChanged()) {
                     showDialog(R.id.dialog_clear);
@@ -468,14 +464,51 @@ public class Canvas extends ActionBarActivity {
             case R.id.menu_open:
                 open();
                 break;
-            case R.id.menu_undo:
-                mCanvas.undo();
-                break;
             case R.id.menu_preferences:
                 showPreferences();
                 break;
             case R.id.menu_set_wallpaper:
                 new SetWallpaperTask().execute();
+                break;
+            case R.id.SaveButton:
+                savePicture(ACTION_SAVE_AND_RETURN);
+                break;
+            case R.id.UndoButton:
+                mCanvas.undo();
+                break;
+            case R.id.clearBtn:
+                if (mCanvas.isChanged()) {
+                    showDialog(R.id.dialog_clear);
+                } else {
+                    clear();
+                }
+                break;
+            case R.id.uploadBtn:
+                String pictureName = getUniquePictureName(getSaveDir());
+                Bitmap bm = BitmapFactory.decodeFile(getSaveDir());
+                saveBitmap(pictureName);
+                ByteArrayOutputStream bao = new ByteArrayOutputStream();
+                bm.compress(Bitmap.CompressFormat.PNG, 90, bao);
+                byte[] ba = bao.toByteArray();
+                ba1 = Base64.encodeToString(ba, Base64.DEFAULT);
+                ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+                nameValuePairs.add(new BasicNameValuePair("base64",ba1));
+                nameValuePairs.add(new BasicNameValuePair("image",pictureName));
+
+                try {
+                    HttpClient httpClient = new DefaultHttpClient();
+                    HttpPost httpPost = new HttpPost("http://140.115.80.233/android_connect/uploadphoto.php");
+                    httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+                    HttpResponse response = httpClient.execute(httpPost);
+                    String st = EntityUtils.toString(response.getEntity());
+                    Log.v("log_tag","In the try Loop" + st);
+                }
+                catch (Exception e) {
+                    Log.e("log_tag", e.toString());
+                }
+                break;
+            case R.id.keepdrawing:
+
                 break;
         }
         return true;
@@ -749,8 +782,6 @@ public class Canvas extends ActionBarActivity {
 
         return savedBitmap;
     }
-
-
     public void ToDoSomething(View v){
         switch(v.getId()){
             case R.id.SaveButton:
@@ -760,12 +791,12 @@ public class Canvas extends ActionBarActivity {
                 mCanvas.undo();
                 break;
             case R.id.clearBtn:
-            if (mCanvas.isChanged()) {
-                showDialog(R.id.dialog_clear);
-            } else {
-                clear();
-            }
-            break;
+                if (mCanvas.isChanged()) {
+                    showDialog(R.id.dialog_clear);
+                } else {
+                    clear();
+                }
+                break;
             case R.id.uploadBtn:
                 String pictureName = getUniquePictureName(getSaveDir());
                 Bitmap bm = BitmapFactory.decodeFile(getSaveDir());
@@ -773,7 +804,7 @@ public class Canvas extends ActionBarActivity {
                 ByteArrayOutputStream bao = new ByteArrayOutputStream();
                 bm.compress(Bitmap.CompressFormat.PNG, 90, bao);
                 byte[] ba = bao.toByteArray();
-                ba1 = Base64.encodeToString(ba,Base64.DEFAULT);
+                ba1 = Base64.encodeToString(ba, Base64.DEFAULT);
                 ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
                 nameValuePairs.add(new BasicNameValuePair("base64",ba1));
                 nameValuePairs.add(new BasicNameValuePair("image",pictureName));
@@ -795,6 +826,7 @@ public class Canvas extends ActionBarActivity {
                 break;
         }
     }
+
     public void setPreset(View v) {
         switch (v.getId()) {
             case R.id.Pencil:

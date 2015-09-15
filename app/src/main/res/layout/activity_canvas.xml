@@ -69,14 +69,15 @@
 
     <LinearLayout
         android:id="@+id/paint_colors"
-        android:layout_width="377dp"
-        android:layout_height="35dp"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="false"
         android:orientation="horizontal"
         android:weightSum="1"
-        android:layout_gravity="center_horizontal|bottom">
+        android:layout_gravity="center_horizontal|bottom"
+        android:gravity="center_horizontal">
 
         <!--<ImageButton-->
         <!--android:id="@+id/imageButton1"-->
@@ -92,7 +93,8 @@
             android:layout_height="27dp"
             android:src="@drawable/save_canvas"
             android:background="#FFFFFF"
-            android:id="@+id/SaveButton" />
+            android:id="@+id/SaveButton"
+            android:onClick="ToDoSomething"/>
 
         <ImageButton
             android:id="@+id/settingbtn"
@@ -112,6 +114,7 @@
             android:src="@drawable/undo"
             android:background="#FFFFFF"
             android:id="@+id/UndoButton"
+            android:onClick="ToDoSomething"
             />
 
         <ImageButton

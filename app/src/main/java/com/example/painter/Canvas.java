@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Locale;
 
 import android.app.Activity;
@@ -38,6 +39,7 @@ import android.graphics.drawable.PaintDrawable;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.Message;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
@@ -78,7 +80,6 @@ import painter.PainterSettings;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
-<<<<<<< HEAD
 import android.widget.ImageButton;
 import android.widget.PopupWindow;
 import android.widget.Toast;
@@ -95,6 +96,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 
 public class Canvas extends ActionBarActivity {
@@ -140,6 +143,11 @@ public class Canvas extends ActionBarActivity {
 
     private int mVolumeButtonsShortcuts;
     private String ba1;
+    SessionManager session;
+    HashMap user;
+    ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+
+    boolean notInRoom = true;
 
     private class SaveTask extends AsyncTask<Void, Void, String> {
         private ProgressDialog dialog = ProgressDialog.show(Canvas.this,
@@ -224,6 +232,9 @@ public class Canvas extends ActionBarActivity {
         super.onCreate(savedInstanceState);
 
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
+
+        session = new SessionManager(getApplicationContext());
+        user = session.getUserDetails();
 
         setContentView(R.layout.activity_canvas);
 
@@ -324,7 +335,25 @@ public class Canvas extends ActionBarActivity {
 
         updateControls();
         setActivePreset(mCanvas.getCurrentPreset().type);
+
+        Thread thread = new Thread(checkThread);
+        thread.start();
     }
+
+    private Runnable checkThread = new Runnable() {
+        public void run() {
+            try {
+                int count=0;
+                while(notInRoom){
+                    Thread.sleep(3000);
+                    Log.d("CY_Test",""+ count);
+                    count++;
+                }
+            } catch (Exception e) {
+                Log.e("log_tag", e.toString());
+            }
+        }
+    };
 
     @Override
     protected void onResume() {
@@ -405,13 +434,10 @@ public class Canvas extends ActionBarActivity {
 
             /*    EditText accountEdt;
                 accountEdt = (EditText) findViewById(R.id.accountEdit);
-
                 Intent intent = new Intent();
-
-                Bundle bundle=new Bundle(); //«Ø¥ß¤@­Óbundle¹êÅé¡A±Nintent¸Ìªº©Ò¦³¸ê°T©ñ¦b¸Ì­±
-
+                Bundle bundle=new Bundle(); //å»ºç«‹ä¸€å€‹bundleå¯¦é«”ï¼Œå°‡intentè£¡çš„æ‰€æœ‰è³‡è¨Šæ”¾åœ¨è£¡é¢
                 bundle.putString("account", accountEdt.getText().toString());
-                intent.putExtras(bundle); //³z¹L³o§Ú­Ì±Nbundleªş¦bintent¤W¡AÀHµÛintent°e¥X¦Ó°e¥X
+                intent.putExtras(bundle); //é€éé€™æˆ‘å€‘å°‡bundleé™„åœ¨intentä¸Šï¼Œéš¨è‘—intenté€å‡ºè€Œé€å‡º
               
                 intent.setClass(Canvas.this, FriendTest.class);
                 startActivity(intent);*/
@@ -427,6 +453,11 @@ public class Canvas extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
+                Bundle bundle = new Bundle();
+
+                bundle.putInt("state", 1);
+                intent.putExtras(bundle);
+
                 intent.setClass(Canvas.this, Gallery.class);
                 startActivity(intent);
             }
@@ -483,30 +514,7 @@ public class Canvas extends ActionBarActivity {
                     clear();
                 }
                 break;
-            case R.id.uploadBtn:
-                String pictureName = getUniquePictureName(getSaveDir());
-                Bitmap bm = BitmapFactory.decodeFile(getSaveDir());
-                saveBitmap(pictureName);
-                ByteArrayOutputStream bao = new ByteArrayOutputStream();
-                bm.compress(Bitmap.CompressFormat.PNG, 90, bao);
-                byte[] ba = bao.toByteArray();
-                ba1 = Base64.encodeToString(ba, Base64.DEFAULT);
-                ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-                nameValuePairs.add(new BasicNameValuePair("base64",ba1));
-                nameValuePairs.add(new BasicNameValuePair("image",pictureName));
 
-                try {
-                    HttpClient httpClient = new DefaultHttpClient();
-                    HttpPost httpPost = new HttpPost("http://140.115.80.233/android_connect/uploadphoto.php");
-                    httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-                    HttpResponse response = httpClient.execute(httpPost);
-                    String st = EntityUtils.toString(response.getEntity());
-                    Log.v("log_tag","In the try Loop" + st);
-                }
-                catch (Exception e) {
-                    Log.e("log_tag", e.toString());
-                }
-                break;
             case R.id.keepdrawing:
 
                 break;
@@ -782,8 +790,9 @@ public class Canvas extends ActionBarActivity {
 
         return savedBitmap;
     }
-    public void ToDoSomething(View v){
-        switch(v.getId()){
+
+    public void ToDoSomething(View v) {
+        switch (v.getId()) {
             case R.id.SaveButton:
                 savePicture(ACTION_SAVE_AND_RETURN);
                 break;
@@ -799,33 +808,42 @@ public class Canvas extends ActionBarActivity {
                 break;
             case R.id.uploadBtn:
                 String pictureName = getUniquePictureName(getSaveDir());
-                Bitmap bm = BitmapFactory.decodeFile(getSaveDir());
                 saveBitmap(pictureName);
-                ByteArrayOutputStream bao = new ByteArrayOutputStream();
-                bm.compress(Bitmap.CompressFormat.PNG, 90, bao);
-                byte[] ba = bao.toByteArray();
-                ba1 = Base64.encodeToString(ba, Base64.DEFAULT);
-                ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-                nameValuePairs.add(new BasicNameValuePair("base64",ba1));
-                nameValuePairs.add(new BasicNameValuePair("image",pictureName));
 
-                try {
-                    HttpClient httpClient = new DefaultHttpClient();
-                    HttpPost httpPost = new HttpPost("http://140.115.80.233/android_connect/uploadphoto.php");
-                    httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-                    HttpResponse response = httpClient.execute(httpPost);
-                    String st = EntityUtils.toString(response.getEntity());
-                    Log.v("log_tag","In the try Loop" + st);
-                }
-                catch (Exception e) {
-                    Log.e("log_tag", e.toString());
-                }
+                Bitmap bm = BitmapFactory.decodeFile(pictureName);
+                ByteArrayOutputStream bao = new ByteArrayOutputStream();
+                bm.compress(Bitmap.CompressFormat.JPEG, 100, bao);
+                byte[] ba = bao.toByteArray();
+
+                ba1 = Base64.encodeToString(ba, Base64.DEFAULT);
+                nameValuePairs.add(new BasicNameValuePair("base64", ba1));
+                nameValuePairs.add(new BasicNameValuePair("ImageName", pictureName));
+                nameValuePairs.add(new BasicNameValuePair("Account", String.format("'%s'", (String) user.get(SessionManager.KEY_EMAIL))));
+
+                Thread thread = new Thread(uploadThread);
+                thread.start();
+
                 break;
             case R.id.keepdrawing:
 
                 break;
         }
     }
+
+    private Runnable uploadThread = new Runnable() {
+        public void run() {
+            try {
+                HttpClient httpClient = new DefaultHttpClient();
+                HttpPost httpPost = new HttpPost("http://140.115.87.44/android_connect/uploadphoto.php");
+                httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+                HttpResponse response = httpClient.execute(httpPost);
+                String st = EntityUtils.toString(response.getEntity());
+                Log.d("Result", "" + st);
+            } catch (Exception e) {
+                Log.e("log_tag", e.toString());
+            }
+        }
+    };
 
     public void setPreset(View v) {
         switch (v.getId()) {
@@ -1164,9 +1182,10 @@ public class Canvas extends ActionBarActivity {
     }
 
     private void setActivePreset(int preset) {
+        Log.d("CY_preset", "" + preset);
         if (preset > 0 && preset != BrushPreset.CUSTOM) {
             LinearLayout wrapper = (LinearLayout) mPresetsBar.getChildAt(0);
-            highlightActivePreset(wrapper.getChildAt(preset - 1));
+            //highlightActivePreset(wrapper.getChildAt(preset - 1));
         }
     }
 
@@ -1300,6 +1319,7 @@ public class Canvas extends ActionBarActivity {
 
     private void saveBitmap(String pictureName) {
         try {
+            Log.d("CY_picName", pictureName);
             mCanvas.saveBitmap(pictureName);
             mCanvas.changed(false);
         } catch (FileNotFoundException e) {

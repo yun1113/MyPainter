@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
@@ -16,22 +17,17 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.painter.GalleryDetail;
 import com.example.painter.R;
 import com.example.painter.SessionManager;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -50,8 +46,8 @@ public class Gallery_Tab extends Fragment {
     String gallery_id;
     SessionManager session;
     HashMap user;
-
-
+    GridView gridView;
+    int count;
     // list of data items
     List<Bitmap> mDataList = new ArrayList();
 
@@ -61,7 +57,6 @@ public class Gallery_Tab extends Fragment {
         //getListData();
         bundle = getArguments();
         state = bundle.getInt("state");
-        Log.d("G_State", "" + state);
 
         session = new SessionManager(getActivity().getApplicationContext());
         user = session.getUserDetails();
@@ -71,31 +66,71 @@ public class Gallery_Tab extends Fragment {
         else
             gallery_id = (String) user.get(SessionManager.KEY_EMAIL);
         Log.d("Gallery_id", gallery_id);
+        bundle.putString("gallery_id", gallery_id);
 
+        //getGCount();
 
-        GridView gridView = (GridView) v.findViewById(R.id.gridView);
-        gridView.setAdapter(new GridViewAdapter());
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        gridView = (GridView)v.findViewById(R.id.gridView);
+        getActivity().runOnUiThread(new Runnable() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                int index = (int) view.getTag();
-                GalleryDetail.launch(getActivity(), view.findViewById(R.id.image), index);
+            public void run() {
+                gridView.setAdapter(new GridViewAdapter());
+                gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        int index = (int) view.getTag();
+                        GalleryDetail.launch(getActivity(), view.findViewById(R.id.image), index, bundle);
+                    }
+                });
             }
         });
+
+//        GridView gridView = (GridView) v.findViewById(R.id.gridView);
+//        gridView.setAdapter(new GridViewAdapter());
+//        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                int index = (int) view.getTag();
+//                GalleryDetail.launch(getActivity(), view.findViewById(R.id.image), index, bundle);
+//            }
+//        });
 
         drawer = (DrawerLayout) v.findViewById(R.id.drawer);
         drawer.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
         return v;
     }
 
+    void getGCount() {
+        Thread thread = new Thread(mutiThread);
+        thread.start();
+    }
+
+    // list of data items
+    private Runnable mutiThread = new Runnable() {
+        public void run() {
+            try {
+                DBConnector dbConnector = new DBConnector("connect1.php");
+                String result = dbConnector.executeQuery(String.format("SELECT * FROM gallerylist where gallery_id = '%s'", gallery_id));
+
+                JSONArray jsonArray = new JSONArray(result);
+                count = jsonArray.length();
+
+            } catch (Exception e) {
+                Log.e("log_tag", e.toString());
+            }
+        }
+    };
+
     private class ImageDownloadTask extends AsyncTask<String, Void, Bitmap> {
         ImageView imageView;
+        TextView text;
         int index;
 
         // Constructor
-        public ImageDownloadTask(ImageView imageView, int i) {
+        public ImageDownloadTask(ImageView imageView, TextView text, int index) {
             this.imageView = imageView;
-            index = i;
+            this.text = text;
+            this.index = index;
         }
 
         @Override
@@ -108,23 +143,16 @@ public class Gallery_Tab extends Fragment {
         protected Bitmap doInBackground(String... addresses) {
             Bitmap bitmap = null;
             try {
-
-                String result = DBConnector.executeQuery(String.format("SELECT * FROM gallery_list where gallery_id = '%s'", gallery_id));
-                Log.d("Test", result);
+                DBConnector dbConnector = new DBConnector("connect1.php");
+                String result = dbConnector.executeQuery(String.format("SELECT * FROM gallerylist where gallery_id = '%s'", gallery_id));
+                Log.d("CY_Result",result);
 
                 JSONArray jsonArray = new JSONArray(result);
-                //for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonData = jsonArray.getJSONObject(index);
-
-//                BitmapFactory.Options options = new BitmapFactory.Options();
-//                options.inSampleSize = 2;//?片高?度都?原?的二分之一，即?片大小?原?的大小的四分之一
-//                options.inTempStorage = new byte[5 * 1024]; //?置16MB的??存?空?（不?作用??看出?，待??）
 
                 byte[] decodedString = Base64.decode(jsonData.getString("image"), Base64.DEFAULT);
                 bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-
-                //}
-
+                text.setText(jsonData.getString("name"));
             } catch (Exception e) {
                 Log.e("log_tag", e.toString());
             }
@@ -142,7 +170,7 @@ public class Gallery_Tab extends Fragment {
 
         @Override
         public int getCount() {
-            return 2;
+            return 3;
         }
 
         @Override
@@ -164,7 +192,8 @@ public class Gallery_Tab extends Fragment {
             }
 
             ImageView image = (ImageView) view.findViewById(R.id.image);
-            new ImageDownloadTask(image, index).execute();
+            TextView text = (TextView) view.findViewById(R.id.text);
+            new ImageDownloadTask(image, text, index).execute();
             view.setTag(index);
             return view;
         }

@@ -65,9 +65,11 @@ public class LogInActivity extends ActionBarActivity {
 
             switch(msg.what){
                 case 0x0001:
-
+//                    Intent intent = new Intent();
+//                    intent.setClass(activity, Canvas.class);
+//                    activity.startActivity(intent);
                     Intent intent = new Intent();
-                    intent.setClass(activity, PersonalSetting.class);
+                    intent.setClass(activity, Canvas.class);
                     activity.startActivity(intent);
                     break;
 
@@ -85,7 +87,6 @@ public class LogInActivity extends ActionBarActivity {
                     dialog.setMessage(activity.getResources().getString(R.string.account_doesnt_exist)).setPositiveButton(activity.getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface arg0, int arg1) {
-
                         }
                     });
                     dialog.show();
@@ -123,28 +124,14 @@ public class LogInActivity extends ActionBarActivity {
         inputpassword.setTypeface(font);
 
         session = new SessionManager(getApplicationContext());
-        Toast.makeText(getApplicationContext(), "User Login Status: " + session.isLoggedIn(), Toast.LENGTH_LONG).show();
-
 
         Button logInBtn = (Button) findViewById(R.id.logInBtn);
         logInBtn.setTypeface(font);
         logInBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-
-//                Intent intent = new Intent();
-//                Bundle bundle = new Bundle(); //建立一個bundle實體，將intent裡的所有資訊放在裡面
-//
-//                bundle.putString("account", inputemail.getText().toString());
-//                intent.putExtras(bundle); //透過這我們將bundle附在intent上，隨著intent送出而送出
-//
-//                intent.setClass(LogInActivity.this, Gallery.class);
-//                startActivity(intent);
-
-
                 mthread = new Thread(runnable);
                 mthread.start();
-
             }
         });
 
@@ -176,8 +163,6 @@ public class LogInActivity extends ActionBarActivity {
             Message msg = new Message();
 
             if(email.trim().length() > 0 && password.trim().length() > 0){
-
-                Log.d("Test", "in if");
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
                 nameValuePairs.add(new BasicNameValuePair("email", email));
                 nameValuePairs.add(new BasicNameValuePair("password", password));
@@ -200,7 +185,6 @@ public class LogInActivity extends ActionBarActivity {
                     result = builder.toString();
 
                     try{
-                        Log.d("Test", "in try");
                         JSONObject jObj = new JSONObject(result);
                         int LOGIN_RESULT = jObj.getInt("response");
 
@@ -212,12 +196,10 @@ public class LogInActivity extends ActionBarActivity {
 
                             String user_name = new JSONArray(data).getJSONObject(0).getString("user_name");
                             String user_galleryPublic = new JSONArray(data).getJSONObject(0).getString("gallery_public");
-                            Log.d("Data", user_name);
-                            Log.d("Data", email);
-                            Log.d("Data", password);
-                            Log.d("Data", user_galleryPublic);
 
                             session.createLoginSession(email, password, user_name, user_galleryPublic);
+                            dbConnector.executeQuery(String.format("update user_list set user_status = 'on'  where user_email = '%s'", email));
+                            dbConnector.executeQuery(String.format("update friend_list set friend_status = 'on'  where friend_id = '%s'",  email));
                             msg.what = 0x0001;
                             myHandler.sendMessage(msg);
                         }else if(LOGIN_RESULT == 2){

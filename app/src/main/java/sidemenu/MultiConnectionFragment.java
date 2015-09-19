@@ -34,7 +34,7 @@ import friendlist.DataSource;
 import textdrawable.TextDrawable;
 
 
-// ¦h¤H³s½u
+// ï¿½hï¿½Hï¿½sï¿½u
 public class MultiConnectionFragment extends ContentFragment implements AdapterView.OnItemClickListener {
 
     Bundle bundle;
@@ -109,7 +109,6 @@ public class MultiConnectionFragment extends ContentFragment implements AdapterV
     // list of data items
     private Runnable mutiThread = new Runnable() {
         public void run() {
-            // ¹B¦æºô¸ô³s½uªºµ{¦¡¡A¥Î¥HÀò±oFriend List
             try {
                 DBConnector dbConnector = new DBConnector("connect1.php");
                 String result = dbConnector.executeQuery(String.format("SELECT * FROM friend_list where user_id ='%s'", user_id));
@@ -133,7 +132,7 @@ public class MultiConnectionFragment extends ContentFragment implements AdapterV
         }
     };
 
-    // «Ø¥ß³s½u¸ê®Æ
+    // ï¿½Ø¥ß³sï¿½uï¿½ï¿½ï¿½
     private Runnable createConnectThread = new Runnable() {
         public void run() {
             try {
@@ -246,7 +245,6 @@ public class MultiConnectionFragment extends ContentFragment implements AdapterV
 
             imageView = (ImageView) view.findViewById(R.id.imageView);
             checkIcon = (ImageView) view.findViewById(R.id.check_icon);
-
             textView = (TextView) view.findViewById(R.id.textView);
         }
     }
@@ -303,7 +301,7 @@ public class MultiConnectionFragment extends ContentFragment implements AdapterV
             return convertView;
         }
 
-        // ¤Ä¿ïª¬ºA
+        // ï¿½Ä¿ïª¬ï¿½A
         private void updateCheckedState(ViewHolder holder, ListData item) {
             holder.imageView.setImageDrawable(mDrawableBuilder.build(" ", 0xff616161));
             if (item.isChecked) {

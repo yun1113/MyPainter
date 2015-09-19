@@ -238,6 +238,8 @@
     <string name="settings_brush_blur_radius">brushBlurRadius</string>
     <string name="settings_brush_type">brushType</string>
     <string name="settings_force_open_file">forceOpenFile</string>
+    <string name="settings_downloadBitmap">downloadBitmap</string>
+    <string name="settings_downloadBitmapSrc">downloadBitmapSrc</string>
 
     <!-- language -->
     <string-array name="languages">

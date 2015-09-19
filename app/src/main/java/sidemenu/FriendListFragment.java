@@ -153,8 +153,11 @@ public class FriendListFragment extends ContentFragment implements AdapterView.O
             case R.id.gallery:
                 Log.d("Go Gallery","Start");
                 Intent intent = new Intent();
+                Bundle bundle = new Bundle();
+
                 bundle.putInt("state", 2);
                 bundle.putString("friend_account", mDataList.get(info.position).friend_email);
+
                 intent.putExtras(bundle);
                 intent.setClass(getActivity(), Gallery.class);
                 startActivity(intent);

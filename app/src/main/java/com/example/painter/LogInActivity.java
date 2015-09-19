@@ -65,14 +65,15 @@ public class LogInActivity extends ActionBarActivity {
 
             switch(msg.what){
                 case 0x0001:
-//                    Intent intent = new Intent();
-//                    intent.setClass(activity, Canvas.class);
-//                    activity.startActivity(intent);
                     Intent intent = new Intent();
+
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("state",1);
+                    intent.putExtras(bundle);
+
                     intent.setClass(activity, Canvas.class);
                     activity.startActivity(intent);
                     break;
-
                 case 0x0002:
                     dialog.setMessage(activity.getResources().getString(R.string.wrong_password)).setPositiveButton(activity.getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
                         @Override

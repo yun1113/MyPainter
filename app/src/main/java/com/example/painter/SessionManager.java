@@ -38,7 +38,7 @@ public class SessionManager {
     public static final String KEY_NAME = "name";
     public static final String KEY_GALLERYPUBLIC = "galleryPublic";
     public static final String KEY_FriendListID = "friendListID";
-
+    public static final boolean GET_FROM_INTERNET = false;
     // Constructor
     public SessionManager(Context context) {
         this._context = context;
@@ -97,11 +97,8 @@ public class SessionManager {
 
         // user password
         user.put(KEY_PASSWORD, pref.getString(KEY_PASSWORD, null));
-
         user.put(KEY_NAME, pref.getString(KEY_NAME, null));
         user.put(KEY_GALLERYPUBLIC, pref.getString(KEY_GALLERYPUBLIC, null));
-//        user.put(KEY_FriendListID, pref.getString(KEY_FriendListID, null));
-
 
         // return user
         return user;

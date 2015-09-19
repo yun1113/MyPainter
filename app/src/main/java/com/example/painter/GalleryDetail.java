@@ -23,14 +23,18 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+
 import db_connect.DBConnector;
 import gallerymaterial.BaseActivity;
 
 public class GalleryDetail extends BaseActivity {
 
     public static final String EXTRA_IMAGE = "DetailActivity:image";
+    SessionManager session;
+    HashMap user;
 
-    public static void launch(FragmentActivity activity, View transitionView, int index, Bundle bundle) {
+    public static void launch(FragmentActivity activity, View transitionView, int index, Bundle bundle, int page) {
         ActivityOptionsCompat options =
                 ActivityOptionsCompat.makeSceneTransitionAnimation(
                         activity, transitionView, EXTRA_IMAGE);
@@ -38,8 +42,9 @@ public class GalleryDetail extends BaseActivity {
         Intent intent = new Intent(activity, GalleryDetail.class);
         intent.putExtra(EXTRA_IMAGE, index);
         intent.putExtra("bundle", bundle);
-        Log.d("CY_GID",bundle.getString("gallery_id"));
+        Log.d("CY_GID", bundle.getString("gallery_id"));
         intent.putExtra("G_id", bundle.getString("gallery_id"));
+        intent.putExtra("page", page);
         ActivityCompat.startActivity(activity, intent, options.toBundle());
     }
 
@@ -58,13 +63,15 @@ public class GalleryDetail extends BaseActivity {
             }
         });
 
+        session = new SessionManager(getApplicationContext());
+        user = session.getUserDetails();
 
         ImageView image = (ImageView) findViewById(R.id.image);
         TextView text = (TextView) findViewById(R.id.text);
         new ImageDownloadTask(image, text, getIntent().getIntExtra(EXTRA_IMAGE, 0), getIntent().getStringExtra("G_id")).execute();
     }
 
-    void Back(){
+    void Back() {
 
         Bundle bundle = getIntent().getBundleExtra("bundle");
 
@@ -123,9 +130,12 @@ public class GalleryDetail extends BaseActivity {
             Bitmap bitmap = null;
             try {
                 DBConnector dbConnector = new DBConnector("connect1.php");
-                Log.d("CY_Query",String.format("SELECT * FROM gallerylist where gallery_id = '%s'", gallery_id));
-                String result = dbConnector.executeQuery(String.format("SELECT * FROM gallerylist where gallery_id = '%s'", gallery_id));
-                Log.d("CY_Result",result);
+                String result = "";
+                if (getIntent().getIntExtra("page", 0) == 0) {
+                    result = dbConnector.executeQuery(String.format("SELECT * FROM gallerylist where gallery_id = '%s'", gallery_id));
+                } else {
+                    result = dbConnector.executeQuery(String.format("SELECT * FROM gallery_c_list where user_id = '%s'", gallery_id));
+                }
 
                 JSONArray jsonArray = new JSONArray(result);
                 //for (int i = 0; i < jsonArray.length(); i++) {

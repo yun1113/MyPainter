@@ -147,6 +147,7 @@ public class Canvas extends ActionBarActivity {
     HashMap user;
     ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 
+    Bitmap getBitmap;
     boolean notInRoom = true;
 
     private class SaveTask extends AsyncTask<Void, Void, String> {
@@ -336,17 +337,17 @@ public class Canvas extends ActionBarActivity {
         updateControls();
         setActivePreset(mCanvas.getCurrentPreset().type);
 
-        Thread thread = new Thread(checkThread);
-        thread.start();
+//        Thread thread = new Thread(checkThread);
+//        thread.start();
     }
 
     private Runnable checkThread = new Runnable() {
         public void run() {
             try {
-                int count=0;
-                while(notInRoom){
+                int count = 0;
+                while (notInRoom) {
                     Thread.sleep(3000);
-                    Log.d("CY_Test",""+ count);
+                    Log.d("CY_Test", "" + count);
                     count++;
                 }
             } catch (Exception e) {
@@ -380,16 +381,13 @@ public class Canvas extends ActionBarActivity {
                 String.valueOf(SHORTCUTS_VOLUME_BRUSH_SIZE)));
 
         ImageButton btn = (ImageButton) findViewById(R.id.settingbtn);
-        btn.setOnClickListener(new View.OnClickListener()
-
-                               {
-                                   @Override
-                                   public void onClick(View v) {
-
-                                       getPopupWindow();
-                                   }
-                               }
-
+        btn.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        getPopupWindow();
+                    }
+                }
         );
     }
 
@@ -513,10 +511,6 @@ public class Canvas extends ActionBarActivity {
                 } else {
                     clear();
                 }
-                break;
-
-            case R.id.keepdrawing:
-
                 break;
         }
         return true;
@@ -677,9 +671,7 @@ public class Canvas extends ActionBarActivity {
                                 Bitmap bitmap = null;
 
                                 try {
-                                    bitmap = BitmapFactory.decodeFile(picture
-                                            .getAbsolutePath());
-
+                                    bitmap = BitmapFactory.decodeFile(picture.getAbsolutePath());
                                     Bitmap.Config bitmapConfig = bitmap.getConfig();
                                     if (bitmapConfig != Bitmap.Config.ARGB_8888) {
                                         bitmap = null;
@@ -707,9 +699,9 @@ public class Canvas extends ActionBarActivity {
                                                             String.valueOf(BACKUP_OPENED_ONLY_FROM_OTHER)));
 
                                     String pictureName = null;
-
                                     switch (backupOption) {
                                         case BACKUP_OPENED_ONLY_FROM_OTHER:
+                                            Log.d("CY", "BACKUP_OPENED_ONLY_FROM_OTHER");
                                             if (!picture
                                                     .getParentFile()
                                                     .getName()
@@ -783,11 +775,19 @@ public class Canvas extends ActionBarActivity {
             if (new File(mSettings.lastPicture).exists()) {
                 savedBitmap = BitmapFactory.decodeFile(mSettings.lastPicture);
                 mIsNewFile = false;
+                mSettings.lastPicture = null;
             } else {
                 mSettings.lastPicture = null;
             }
         }
 
+        if (mSettings.downloadBitmap) {
+            byte[] decodedString = Base64.decode(mSettings.downloadBitmapSrc, Base64.DEFAULT);
+            savedBitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            Bitmap.Config bitmapConfig = savedBitmap.getConfig();
+        }
+        mSettings.downloadBitmap = false;
+        mSettings.downloadBitmapSrc = null;
         return savedBitmap;
     }
 
@@ -825,7 +825,8 @@ public class Canvas extends ActionBarActivity {
 
                 break;
             case R.id.keepdrawing:
-
+                Log.d("CY", "keepdrawing");
+                downloadPic();
                 break;
         }
     }
@@ -1182,7 +1183,6 @@ public class Canvas extends ActionBarActivity {
     }
 
     private void setActivePreset(int preset) {
-        Log.d("CY_preset", "" + preset);
         if (preset > 0 && preset != BrushPreset.CUSTOM) {
             LinearLayout wrapper = (LinearLayout) mPresetsBar.getChildAt(0);
             //highlightActivePreset(wrapper.getChildAt(preset - 1));
@@ -1303,6 +1303,10 @@ public class Canvas extends ActionBarActivity {
 
         mSettings.forceOpenFile = settings.getBoolean(
                 getString(R.string.settings_force_open_file), false);
+        mSettings.downloadBitmap = settings.getBoolean(
+                getString(R.string.settings_downloadBitmap), false);
+        mSettings.downloadBitmapSrc = settings.getString(
+                getString(R.string.settings_downloadBitmapSrc), null);
     }
 
     private String getSaveDir() {
@@ -1319,7 +1323,6 @@ public class Canvas extends ActionBarActivity {
 
     private void saveBitmap(String pictureName) {
         try {
-            Log.d("CY_picName", pictureName);
             mCanvas.saveBitmap(pictureName);
             mCanvas.changed(false);
         } catch (FileNotFoundException e) {
@@ -1358,7 +1361,10 @@ public class Canvas extends ActionBarActivity {
                 mSettings.preset.type);
         editor.putBoolean(getString(R.string.settings_force_open_file),
                 mSettings.forceOpenFile);
-
+        editor.putBoolean(getString(R.string.settings_downloadBitmap),
+                mSettings.downloadBitmap);
+        editor.putString(getString(R.string.settings_downloadBitmapSrc),
+                mSettings.downloadBitmapSrc);
         editor.commit();
     }
 
@@ -1367,11 +1373,44 @@ public class Canvas extends ActionBarActivity {
         deleteFile(SETTINGS_STORAGE);
     }
 
+    private void downloadPic() {
+        Log.d("CY", "downloadPic");
+        if (!isStorageAvailable()) {
+            return;
+        }
+        if (mCanvas.isChanged()) {
+            showDialog(R.id.dialog_open);
+        } else {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        String user_id = (String) user.get(SessionManager.KEY_EMAIL);
+                        DBConnector dbConnector = new DBConnector("connect1.php");
+                        String result = dbConnector.executeQuery(String.format("SELECT * FROM gallerylist where gallery_id='%s'", user_id));
+                        Log.d("Query_Result", result);
+
+                        JSONArray jsonArray = new JSONArray(result);
+                        JSONObject jsonData = jsonArray.getJSONObject(0);
+                        Log.d("CY", jsonData.getString("image"));
+                        mSettings.downloadBitmapSrc = jsonData.getString("image");
+                        mSettings.downloadBitmap = true;
+                        saveSettings();
+                        restart();
+
+                    } catch (Exception e) {
+                        Log.e("log_tag", e.toString());
+                    }
+                }
+            }).start();
+        }
+    }
+
+
     private void open() {
         if (!isStorageAvailable()) {
             return;
         }
-
         mSettings.forceOpenFile = true;
 
         if (mCanvas.isChanged()) {

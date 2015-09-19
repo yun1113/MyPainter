@@ -55,6 +55,7 @@
                     android:background="@drawable/button_in_setting"
                     android:layout_marginRight="30dp"
                     android:elevation="2dp"
+                    android:onClick="ToDoSomething"
                     />
             </com.andexert.library.RippleView>
 

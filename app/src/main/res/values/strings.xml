@@ -204,6 +204,7 @@
     <string name="home_menu_practice">練習模式</string>
     <string name="home_menu_setting">設定</string>
     <string name="home_menu_achievement">成就</string>
+    <string name="title_activity_frame">frame</string>
     <!-- HomeScreen Menu END-->
 
 </resources>

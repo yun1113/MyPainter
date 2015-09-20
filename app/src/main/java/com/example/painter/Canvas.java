@@ -797,6 +797,9 @@ public class Canvas extends ActionBarActivity {
                     clear();
                 }
                 break;
+            case R.id.shareBtn:
+                share();
+                break;
             case R.id.uploadBtn:
                 String pictureName = getUniquePictureName(getSaveDir());
                 Bitmap bm = BitmapFactory.decodeFile(getSaveDir());

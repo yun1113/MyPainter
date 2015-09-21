@@ -1,4 +1,4 @@
-package sidemenu;
+﻿package sidemenu;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -49,6 +49,7 @@ public class MultiConnectionFragment extends ContentFragment implements AdapterV
     final int MAX_CONNECT = 4;
 
     private String user_id, user_name;
+
     SessionManager session;
     HashMap user;
     // declare the color generator and drawable builder
@@ -82,6 +83,7 @@ public class MultiConnectionFragment extends ContentFragment implements AdapterV
             @Override
             public void onClick(View arg0) {
 
+
 //                for (int i = 0; i < connectDataList.size(); i++) {
 //                    Log.d("CY" + i, connectDataList.get(i).data);
 //                }
@@ -92,6 +94,13 @@ public class MultiConnectionFragment extends ContentFragment implements AdapterV
 //                        connectDataList.add(mDataList.get(i));
 //                    }
 //                }
+
+                for (int i = 0; i < mDataList.size(); i++) {
+                    if (mDataList.get(i).isChecked) {
+                        connectCount++;
+                        connectDataList.add(mDataList.get(i));
+                    }
+                }
                 if (connectCount > MAX_CONNECT) {
                     Message msg = alertHandler.obtainMessage();
                     msg.what = 1;
@@ -155,6 +164,16 @@ public class MultiConnectionFragment extends ContentFragment implements AdapterV
                 dbConnector.executeQuery(String.format("UPDATE friend_list SET friend_status='busy' WHERE friend_id = '%s'", user_id));
                 String result = dbConnector.executeQuery(String.format("INSERT INTO nowconnect(user_1,user_2,user_3,user_4,user_5)" +
                         " VALUES ('%s','%s','%s','%s','%s')", user_name, user[0], user[1], user[2], user[3]));
+                    if (i < connectCount){
+                        user[i] = connectDataList.get(i).data;
+                        dbConnector.executeQuery(String.format("UPDATE friend_list SET friend_status='busy' WHERE friend_id = '%s'",user[i]));
+                    }
+                    else
+                        user[i] = "";
+                }
+                dbConnector.executeQuery(String.format("UPDATE friend_list SET friend_status='busy' WHERE friend_id = '%s'", user_id));
+                String result = dbConnector.executeQuery(String.format("INSERT INTO nowconnect2(user_1,user_2,user_3,user_4,user_5, total)" +
+                        " VALUES ('%s','%s','%s','%s','%s','%s')", user_id, user[0], user[1], user[2], user[3], Integer.toString(connectCount+1)));
                 Log.d("Send_Result", result);
 
                 JSONObject jObj = new JSONObject(result);

@@ -1,9 +1,12 @@
-package com.example.painter;
+﻿package com.example.painter;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -149,6 +152,34 @@ public class Canvas extends ActionBarActivity {
 
     boolean check = true;
 
+    Message msg = new Message();
+    private final mHandler myHandler = new mHandler(this);
+    private static class mHandler extends Handler {
+        private final WeakReference<Canvas> mActivity;
+        public mHandler(Canvas activity){
+            mActivity = new WeakReference<Canvas>(activity);
+        }
+
+        public void handleMessage(Message msg){
+
+            final Canvas activity = mActivity.get();
+            AlertDialog.Builder dialog = new AlertDialog.Builder(activity);
+
+            switch(msg.what){
+                case 0x0001:
+                    dialog.setMessage(activity.getResources().getString(R.string.pass_done)).
+                            setPositiveButton(activity.getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface arg0, int arg1) {
+                                }
+                            });
+                    dialog.show();
+                    break;
+            }
+        }
+    }
+
+
     private class SaveTask extends AsyncTask<Void, Void, String> {
         private ProgressDialog dialog = ProgressDialog.show(Canvas.this,
                 getString(R.string.saving_title),
@@ -249,6 +280,33 @@ public class Canvas extends ActionBarActivity {
         }
 
         loadSettings();
+
+        mBrushSize = (SeekBar) findViewById(R.id.brush_size);
+        mBrushSize.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+
+        if (getIntent().hasExtra("Image")) {
+            Log.d("INTENT", "OK");
+            Intent intent = getIntent();
+            byte[] decodedString = intent.getByteArrayExtra("Image");
+            Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
+            File f = new File(getFrameName(getSaveDir()));
+            try {
+                boolean file = f.createNewFile();
+                FileOutputStream fo = new FileOutputStream(f);
+                fo.write(bytes.toByteArray());
+// remember close de FileOutput
+                fo.close();
+            } catch (Exception e) {
+                Log.e("log_tag", e.toString());
+            }
+            getIntent().removeExtra("Image");
+            //Bitmap bitmap = (Bitmap) intent.getParcelableExtra("Image");
+            //importFrame(bitmap);
+            //getIntent().removeExtra("Image");
+        }
 
         mBrushSize = (SeekBar) findViewById(R.id.brush_size);
         mBrushSize.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -358,6 +416,40 @@ public class Canvas extends ActionBarActivity {
                         msg.what = 1;
                         msg.sendToTarget();
                     }
+
+//        Thread thread = new Thread(checkThread);
+//        thread.start();
+    }
+
+
+
+    private String getFrameName(String path) {
+        String prefix = PICTURE_PREFIX;
+        String ext = PICTURE_EXT;
+        String pictureName = "";
+
+        int suffix = 1;
+        pictureName = path + prefix + suffix + ext;
+
+        while (new File(pictureName).exists()) {
+            pictureName = path + prefix + suffix + ext;
+            suffix++;
+        }
+
+        mSettings.lastPicture = pictureName;
+        Log.d("Unique", "here1");
+        return pictureName;
+    }
+
+
+    private Runnable checkThread = new Runnable() {
+        public void run() {
+            try {
+                int count = 0;
+                while (notInRoom) {
+                    Thread.sleep(3000);
+                    Log.d("CY_Test", "" + count);
+                    count++;
                 }
             } catch (Exception e) {
                 Log.e("log_tag", e.toString());
@@ -382,7 +474,6 @@ public class Canvas extends ActionBarActivity {
                     }).show();
         }
     };
-
 
     @Override
     protected void onResume() {
@@ -486,6 +577,25 @@ public class Canvas extends ActionBarActivity {
 
                 intent.setClass(Canvas.this, Gallery.class);
                 startActivity(intent);
+            }
+        });
+
+        ImageButton frameBtn = (ImageButton) layout.findViewById(R.id.frameBtn);
+        frameBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent();
+                intent.setClass(Canvas.this, frame2.class);
+                startActivity(intent);
+            }
+        });
+
+        ImageButton importBtn = (ImageButton) layout.findViewById(R.id.importPicBtn);
+        importBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                open();
             }
         });
     }
@@ -1182,6 +1292,755 @@ public class Canvas extends ActionBarActivity {
         }
     }
 
+
+                    int beforeExit = Integer.parseInt(preferences.getString(
+                            getString(R.string.preferences_before_exit),
+                            String.valueOf(BEFORE_EXIT_SUBMIT)));
+
+                    if (mCanvas.isChanged() && beforeExit == BEFORE_EXIT_SUBMIT) {
+                        showDialog(R.id.dialog_exit);
+                    } else if (beforeExit == BEFORE_EXIT_SAVE) {
+                        savePicture(ACTION_SAVE_AND_EXIT);
+                    } else {
+                        return super.onKeyDown(keyCode, event);
+                    }
+                    return true;
+                }
+                break;
+
+            case KeyEvent.KEYCODE_MENU:
+                if (mCanvas.isSetup()) {
+                    return true;
+                }
+                break;
+
+            case KeyEvent.KEYCODE_VOLUME_UP:
+                switch (mVolumeButtonsShortcuts) {
+                    case SHORTCUTS_VOLUME_BRUSH_SIZE:
+                        mCanvas.setPresetSize(mCanvas.getCurrentPreset().size + 1);
+                        if (mCanvas.isSetup()) {
+                            updateControls();
+                        }
+                        break;
+
+                    case SHORTCUTS_VOLUME_UNDO_REDO:
+                        if (!mCanvas.isSetup()) {
+                            if (mCanvas.canRedo()) {
+                                mCanvas.undo();
+                            }
+                        }
+                        break;
+                }
+
+                return true;
+
+            case KeyEvent.KEYCODE_VOLUME_DOWN:
+                switch (mVolumeButtonsShortcuts) {
+                    case SHORTCUTS_VOLUME_BRUSH_SIZE:
+                        mCanvas.setPresetSize(mCanvas.getCurrentPreset().size - 1);
+                        if (mCanvas.isSetup()) {
+                            updateControls();
+                        }
+                        break;
+
+                    case SHORTCUTS_VOLUME_UNDO_REDO:
+                        if (!mCanvas.isSetup()) {
+                            if (mCanvas.canUndo()) {
+                                mCanvas.undo();
+                            }
+                        }
+                        break;
+                }
+
+                return true;
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        switch (id) {
+            case R.id.dialog_clear:
+                return createDialogClear();
+
+            case R.id.dialog_exit:
+                return createDialogExit();
+
+            case R.id.dialog_share:
+                return createDialogShare();
+
+            case R.id.dialog_open:
+                return createDialogOpen();
+
+            default:
+                return super.onCreateDialog(id);
+
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        mSettings.preset = mCanvas.getCurrentPreset();
+        saveSettings();
+        super.onStop();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode,
+                                    Intent intent) {
+        switch (requestCode) {
+            case REQUEST_OPEN:
+                if (resultCode == Activity.RESULT_OK) {
+                    Uri uri = intent.getData();
+                    String path = "";
+
+                    if (uri != null) {
+                        if (uri.toString().toLowerCase().startsWith("content://")) {
+                            path = "file://" + getRealPathFromURI(uri);
+                        } else {
+                            path = uri.toString();
+                        }
+                        URI file_uri = URI.create(path);
+
+                        if (file_uri != null) {
+                            File picture = new File(file_uri);
+
+                            if (picture.exists()) {
+                                Bitmap bitmap = null;
+
+                                try {
+                                    bitmap = BitmapFactory.decodeFile(picture.getAbsolutePath());
+                                    Bitmap.Config bitmapConfig = bitmap.getConfig();
+                                    if (bitmapConfig != Bitmap.Config.ARGB_8888) {
+                                        bitmap = null;
+                                    }
+                                } catch (Exception e) {
+                                }
+
+                                if (bitmap != null) {
+                                    if (bitmap.getWidth() > bitmap.getHeight()) {
+                                        mSettings.orientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+                                    } else if (bitmap.getWidth() != bitmap
+                                            .getHeight()) {
+                                        mSettings.orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+                                    } else {
+                                        mSettings.orientation = getRequestedOrientation();
+                                    }
+
+                                    SharedPreferences preferences = PreferenceManager
+                                            .getDefaultSharedPreferences(this);
+
+                                    int backupOption = Integer
+                                            .parseInt(preferences
+                                                    .getString(
+                                                            getString(R.string.preferences_backup_openeded_file),
+                                                            String.valueOf(BACKUP_OPENED_ONLY_FROM_OTHER)));
+
+                                    String pictureName = null;
+                                    switch (backupOption) {
+                                        case BACKUP_OPENED_ONLY_FROM_OTHER:
+                                            Log.d("CY", "BACKUP_OPENED_ONLY_FROM_OTHER");
+                                            if (!picture
+                                                    .getParentFile()
+                                                    .getName()
+                                                    .equals(getString(R.string.app_name))) {
+                                                pictureName = FileSystem.copyFile(
+                                                        picture.getAbsolutePath(),
+                                                        getSaveDir()
+                                                                + picture.getName());
+                                            } else {
+                                                pictureName = picture.getAbsolutePath();
+                                            }
+                                            break;
+
+                                        case BACKUP_OPENED_ALWAYS:
+                                            pictureName = FileSystem.copyFile(
+                                                    picture.getAbsolutePath(),
+                                                    getSaveDir() + picture.getName());
+                                            break;
+
+                                        case BACKUP_OPENED_NEVER:
+                                            pictureName = picture.getAbsolutePath();
+                                            break;
+                                    }
+
+                                    if (pictureName != null) {
+                                        mSettings.lastPicture = pictureName;
+
+                                        saveSettings();
+                                        restart();
+                                    } else {
+                                        Toast.makeText(this,
+                                                R.string.file_not_found,
+                                                Toast.LENGTH_SHORT).show();
+                                    }
+                                } else {
+                                    Toast.makeText(this, R.string.invalid_file,
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                            } else {
+                                Toast.makeText(this, R.string.file_not_found,
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+                }
+                break;
+        }
+    }
+
+    public void changeBrushColor(View v) {
+        new ColorPickerDialog(this,
+                new ColorPickerDialog.OnColorChangedListener() {
+                    public void colorChanged(int color) {
+                        mCanvas.setPresetColor(color);
+                    }
+                }, mCanvas.getCurrentPreset().color).show();
+    }
+
+    public Bitmap getLastPicture() {
+        Bitmap savedBitmap = null;
+
+        if (!mOpenLastFile && mSettings.forceOpenFile) {
+            mSettings.lastPicture = null;
+            mIsNewFile = true;
+            return savedBitmap;
+        }
+
+        mSettings.forceOpenFile = false;
+
+        if (mSettings.lastPicture != null) {
+            if (new File(mSettings.lastPicture).exists()) {
+                savedBitmap = BitmapFactory.decodeFile(mSettings.lastPicture);
+                mIsNewFile = false;
+                mSettings.lastPicture = null;
+            } else {
+                mSettings.lastPicture = null;
+            }
+        }
+
+        if (mSettings.downloadBitmap) {
+            byte[] decodedString = Base64.decode(mSettings.downloadBitmapSrc, Base64.DEFAULT);
+            savedBitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            Bitmap.Config bitmapConfig = savedBitmap.getConfig();
+        }
+        mSettings.downloadBitmap = false;
+        mSettings.downloadBitmapSrc = null;
+        return savedBitmap;
+    }
+    String next;
+    String roomID ;
+    String total;
+    int order;
+    public void ToDoSomething(View v) {
+        switch (v.getId()) {
+            case R.id.SaveButton:
+                savePicture(ACTION_SAVE_AND_RETURN);
+                break;
+            case R.id.UndoButton:
+                mCanvas.undo();
+                break;
+            case R.id.clearBtn:
+                if (mCanvas.isChanged()) {
+                    showDialog(R.id.dialog_clear);
+                } else {
+                    clear();
+                }
+                break;
+            case R.id.uploadBtn:
+                Thread thread = new Thread(passThread);
+                thread.start();
+
+                break;
+            case R.id.keepdrawing:
+                Log.d("CY", "keepdrawing");
+
+                Thread thread2 = new Thread(getInfoThread);
+                thread2.start();
+
+                //downloadPic();
+                break;
+        }
+    }
+    String orderSt;
+    String nextOrder;
+
+    private Runnable getInfoThread = new Runnable() {
+        public void run() {
+            try {
+                DBConnector dbConnector = new DBConnector("connect.php");
+                String result = dbConnector.executeQuery(String.format("SELECT * FROM pass2 WHERE next = '%s' ", user.get(SessionManager.KEY_NAME)));
+                Log.d("Test", result);
+                JSONObject jObj = new JSONObject(result);
+                int RESULT = jObj.getInt("response");
+                if (RESULT == 1) {
+                    DBConnector dbConnector2 = new DBConnector("connect1.php");
+                    String result2 = dbConnector2.executeQuery(String.format("SELECT * FROM pass2 WHERE next= '%s' ", user.get(SessionManager.KEY_NAME)));
+                    roomID = new JSONArray(result2).getJSONObject(0).getString("PID");
+                    orderSt = new JSONArray(result2).getJSONObject(0).getString("nextOrder");
+                    total = new JSONArray(result2).getJSONObject(0).getString("totalUser");
+                    Log.d("next", orderSt);
+                    Log.d("Room", roomID);
+                    Log.d("total", total);
+
+                    DBConnector deleteConnector = new DBConnector("insert_db.php");
+                    String delete = deleteConnector.executeQuery(String.format("DELETE FROM pass2 WHERE next =  '%s' ", user.get(SessionManager.KEY_NAME)));
+                    Log.d("Test",delete);
+                }
+            } catch (Exception e) {
+                Log.e("log_tag", e.toString());
+            }
+        }
+    };
+
+    private Runnable uploadThread = new Runnable() {
+        public void run() {
+            String userName = (String)user.get(SessionManager.KEY_NAME);
+            String pictureName = getUniquePictureName(getSaveDir());
+            saveBitmap(pictureName);
+
+            Bitmap bm = BitmapFactory.decodeFile(pictureName);
+            ByteArrayOutputStream bao = new ByteArrayOutputStream();
+            bm.compress(Bitmap.CompressFormat.JPEG, 100, bao);
+            byte[] ba = bao.toByteArray();
+
+            ba1 = Base64.encodeToString(ba, Base64.DEFAULT);
+            nameValuePairs.add(new BasicNameValuePair("base64", ba1));
+            nameValuePairs.add(new BasicNameValuePair("ImageName", pictureName));
+            nameValuePairs.add(new BasicNameValuePair("user", userName));
+            nameValuePairs.add(new BasicNameValuePair("PID", roomID));
+            nameValuePairs.add(new BasicNameValuePair("next", next));
+            nameValuePairs.add(new BasicNameValuePair("nextOrder", nextOrder));
+            nameValuePairs.add(new BasicNameValuePair("totalUser", total));
+
+            try {
+                HttpClient httpClient = new DefaultHttpClient();
+                HttpPost httpPost = new HttpPost("http://140.115.87.44/android_connect/uploadphoto2.php");
+                httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+                HttpResponse response = httpClient.execute(httpPost);
+                String st = EntityUtils.toString(response.getEntity());
+                Log.d("Result", "" + st);
+            } catch (Exception e) {
+                Log.e("log_tag", e.toString());
+            }
+        }
+    };
+
+    private Runnable passThread = new Runnable() {
+        public void run() {
+            try {
+                DBConnector dbConnector = new DBConnector("connect.php");
+                String result = dbConnector.executeQuery(String.format("SELECT * FROM nowconnect2 WHERE user_1= '%s' ", user.get(SessionManager.KEY_EMAIL)));
+                Log.d("Test", result);
+                JSONObject jObj = new JSONObject(result);
+                int RESULT = jObj.getInt("response");
+                if (RESULT == 1) {
+                    Log.d("Respnse", "first");
+                    order = 1;
+                    DBConnector dbConnector2 = new DBConnector("connect1.php");
+                    String result2 = dbConnector2.executeQuery(String.format("SELECT * FROM nowconnect2 WHERE user_1= '%s' ", user.get(SessionManager.KEY_EMAIL)));
+                     next = new JSONArray(result2).getJSONObject(0).getString("user_2");
+                     roomID = new JSONArray(result2).getJSONObject(0).getString("PID");
+                     total = new JSONArray(result2).getJSONObject(0).getString("total");
+                    Log.d("next", next);
+                    Log.d("Room", roomID);
+
+                    nextOrder = Integer.toString(order + 1);
+                    Thread thread2 = new Thread(uploadThread);
+                    thread2.start();
+
+//                    String userName = (String)user.get(SessionManager.KEY_NAME);
+//                    String pictureName = getUniquePictureName(getSaveDir());
+//                    saveBitmap(pictureName);
+//
+//                    Bitmap bm = BitmapFactory.decodeFile(pictureName);
+//                    ByteArrayOutputStream bao = new ByteArrayOutputStream();
+//                    bm.compress(Bitmap.CompressFormat.JPEG, 100, bao);
+//                    byte[] ba = bao.toByteArray();
+//
+//                    ba1 = Base64.encodeToString(ba, Base64.DEFAULT);
+//                    nameValuePairs.add(new BasicNameValuePair("base64", ba1));
+//                    nameValuePairs.add(new BasicNameValuePair("ImageName", pictureName));
+//                    nameValuePairs.add(new BasicNameValuePair("user", userName));
+//                    nameValuePairs.add(new BasicNameValuePair("PID", roomID));
+//                    nameValuePairs.add(new BasicNameValuePair("next", next));
+//                    nameValuePairs.add(new BasicNameValuePair("nextOrder", nextOrder));
+//                    nameValuePairs.add(new BasicNameValuePair("totalUser", total));
+//
+//                    try {
+//                        HttpClient httpClient = new DefaultHttpClient();
+//                        HttpPost httpPost = new HttpPost("http://140.115.87.44/android_connect/uploadphoto2.php");
+//                        httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+//                        HttpResponse response = httpClient.execute(httpPost);
+//                        String st = EntityUtils.toString(response.getEntity());
+//                        Log.d("Result", "" + st);
+//                    } catch (Exception e) {
+//                        Log.e("log_tag", e.toString());
+//                    }
+                } else {
+                    if(Integer.parseInt(orderSt) < Integer.parseInt(total)) {
+                        nextOrder = Integer.toString(Integer.parseInt(orderSt) + 1);
+                        String nextOrderSt = "user_"+nextOrder;
+
+
+                        DBConnector dbConnector2 = new DBConnector("connect1.php");
+                        String result2 = dbConnector2.executeQuery(String.format("SELECT * FROM nowconnect2 WHERE PID = '%s' ",  roomID));
+
+                        next = new JSONArray(result2).getJSONObject(0).getString(nextOrderSt);
+
+                        Thread thread2 = new Thread(uploadThread);
+                        thread2.start();
+//                        String userName = (String)user.get(SessionManager.KEY_NAME);
+//                        String pictureName = getUniquePictureName(getSaveDir());
+//                        saveBitmap(pictureName);
+//
+//                        Bitmap bm = BitmapFactory.decodeFile(pictureName);
+//                        ByteArrayOutputStream bao = new ByteArrayOutputStream();
+//                        bm.compress(Bitmap.CompressFormat.JPEG, 100, bao);
+//                        byte[] ba = bao.toByteArray();
+//
+//                        ba1 = Base64.encodeToString(ba, Base64.DEFAULT);
+//                        nameValuePairs.add(new BasicNameValuePair("base64", ba1));
+//                        nameValuePairs.add(new BasicNameValuePair("ImageName", pictureName));
+//                        nameValuePairs.add(new BasicNameValuePair("user", userName));
+//                        nameValuePairs.add(new BasicNameValuePair("PID", roomID));
+//                        nameValuePairs.add(new BasicNameValuePair("next", next));
+//                        nameValuePairs.add(new BasicNameValuePair("nextOrder", nextOrder));
+//                        nameValuePairs.add(new BasicNameValuePair("totalUser", total));
+//
+//                        try {
+//                            HttpClient httpClient = new DefaultHttpClient();
+//                            HttpPost httpPost = new HttpPost("http://140.115.87.44/android_connect/uploadphoto2.php");
+//                            httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+//                            HttpResponse response = httpClient.execute(httpPost);
+//                            String st = EntityUtils.toString(response.getEntity());
+//                            Log.d("Result", "" + st);
+//                        } catch (Exception e) {
+//                            Log.e("log_tag", e.toString());
+//                        }
+                    }else if(Integer.parseInt(orderSt) == Integer.parseInt(total)){
+                        DBConnector deleteConnector = new DBConnector("insert_db.php");
+                        String delete = deleteConnector.executeQuery(String.format("DELETE FROM nowconnect2 WHERE PID =  '%s' ", roomID));
+                        Log.d("Test",delete);
+
+                        msg.what = 0x0001;
+                        myHandler.sendMessage(msg);
+
+                        //insert to gallery
+                    }
+                }
+            } catch (Exception e) {
+                Log.e("log_tag", e.toString());
+            }
+        }
+    };
+
+    public void setPreset(View v) {
+        switch (v.getId()) {
+            case R.id.Pencil:
+                mCanvas.setPreset(new BrushPreset(BrushPreset.PENCIL, mCanvas
+                        .getCurrentPreset().color));
+                break;
+            case R.id.Brush:
+                mCanvas.setPreset(new BrushPreset(BrushPreset.BRUSH, mCanvas
+                        .getCurrentPreset().color));
+                break;
+            case R.id.Marker:
+                mCanvas.setPreset(new BrushPreset(BrushPreset.MARKER, mCanvas
+                        .getCurrentPreset().color));
+                break;
+            case R.id.Eraser:
+                mCanvas.setPreset(new BrushPreset(BrushPreset.ERASER, mCanvas
+                        .getCurrentPreset().color));
+                break;
+            case R.id.Black:
+                mCanvas.setPreset(new BrushPreset(BrushPreset.BLACK, mCanvas
+                        .getCurrentPreset().color));
+                break;
+            case R.id.Red:
+                mCanvas.setPreset(new BrushPreset(BrushPreset.RED, mCanvas
+                        .getCurrentPreset().color));
+                break;
+            case R.id.Orange:
+                mCanvas.setPreset(new BrushPreset(BrushPreset.ORANGE, mCanvas
+                        .getCurrentPreset().color));
+                break;
+            case R.id.Yellow:
+                mCanvas.setPreset(new BrushPreset(BrushPreset.YELLOW, mCanvas
+                        .getCurrentPreset().color));
+                break;
+            case R.id.Green:
+                mCanvas.setPreset(new BrushPreset(BrushPreset.GREEN, mCanvas
+                        .getCurrentPreset().color));
+                break;
+            case R.id.Blue:
+                mCanvas.setPreset(new BrushPreset(BrushPreset.BLUE, mCanvas
+                        .getCurrentPreset().color));
+                break;
+            case R.id.Purple:
+                mCanvas.setPreset(new BrushPreset(BrushPreset.PURPLE, mCanvas
+                        .getCurrentPreset().color));
+                break;
+        }
+
+        resetPresets();
+        setActivePreset(v);
+        updateControls();
+    }
+
+    public void resetPresets() {
+        LinearLayout wrapper = (LinearLayout) mPresetsBar.getChildAt(0);
+        for (int i = wrapper.getChildCount() - 1; i >= 0; i--) {
+            wrapper.getChildAt(i).setBackgroundColor(Color.WHITE);
+        }
+    }
+
+    public void savePicture(int action) {
+        if (!isStorageAvailable()) {
+            return;
+        }
+
+        final int taskAction = action;
+
+        new SaveTask() {
+            protected void onPostExecute(String pictureName) {
+                mIsNewFile = false;
+
+                if (taskAction == Canvas.ACTION_SAVE_AND_SHARE) {
+                    startShareActivity(pictureName);
+                }
+
+                if (taskAction == Canvas.ACTION_SAVE_AND_OPEN) {
+                    startOpenActivity();
+                }
+
+                super.onPostExecute(pictureName);
+
+                if (taskAction == Canvas.ACTION_SAVE_AND_EXIT) {
+                    finish();
+                }
+                if (taskAction == Canvas.ACTION_SAVE_AND_ROTATE) {
+                    rotateScreen();
+                }
+            }
+        }.execute();
+    }
+
+    private void enterBrushSetup() {
+        mSettingsLayout.setVisibility(View.VISIBLE);
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                mCanvas.setVisibility(View.INVISIBLE);
+                setPanelVerticalSlide(mPresetsBar, -1.0f, 0.0f, 300);
+                setPanelVerticalSlide(mPropertiesBar, 1.0f, 0.0f, 300, true);
+                mCanvas.setup(true);
+            }
+        }, 10);
+    }
+
+    private void exitBrushSetup() {
+        mSettingsLayout.setBackgroundColor(Color.WHITE);
+
+        if (mIsHardwareAccelerated) {
+            setPanelVerticalSlide(mPresetsBar, 0.0f, -1.0f, 300);
+            setPanelVerticalSlide(mPropertiesBar, 0.0f, 1.0f, 300, true);
+            mCanvas.setup(false);
+        } else {
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    mCanvas.setVisibility(View.INVISIBLE);
+                    setPanelVerticalSlide(mPresetsBar, 0.0f, -1.0f, 300);
+                    setPanelVerticalSlide(mPropertiesBar, 0.0f, 1.0f, 300, true);
+                    mCanvas.setup(false);
+                }
+            }, 10);
+        }
+    }
+
+    private Dialog createDialogClear() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setMessage(R.string.clear_bitmap_prompt);
+        alert.setCancelable(false);
+        alert.setTitle(R.string.clear_bitmap_prompt_title);
+
+        alert.setPositiveButton(R.string.yes,
+                new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int which) {
+                        clear();
+                    }
+                });
+        alert.setNegativeButton(R.string.no, null);
+        return alert.create();
+    }
+
+    private Dialog createDialogExit() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setMessage(R.string.exit_app_prompt);
+        alert.setCancelable(false);
+        alert.setTitle(R.string.exit_app_prompt_title);
+
+        alert.setPositiveButton(R.string.yes,
+                new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int which) {
+                        savePicture(Canvas.ACTION_SAVE_AND_EXIT);
+                    }
+                });
+        alert.setNegativeButton(R.string.no,
+                new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                });
+
+        return alert.create();
+    }
+
+    private Dialog createDialogOpen() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setMessage(R.string.open_prompt);
+        alert.setCancelable(false);
+        alert.setTitle(R.string.open_prompt_title);
+
+        alert.setPositiveButton(R.string.yes,
+                new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int which) {
+                        savePicture(Canvas.ACTION_SAVE_AND_OPEN);
+                    }
+                });
+        alert.setNegativeButton(R.string.no,
+                new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int which) {
+                        startOpenActivity();
+                    }
+                });
+
+        return alert.create();
+    }
+
+    private Dialog createDialogShare() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setMessage(R.string.share_prompt);
+        alert.setCancelable(false);
+        alert.setTitle(R.string.share_prompt_title);
+
+        alert.setPositiveButton(R.string.yes,
+                new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int which) {
+                        savePicture(Canvas.ACTION_SAVE_AND_SHARE);
+                    }
+                });
+        alert.setNegativeButton(R.string.no,
+                new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int which) {
+                        startShareActivity(mSettings.lastPicture);
+                    }
+                });
+
+        return alert.create();
+    }
+
+    private void updateControls() {
+        mBrushSize.setProgress((int) mCanvas.getCurrentPreset().size);
+        if (mCanvas.getCurrentPreset().blurStyle != null) {
+            mBrushBlurStyle.setSelection(mCanvas.getCurrentPreset().blurStyle
+                    .ordinal() + 1);
+            mBrushBlurRadius.setProgress(mCanvas.getCurrentPreset().blurRadius);
+        } else {
+            mBrushBlurStyle.setSelection(0);
+            mBrushBlurRadius.setProgress(0);
+        }
+    }
+
+    private void setPanelVerticalSlide(LinearLayout layout, float from,
+                                       float to, int duration) {
+        setPanelVerticalSlide(layout, from, to, duration, false);
+    }
+
+    private void setPanelVerticalSlide(LinearLayout layout, float from,
+                                       float to, int duration, boolean last) {
+        Animation animation = new TranslateAnimation(
+                Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF,
+                0.0f, Animation.RELATIVE_TO_SELF, from,
+                Animation.RELATIVE_TO_SELF, to);
+
+        animation.setDuration(duration);
+        animation.setFillAfter(true);
+        animation.setInterpolator(this, android.R.anim.decelerate_interpolator);
+
+        final float listenerFrom = Math.abs(from);
+        final float listenerTo = Math.abs(to);
+        final boolean listenerLast = last;
+        final View listenerLayout = layout;
+
+        if (listenerFrom > listenerTo) {
+            listenerLayout.setVisibility(View.VISIBLE);
+        }
+
+        animation.setAnimationListener(new Animation.AnimationListener() {
+
+            public void onAnimationStart(Animation animation) {
+            }
+
+            public void onAnimationRepeat(Animation animation) {
+            }
+
+            public void onAnimationEnd(Animation animation) {
+                if (listenerFrom < listenerTo) {
+                    listenerLayout.setVisibility(View.INVISIBLE);
+                    if (listenerLast) {
+                        mCanvas.setVisibility(View.VISIBLE);
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            public void run() {
+                                mSettingsLayout.setVisibility(View.GONE);
+                            }
+                        }, 10);
+                    }
+                } else {
+                    if (listenerLast) {
+                        mCanvas.setVisibility(View.VISIBLE);
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            public void run() {
+                                mSettingsLayout
+                                        .setBackgroundColor(Color.TRANSPARENT);
+                            }
+                        }, 10);
+                    }
+                }
+            }
+        });
+
+        layout.setAnimation(animation);
+    }
+
+    private void share() {
+        if (!isStorageAvailable()) {
+            return;
+        }
+
+        if (mCanvas.isChanged() || mIsNewFile) {
+            if (mIsNewFile) {
+                savePicture(ACTION_SAVE_AND_SHARE);
+            } else {
+                showDialog(R.id.dialog_share);
+            }
+        } else {
+            startShareActivity(mSettings.lastPicture);
+        }
+    }
+
     private void startShareActivity(String pictureName) {
         Uri uri = Uri.fromFile(new File(pictureName));
 
@@ -1374,6 +2233,101 @@ public class Canvas extends ActionBarActivity {
         } catch (PackageManager.NameNotFoundException e) {
         }
 
+        }
+
+        String prefix = PICTURE_PREFIX;
+        String ext = PICTURE_EXT;
+        String pictureName = "";
+
+        int suffix = 1;
+        pictureName = path + prefix + suffix + ext;
+
+        while (new File(pictureName).exists()) {
+            pictureName = path + prefix + suffix + ext;
+            suffix++;
+        }
+
+        mSettings.lastPicture = pictureName;
+        return pictureName;
+    }
+
+    private void loadSettings() {
+        mSettings = new PainterSettings();
+        SharedPreferences settings = getSharedPreferences(SETTINGS_STORAGE,
+                Context.MODE_PRIVATE);
+
+        mSettings.orientation = settings.getInt(
+                getString(R.string.settings_orientation),
+                ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        if (getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
+            setRequestedOrientation(mSettings.orientation);
+        }
+
+        mSettings.lastPicture = settings.getString(
+                getString(R.string.settings_last_picture), null);
+
+        int type = settings.getInt(getString(R.string.settings_brush_type),
+                BrushPreset.PENCIL);
+
+        if (type == BrushPreset.CUSTOM) {
+            mSettings.preset = new BrushPreset(settings.getFloat(
+                    getString(R.string.settings_brush_size), 2),
+                    settings.getInt(getString(R.string.settings_brush_color),
+                            Color.BLACK), settings.getInt(
+                    getString(R.string.settings_brush_blur_style), 0),
+                    settings.getInt(
+                            getString(R.string.settings_brush_blur_radius), 0));
+            mSettings.preset.setType(type);
+        } else {
+            mSettings.preset = new BrushPreset(type, settings.getInt(
+                    getString(R.string.settings_brush_color), Color.BLACK));
+        }
+
+        mCanvas.setPreset(mSettings.preset);
+
+        mSettings.forceOpenFile = settings.getBoolean(
+                getString(R.string.settings_force_open_file), false);
+        mSettings.downloadBitmap = settings.getBoolean(
+                getString(R.string.settings_downloadBitmap), false);
+        mSettings.downloadBitmapSrc = settings.getString(
+                getString(R.string.settings_downloadBitmapSrc), null);
+    }
+
+    private String getSaveDir() {
+        String path = Environment.getExternalStorageDirectory()
+                .getAbsolutePath() + '/' + getString(R.string.app_name) + '/';
+
+        File file = new File(path);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+
+        return path;
+    }
+
+    private void saveBitmap(String pictureName) {
+        try {
+            mCanvas.saveBitmap(pictureName);
+            mCanvas.changed(false);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void saveSettings() {
+        SharedPreferences settings = getSharedPreferences(SETTINGS_STORAGE,
+                Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = settings.edit();
+
+        try {
+            PackageInfo pack = getPackageManager().getPackageInfo(
+                    getPackageName(), 0);
+            editor.putInt(getString(R.string.settings_version),
+                    pack.versionCode);
+        } catch (PackageManager.NameNotFoundException e) {
+        }
+
         editor.putInt(getString(R.string.settings_orientation),
                 mSettings.orientation);
         editor.putString(getString(R.string.settings_last_picture),
@@ -1424,6 +2378,12 @@ public class Canvas extends ActionBarActivity {
                         DBConnector dbConnector2 = new DBConnector("insert_db.php");
                         String result2 = dbConnector2.executeQuery(String.format("DELETE FROM `pass2` WHERE next='%s'", user_name));
                         Log.d("Query_Result2", result2);
+
+=======
+                        String user_id = (String) user.get(SessionManager.KEY_EMAIL);
+                        DBConnector dbConnector = new DBConnector("connect1.php");
+                        String result = dbConnector.executeQuery(String.format("SELECT * FROM gallerylist where gallery_id='%s'", user_id));
+                        Log.d("Query_Result", result);
 
                         JSONArray jsonArray = new JSONArray(result);
                         JSONObject jsonData = jsonArray.getJSONObject(0);

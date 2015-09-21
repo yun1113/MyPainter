@@ -1,144 +1,225 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/RelativeLayout1"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#FFFFFF"
-    android:orientation="horizontal"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.painter.Canvas">
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
 
-    <View
-        android:id="@+id/view1"
+    <painter.PainterCanvas android:id="@+id/canvas"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_alignParentStart="true"
-        android:background="#FFFFFF" />
+        android:layout_height="fill_parent"/>
 
-    <ImageButton
-        android:id="@+id/settingbtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="false"
-        android:layout_alignParentRight="true"
-        android:background="#FFFFFF"
-        android:clickable="true"
-        android:src="@drawable/setting"
-        android:layout_marginBottom="8dp" />
+    <RelativeLayout android:id="@+id/settings_layout"
+        style="@style/Settings">
+
+        <LinearLayout android:id="@+id/presets_bar"
+            android:gravity="center_horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true">
+            <LinearLayout style="@style/BrushsPresets">
+                <ImageButton android:id="@+id/preset_pencil"
+                    android:onClick="setPreset"
+                    android:src="@drawable/pencil"
+                    style="@style/BrushsPresets.Preset"/>
+                <ImageButton android:id="@+id/preset_brush"
+                    android:onClick="setPreset"
+                    android:src="@drawable/brush"
+                    style="@style/BrushsPresets.Preset"/>
+                <ImageButton android:id="@+id/preset_marker"
+                    android:onClick="setPreset"
+                    android:src="@drawable/marker"
+                    style="@style/BrushsPresets.Preset"/>
+                <ImageButton android:id="@+id/preset_pen"
+                    android:onClick="setPreset"
+                    android:src="@drawable/pen"
+                    style="@style/BrushsPresets.Preset"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout android:id="@+id/properties_bar"
+            style="@style/BrushProperties.Wrapper" >
+            <LinearLayout style="@style/BrushProperties.Controls" >
+                <TextView style="@style/BrushProperties.Label"
+                    android:text="@string/brush_color"/>
+                <ImageButton android:src="@drawable/ic_menu_colors"
+                    android:onClick="changeBrushColor"
+                    style="@style/BrushProperties.Control.Image"	/>
+            </LinearLayout>
+            <LinearLayout style="@style/BrushProperties.Controls" >
+                <TextView style="@style/BrushProperties.Label"
+                    android:text="@string/brush_size"/>
+                <SeekBar android:id="@+id/brush_size"
+                    style="@style/BrushProperties.Control" />
+            </LinearLayout>
+            <LinearLayout style="@style/BrushProperties.Controls">
+                <TextView style="@style/BrushProperties.Label"
+                    android:text="@string/blur_radius" />
+                <SeekBar android:id="@+id/brush_blur_radius"
+                    style="@style/BrushProperties.Control" />
+            </LinearLayout>
+            <LinearLayout style="@style/BrushProperties.Controls.Last">
+                <TextView style="@style/BrushProperties.Label"
+                    android:text="@string/blur_style" />
+                <painter.BlurStyleSpinner android:id="@+id/brush_blur_style"
+                    android:prompt="@string/blur_type_select"
+                    android:entries="@array/blur_types"
+                    style="@style/BrushProperties.Control" />
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:id="@+id/paint_colors"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="false"
         android:orientation="horizontal"
-        android:weightSum="1">
+        android:weightSum="1"
+        android:layout_gravity="center_horizontal|bottom"
+        android:gravity="center_horizontal">
+
+        <!--<ImageButton-->
+        <!--android:id="@+id/imageButton1"-->
+        <!--android:onClick="setPreset"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginBottom="5dp"-->
+        <!--android:background="#FFFFFF"-->
+        <!--android:src="@android:drawable/ic_menu_revert" />-->
 
         <ImageButton
-            android:id="@+id/imageButton1"
+            android:layout_width="wrap_content"
+            android:layout_height="27dp"
+            android:src="@drawable/save_canvas"
+            android:background="#FFFFFF"
+            android:id="@+id/SaveButton"
+            android:onClick="ToDoSomething"/>
+
+        <ImageButton
+            android:id="@+id/settingbtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="false"
+            android:layout_alignParentRight="true"
             android:layout_marginBottom="5dp"
             android:background="#FFFFFF"
-            android:src="@drawable/undo"
-            android:layout_marginLeft="10dp" />
+            android:clickable="true"
+            android:src="@drawable/ic_settings_grey600_36dp" />
 
         <ImageButton
-            android:id="@+id/ImageButton03"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
+            android:layout_height="27dp"
+            android:src="@drawable/undo"
+            android:background="#FFFFFF"
+            android:id="@+id/UndoButton"
+            android:onClick="ToDoSomething"
+            />
+
+        <ImageButton
+            android:id="@+id/Pencil"
+            android:onClick="setPreset"
+            android:layout_width="wrap_content"
+            android:layout_height="27dp"
+            android:layout_marginLeft="10dp"
             android:background="#FFFFFF"
             android:src="@drawable/pencil" />
 
         <ImageButton
-            android:id="@+id/ImageButton02"
+            android:id="@+id/Brush"
+            android:onClick="setPreset"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="27dp"
             android:layout_marginLeft="10dp"
             android:background="#FFFFFF"
             android:src="@drawable/brush" />
 
         <ImageButton
-            android:id="@+id/ImageButton01"
+            android:id="@+id/Marker"
+            android:onClick="setPreset"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="27dp"
             android:layout_marginLeft="10dp"
             android:background="#FFFFFF"
             android:src="@drawable/marker" />
 
         <ImageButton
-            android:id="@+id/imageButton10"
+            android:id="@+id/Eraser"
+            android:onClick="setPreset"
+            android:layout_width="wrap_content"
+            android:layout_height="27dp"
+            android:layout_marginLeft="10dp"
+            android:adjustViewBounds="false"
+            android:background="#FFFFFF"
+            android:src="@drawable/eraser" />
+
+        <ImageButton
+            android:id="@+id/Black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:background="@drawable/eraser" />
+            android:onClick="setPreset"
+            android:src="@drawable/black"
+            android:background="@drawable/blackbutton" />
 
         <ImageButton
-            android:id="@+id/imageButton9"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:background="@drawable/blackbutton"
-            android:layout_marginTop="2dp" />
-
-        <ImageButton
-            android:id="@+id/imageButton"
+            android:id="@+id/Red"
             android:layout_width="27dp"
             android:layout_height="27dp"
             android:layout_marginLeft="10dp"
-            android:background="@drawable/redbutton"
-            android:layout_marginTop="2dp" />
+            android:onClick="setPreset"
+            android:src="@drawable/red"
+            android:background="@drawable/redbutton" />
 
         <ImageButton
-            android:id="@+id/imageButton4"
+            android:id="@+id/Orange"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:background="@drawable/orangebutton"
-            android:layout_marginTop="2dp" />
+            android:onClick="setPreset"
+            android:src="@drawable/orange"
+            android:background="@drawable/orangebutton" />
 
         <ImageButton
-            android:id="@+id/imageButton5"
+            android:id="@+id/Yellow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:background="@drawable/yellowbutton"
-            android:layout_marginTop="2dp" />
+            android:onClick="setPreset"
+            android:src="@drawable/yellow"
+            android:background="@drawable/yellowbutton" />
 
         <ImageButton
-            android:id="@+id/imageButton6"
+            android:id="@+id/Green"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:background="@drawable/greenbutton"
-            android:layout_marginTop="2dp" />
+            android:onClick="setPreset"
+            android:src="@drawable/green"
+            android:background="@drawable/greenbutton" />
 
         <ImageButton
-            android:id="@+id/imageButton7"
+            android:id="@+id/Blue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/view1"
             android:layout_centerHorizontal="true"
             android:layout_marginLeft="10dp"
-            android:background="@drawable/bulebutton"
-            android:layout_marginTop="2dp" />
+            android:onClick="setPreset"
+            android:src="@drawable/blue"
+            android:background="@drawable/bulebutton" />
 
         <ImageButton
-            android:id="@+id/imageButton8"
+            android:id="@+id/Purple"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:background="@drawable/purplebutton"
-            android:layout_marginTop="2dp" />
+            android:onClick="setPreset"
+            android:src="@drawable/purple"
+            android:background="@drawable/purplebutton" />
 
 
     </LinearLayout>
 
-
-</RelativeLayout>
+</FrameLayout>

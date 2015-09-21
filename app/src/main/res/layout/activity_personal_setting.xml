@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+﻿<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:float="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/personalSetting"
@@ -7,9 +7,8 @@
     android:orientation="vertical"
     android:weightSum="3"
     tools:context="com.example.painter.PersonalSetting"
-    android:background="#ccFFFFFF"
-
-    >
+    android:background="#aaFFCDD2"
+>
 
 
     <LinearLayout
@@ -148,7 +147,8 @@
                 android:id="@+id/gSharingSwitch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="left|center_vertical" />
+                android:layout_gravity="left|center_vertical"
+                />
 
         </LinearLayout>
 

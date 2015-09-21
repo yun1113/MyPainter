@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -42,18 +43,20 @@ import java.util.logging.LogRecord;
 
 public class Sign_up extends ActionBarActivity {
     private final mHandler myHandler = new mHandler(this);
-    private static class mHandler extends Handler{
+
+    private static class mHandler extends Handler {
         private final WeakReference<Sign_up> mActivity;
-        public mHandler(Sign_up activity){
+
+        public mHandler(Sign_up activity) {
             mActivity = new WeakReference<Sign_up>(activity);
         }
 
-        public void handleMessage(Message msg){
+        public void handleMessage(Message msg) {
 
             final Sign_up activity = mActivity.get();
             AlertDialog.Builder dialog = new AlertDialog.Builder(activity);
 
-            switch(msg.what){
+            switch (msg.what) {
                 case 0x0001:
                    /*String msg_success = "data entered successfully";
                     Toast.makeText(activity.getApplicationContext(),msg_success, Toast.LENGTH_LONG).show();*/
@@ -61,7 +64,7 @@ public class Sign_up extends ActionBarActivity {
                         @Override
                         public void onClick(DialogInterface arg0, int arg1) {
                             Intent intent = new Intent();
-                            intent.setClass(activity, FriendTest.class);
+                            intent.setClass(activity, Canvas.class);
                             activity.startActivity(intent);
                         }
                     });
@@ -151,7 +154,7 @@ public class Sign_up extends ActionBarActivity {
 
             try {
                 HttpClient httpClient = new DefaultHttpClient();
-                HttpPost httpPost = new HttpPost("http://140.115.80.233/android_connect/test123.php");
+                HttpPost httpPost = new HttpPost("http://140.115.87.44/android_connect/sign_up.php");
                 httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
                 HttpResponse response = httpClient.execute(httpPost);
                 HttpEntity entity = response.getEntity();
@@ -160,28 +163,29 @@ public class Sign_up extends ActionBarActivity {
                 BufferedReader bufReader = new BufferedReader(new InputStreamReader(is, "utf-8"), 8);
                 StringBuilder builder = new StringBuilder();
                 String line = null;
-                while((line = bufReader.readLine()) != null) {
+                while ((line = bufReader.readLine()) != null) {
                     builder.append(line + "\n");
                 }
                 is.close();
                 result = builder.toString();
 
-                try{
+                try {
+                    Log.d("CY_Test",result);
                     JSONObject jObj = new JSONObject(result);
                     int SIGNUP_RESULT = jObj.getInt("response");
                     Message msg = new Message();
 
-                    if(SIGNUP_RESULT == 1){
+                    if (SIGNUP_RESULT == 1) {
                         msg.what = 0x0001;
                         myHandler.sendMessage(msg);
-                    }else if(SIGNUP_RESULT == 2){
+                    } else if (SIGNUP_RESULT == 2) {
                         msg.what = 0x0002;
                         myHandler.sendMessage(msg);
-                    }else{
+                    } else {
                         msg.what = 0x0003;
                         myHandler.sendMessage(msg);
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
                     Log.e("log_tag", e.toString());
                 }
 

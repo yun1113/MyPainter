@@ -84,7 +84,6 @@ public class PersonalSetting extends ActionBarActivity {
 		password = user.get(SessionManager.KEY_PASSWORD);
 		name = user.get(SessionManager.KEY_NAME);
 		galleryPublic = user.get(SessionManager.KEY_GALLERYPUBLIC);
-		galleryID = user.get(SessionManager.KEY_GALLERYID);
 
 		Log.d("Switch", galleryPublic);
 		userName.setText(name);

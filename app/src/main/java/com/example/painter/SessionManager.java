@@ -4,12 +4,11 @@ package com.example.painter;
  * Created by �d���� on 2015/8/20.
  */
 
+import java.util.HashMap;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-
-import java.util.HashMap;
 
 public class SessionManager {
     // Shared Preferences
@@ -37,10 +36,9 @@ public class SessionManager {
     public static final String KEY_PASSWORD = "password";
 
     public static final String KEY_NAME = "name";
-    public static final String KEY_GALLERYID = "galleryID";
     public static final String KEY_GALLERYPUBLIC = "galleryPublic";
     public static final String KEY_FriendListID = "friendListID";
-
+    public static final boolean GET_FROM_INTERNET = false;
     // Constructor
     public SessionManager(Context context) {
         this._context = context;
@@ -48,8 +46,8 @@ public class SessionManager {
         editor = pref.edit();
     }
 
+    public void createLoginSession(String email, String password, String name, String galleryPublic) {
 
-    public void createLoginSession(String email, String password, String name, String galleryID, String galleryPublic) {
 //       , String name, String galleryID, String galleryPublic, String friendlistID
 
         // Storing login value as TRUE
@@ -62,7 +60,7 @@ public class SessionManager {
         editor.putString(KEY_PASSWORD, password);
 
         editor.putString(KEY_NAME, name);
-        editor.putString(KEY_GALLERYID, galleryID);
+
         editor.putString(KEY_GALLERYPUBLIC, galleryPublic);
 //        editor.putString(KEY_FriendListID, friendlistID);
 
@@ -99,12 +97,8 @@ public class SessionManager {
 
         // user password
         user.put(KEY_PASSWORD, pref.getString(KEY_PASSWORD, null));
-
         user.put(KEY_NAME, pref.getString(KEY_NAME, null));
-        user.put(KEY_GALLERYID, pref.getString(KEY_GALLERYID, null));
         user.put(KEY_GALLERYPUBLIC, pref.getString(KEY_GALLERYPUBLIC, null));
-//        user.put(KEY_FriendListID, pref.getString(KEY_FriendListID, null));
-
 
         // return user
         return user;
@@ -130,7 +124,7 @@ public class SessionManager {
     }
 
     // Quick check for login
-    // Get Login State
+
     public boolean isLoggedIn(){
         return pref.getBoolean(IS_LOGIN, false);
     }

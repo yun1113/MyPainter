@@ -1,5 +1,6 @@
 package slidingtab;
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -11,14 +12,15 @@ public class GalleryViewPageAdapter extends FragmentStatePagerAdapter {
 
         CharSequence Titles[]; // This will Store the Titles of the Tabs which are Going to be passed when ViewPagerAdapter is created
         int NumbOfTabs; // Store the number of tabs, this will also be passed when the ViewPagerAdapter is created
-
+Bundle bundle;
 
         // Build a Constructor and assign the passed Values to appropriate values in the class
-        public GalleryViewPageAdapter(FragmentManager fm, CharSequence mTitles[], int mNumbOfTabsumb) {
+        public GalleryViewPageAdapter(FragmentManager fm, CharSequence mTitles[], int mNumbOfTabsumb,Bundle bundle) {
             super(fm);
 
             this.Titles = mTitles;
             this.NumbOfTabs = mNumbOfTabsumb;
+            this.bundle=bundle;
 
         }
 
@@ -29,9 +31,11 @@ public class GalleryViewPageAdapter extends FragmentStatePagerAdapter {
             if (position == 0) // if the position is 0 we are returning the First tab
             {
                 Gallery_Tab tab1 = new Gallery_Tab();
+                tab1.setArguments(bundle);
                 return tab1;
             } else {
                 GCollection_Tab tab2 = new GCollection_Tab();
+                tab2.setArguments(bundle);
                 return tab2;
             }
         }

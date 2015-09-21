@@ -8,6 +8,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,7 +22,6 @@ import sidemenu.ContentFragment;
 import io.codetail.animation.SupportAnimator;
 import io.codetail.animation.ViewAnimationUtils;
 import sidemenu.FriendPagerAdapter;
-import slidingtab.ViewPagerAdapter;
 import yalantis.com.sidemenu.interfaces.Resourceble;
 import yalantis.com.sidemenu.interfaces.ScreenShotable;
 import yalantis.com.sidemenu.model.SlideMenuItem;
@@ -31,15 +31,17 @@ import yalantis.com.sidemenu.util.ViewAnimator;
 public class FriendTest extends ActionBarActivity implements ViewAnimator.ViewAnimatorListener {
 
     FriendPagerAdapter adapter;
-    CharSequence Titles[] = {"¦n¤Í¦Cªí", "¥[¤J¦n¤Í", "¦h¤H³s½u", "¦n¤ÍÁÜ½Ð"};
+    CharSequence Titles[] = {"ï¿½nï¿½Í¦Cï¿½ï¿½", "ï¿½[ï¿½Jï¿½nï¿½ï¿½", "ï¿½hï¿½Hï¿½sï¿½u", "ï¿½nï¿½ï¿½ï¿½Ü½ï¿½"};
     int Numboftabs = 4;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
     private List<SlideMenuItem> list = new ArrayList<>();
     private ContentFragment contentFragment;
     private ViewAnimator viewAnimator;
+
     //private int posiion = R.drawable.content_music;
     private LinearLayout linearLayout;
+    Bundle bundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,9 +49,13 @@ public class FriendTest extends ActionBarActivity implements ViewAnimator.ViewAn
 
         setContentView(R.layout.activity_friend_test);
 
+        bundle = getIntent().getExtras();
+
+
         // initial view
         adapter = new FriendPagerAdapter(getSupportFragmentManager(), Titles, Numboftabs);
         contentFragment = FriendPagerAdapter.newInstance(0);
+        contentFragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.content_frame, contentFragment)
                 .commit();
@@ -169,6 +175,8 @@ public class FriendTest extends ActionBarActivity implements ViewAnimator.ViewAn
         // change fragment
         ContentFragment contentFragment = (ContentFragment) adapter.getItem(topPosition);
         getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, contentFragment).commit();
+        Log.d("CY", "Change fragment");
+        contentFragment.setArguments(bundle);
 
         return contentFragment;
     }

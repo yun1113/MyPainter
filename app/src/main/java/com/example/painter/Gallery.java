@@ -1,27 +1,22 @@
 package com.example.painter;
 
 import android.os.Bundle;
-import android.support.v4.view.GravityCompat;
+import android.os.Message;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
+import java.util.HashMap;
+
+import db_connect.DBConnector;
 import gallerymaterial.BaseActivity;
 import slidingtab.GalleryViewPageAdapter;
 import slidingtab.SlidingTabLayout;
-import slidingtab.ViewPagerAdapter;
 
 public class Gallery extends BaseActivity {
 
@@ -31,6 +26,7 @@ public class Gallery extends BaseActivity {
 	SlidingTabLayout tabs;
 	CharSequence Titles[] = {"My Gallery", "Collections"};
 	int Numboftabs = 2;
+	Bundle bundle;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +37,10 @@ public class Gallery extends BaseActivity {
 		toolbar = (Toolbar) findViewById(R.id.tool_bar);
 		setSupportActionBar(toolbar);
 
+		bundle = getIntent().getExtras();
+
 		// Creating The ViewPagerAdapter and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs.
-		adapter = new GalleryViewPageAdapter(getSupportFragmentManager(), Titles, Numboftabs);
+		adapter = new GalleryViewPageAdapter(getSupportFragmentManager(), Titles, Numboftabs,bundle);
 
 		// Assigning ViewPager View and setting the adapter
 		pager = (ViewPager) findViewById(R.id.view_pager);

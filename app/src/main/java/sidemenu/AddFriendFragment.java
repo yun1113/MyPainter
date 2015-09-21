@@ -42,10 +42,10 @@ public class AddFriendFragment extends ContentFragment {
     SessionManager session;
     HashMap user;
 
-    // 搜尋使用者, 有的話列出
+
     private Runnable mutiThread = new Runnable() {
         public void run() {
-            // 運行網路連線的程式，用來驗證有無該user
+            // 嚙畿嚙踝蕭嚙踝蕭嚙踝蕭s嚙線嚙踝蕭嚙緹嚙踝蕭嚙璀嚙諄剁蕭嚙踝蕭嚙課佗蕭嚙盤嚙踝蕭user
             try {
                 DBConnector dbConnector = new DBConnector("connect1.php");
                 String result = dbConnector.executeQuery(String.format("SELECT * FROM user_list WHERE user_name='%s'",friendNameEdt.getText().toString()));
@@ -57,7 +57,7 @@ public class AddFriendFragment extends ContentFragment {
 //                    if (friendNameEdt.getText().toString().equals(jsonData.getString("user_name"))) {
                         friendName = jsonData.getString("user_name");
                         friendEmail = jsonData.getString("user_email");
-                        friendExist = true; //該使用者存在
+                        friendExist = true; //嚙諉使用者存嚙箭
 //                        break;
 //                    }
 //                }
@@ -74,7 +74,7 @@ public class AddFriendFragment extends ContentFragment {
 
     private Runnable sendRequestThread = new Runnable() {
         public void run() {
-            // 運行網路連線的程式
+            // 嚙畿嚙踝蕭嚙踝蕭嚙踝蕭s嚙線嚙踝蕭嚙緹嚙踝蕭
             try {
                 DBConnector dbConnector = new DBConnector("insert_db.php");
 

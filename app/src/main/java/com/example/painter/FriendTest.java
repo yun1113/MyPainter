@@ -31,7 +31,7 @@ import yalantis.com.sidemenu.util.ViewAnimator;
 public class FriendTest extends ActionBarActivity implements ViewAnimator.ViewAnimatorListener {
 
     FriendPagerAdapter adapter;
-    CharSequence Titles[] = {"¦n¤Í¦Cªí", "¥[¤J¦n¤Í", "¦h¤H³s½u", "¦n¤ÍÁÜ½Ð"};
+    CharSequence Titles[] = {"ï¿½nï¿½Í¦Cï¿½ï¿½", "ï¿½[ï¿½Jï¿½nï¿½ï¿½", "ï¿½hï¿½Hï¿½sï¿½u", "ï¿½nï¿½ï¿½ï¿½Ü½ï¿½"};
     int Numboftabs = 4;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
@@ -50,7 +50,7 @@ public class FriendTest extends ActionBarActivity implements ViewAnimator.ViewAn
         setContentView(R.layout.activity_friend_test);
 
         bundle = getIntent().getExtras();
-        String account = bundle.getString("account");
+
 
         // initial view
         adapter = new FriendPagerAdapter(getSupportFragmentManager(), Titles, Numboftabs);

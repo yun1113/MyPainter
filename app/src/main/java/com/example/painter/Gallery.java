@@ -1,12 +1,19 @@
 package com.example.painter;
 
 import android.os.Bundle;
+import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+
+import db_connect.DBConnector;
 import gallerymaterial.BaseActivity;
 import slidingtab.GalleryViewPageAdapter;
 import slidingtab.SlidingTabLayout;
@@ -31,8 +38,6 @@ public class Gallery extends BaseActivity {
 		setSupportActionBar(toolbar);
 
 		bundle = getIntent().getExtras();
-		String account = bundle.getString("account");
-		Log.d("Gallery_bundle",account);
 
 		// Creating The ViewPagerAdapter and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs.
 		adapter = new GalleryViewPageAdapter(getSupportFragmentManager(), Titles, Numboftabs,bundle);

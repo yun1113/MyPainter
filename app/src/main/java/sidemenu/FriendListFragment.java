@@ -59,7 +59,7 @@ public class FriendListFragment extends ContentFragment implements AdapterView.O
     private List<ListData> mDataList = new ArrayList();
     private Runnable mutiThread = new Runnable() {
         public void run() {
-            // 運行網路連線的程式，用以獲得Friend List
+            // 嚙畿嚙踝蕭嚙踝蕭嚙踝蕭s嚙線嚙踝蕭嚙緹嚙踝蕭嚙璀嚙諄以嚙踝蕭oFriend List
             try {
                 DBConnector dbConnector = new DBConnector("connect1.php");
                 String result = dbConnector.executeQuery(String.format("SELECT * FROM friend_list where user_id='%s'", user_id));
@@ -153,8 +153,11 @@ public class FriendListFragment extends ContentFragment implements AdapterView.O
             case R.id.gallery:
                 Log.d("Go Gallery","Start");
                 Intent intent = new Intent();
+                Bundle bundle = new Bundle();
+
                 bundle.putInt("state", 2);
                 bundle.putString("friend_account", mDataList.get(info.position).friend_email);
+
                 intent.putExtras(bundle);
                 intent.setClass(getActivity(), Gallery.class);
                 startActivity(intent);
@@ -171,7 +174,7 @@ public class FriendListFragment extends ContentFragment implements AdapterView.O
 
     private Runnable deleteThread = new Runnable() {
         public void run() {
-            // 運行網路連線的程式，用以獲得Friend List
+            // 嚙畿嚙踝蕭嚙踝蕭嚙踝蕭s嚙線嚙踝蕭嚙緹嚙踝蕭嚙璀嚙諄以嚙踝蕭oFriend List
             try {
                 DBConnector deleteConnector = new DBConnector("insert_db.php");
                 String result = deleteConnector.executeQuery(String.format("DELETE FROM friend_list WHERE user_id='%s' and friend_id='%s'"

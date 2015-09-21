@@ -34,7 +34,7 @@ import friendlist.DataSource;
 import textdrawable.TextDrawable;
 
 
-// ¦h¤H³s½u
+// ï¿½hï¿½Hï¿½sï¿½u
 public class MultiConnectionFragment extends ContentFragment implements AdapterView.OnItemClickListener {
 
     Bundle bundle;
@@ -48,7 +48,7 @@ public class MultiConnectionFragment extends ContentFragment implements AdapterV
     private int connectCount = 0;
     final int MAX_CONNECT = 4;
 
-    private String user_id;
+    private String user_id, user_name;
     SessionManager session;
     HashMap user;
     // declare the color generator and drawable builder
@@ -73,6 +73,7 @@ public class MultiConnectionFragment extends ContentFragment implements AdapterV
         session = new SessionManager(getActivity().getApplicationContext());
         user = session.getUserDetails();
         user_id = (String) user.get(SessionManager.KEY_EMAIL);
+        user_name = (String) user.get(SessionManager.KEY_NAME);
 
         mListView.setAdapter(sampleAdapter);
         mListView.setOnItemClickListener(this);
@@ -80,12 +81,17 @@ public class MultiConnectionFragment extends ContentFragment implements AdapterV
         mConnectBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                for (int i = 0; i < mDataList.size(); i++) {
-                    if (mDataList.get(i).isChecked) {
-                        connectCount++;
-                        connectDataList.add(mDataList.get(i));
-                    }
-                }
+
+//                for (int i = 0; i < connectDataList.size(); i++) {
+//                    Log.d("CY" + i, connectDataList.get(i).data);
+//                }
+//
+//                for (int i = 0; i < mDataList.size(); i++) {
+//                    if (mDataList.get(i).isChecked) {
+//                        connectCount++;
+//                        connectDataList.add(mDataList.get(i));
+//                    }
+//                }
                 if (connectCount > MAX_CONNECT) {
                     Message msg = alertHandler.obtainMessage();
                     msg.what = 1;
@@ -109,7 +115,6 @@ public class MultiConnectionFragment extends ContentFragment implements AdapterV
     // list of data items
     private Runnable mutiThread = new Runnable() {
         public void run() {
-            // ¹B¦æºô¸ô³s½uªºµ{¦¡¡A¥Î¥HÀò±oFriend List
             try {
                 DBConnector dbConnector = new DBConnector("connect1.php");
                 String result = dbConnector.executeQuery(String.format("SELECT * FROM friend_list where user_id ='%s'", user_id));
@@ -133,7 +138,7 @@ public class MultiConnectionFragment extends ContentFragment implements AdapterV
         }
     };
 
-    // «Ø¥ß³s½u¸ê®Æ
+    // ï¿½Ø¥ß³sï¿½uï¿½ï¿½ï¿½
     private Runnable createConnectThread = new Runnable() {
         public void run() {
             try {
@@ -141,16 +146,15 @@ public class MultiConnectionFragment extends ContentFragment implements AdapterV
                 DBConnector dbConnector = new DBConnector("insert_db.php");
                 String[] user = new String[MAX_CONNECT];
                 for (int i = 0; i < MAX_CONNECT; i++) {
-                    if (i < connectCount){
+                    if (i < connectCount) {
                         user[i] = connectDataList.get(i).data;
-                        dbConnector.executeQuery(String.format("UPDATE friend_list SET friend_status='busy' WHERE friend_id = '%s'",user[i]));
-                    }
-                    else
+                        dbConnector.executeQuery(String.format("UPDATE friend_list SET friend_status='busy' WHERE friend_id = '%s'", user[i]));
+                    } else
                         user[i] = "";
                 }
                 dbConnector.executeQuery(String.format("UPDATE friend_list SET friend_status='busy' WHERE friend_id = '%s'", user_id));
                 String result = dbConnector.executeQuery(String.format("INSERT INTO nowconnect(user_1,user_2,user_3,user_4,user_5)" +
-                        " VALUES ('%s','%s','%s','%s','%s')", user_id, user[0], user[1], user[2], user[3]));
+                        " VALUES ('%s','%s','%s','%s','%s')", user_name, user[0], user[1], user[2], user[3]));
                 Log.d("Send_Result", result);
 
                 JSONObject jObj = new JSONObject(result);
@@ -246,7 +250,6 @@ public class MultiConnectionFragment extends ContentFragment implements AdapterV
 
             imageView = (ImageView) view.findViewById(R.id.imageView);
             checkIcon = (ImageView) view.findViewById(R.id.check_icon);
-
             textView = (TextView) view.findViewById(R.id.textView);
         }
     }
@@ -303,15 +306,21 @@ public class MultiConnectionFragment extends ContentFragment implements AdapterV
             return convertView;
         }
 
-        // ¤Ä¿ïª¬ºA
+        // ï¿½Ä¿ïª¬ï¿½A
         private void updateCheckedState(ViewHolder holder, ListData item) {
             holder.imageView.setImageDrawable(mDrawableBuilder.build(" ", 0xff616161));
             if (item.isChecked) {
                 holder.view.setBackgroundColor(HIGHLIGHT_COLOR);
                 holder.checkIcon.setVisibility(View.VISIBLE);
+
+                connectCount++;
+                connectDataList.add(item);
             } else {
                 holder.view.setBackgroundColor(Color.TRANSPARENT);
                 holder.checkIcon.setVisibility(View.GONE);
+
+                connectCount--;
+                connectDataList.remove(item);
             }
         }
 

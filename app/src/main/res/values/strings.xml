@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <string name="app_name">Painter</string>
@@ -19,16 +19,14 @@
     <string name="title_activity_friend_test">FriendTest</string>
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
+    <string name="title_activity_home_screen">HomeScreen</string>
+
     <!-- Pretty Painter Start-->
     <string name="app_version">Version: %1$s</string>
     <string name="about_text">Free open source graphics
     editor under MIT License</string>
-    <string name="app_developers">Developer:
-    \nArthur Bikmullin (@devolonter)
-    \n\nCo-developers:
-    \nConstantine Chartomatzis, Lioncash
-    \n\nLocalization:
-    \nOlga Bikmullina (@AhNinniah)</string>
+    <string name="app_developers">Developer:</string>
+
     <!--  dialog -->
     <string name="yes">Yes</string>
     <string name="no">No</string>
@@ -49,6 +47,149 @@
     <string name="share_image_title">Share via</string>
     <string name="select_language_title">Select language</string>
     <string name="copy_file_title">Copy files</string>
+
+    <string name="sign_up_success">註冊成功</string>
+    <string name="sign_up_existed">此信箱已註冊過，請前往登入頁面</string>
+    <string name="sign_up_fail">註冊失敗</string>
+    <string name="wrong_password">密碼錯誤</string>
+    <string name="account_doesnt_exist">帳號不存在</string>
+    <string name="ok">確定</string>
+    <string name="cancel">取消</string>
+    <string name="sign_up">註冊</string>
+    <string name="log_in">登入</string>
+    <string name="save">儲存</string>
+    <string name="change_pic">修改圖片</string>
+    <string name="personal_setting">個人設定</string>
+    <string name="setting_gallery">Gallery分享</string>
+
+    <!--&lt;!&ndash;  brush setup &ndash;&gt;-->
+    <!--<string name="brush_size">Brush size</string>-->
+    <!--<string name="blur_radius">Blur radius</string>-->
+    <!--<string name="blur_style">Blur style</string>-->
+    <!--<string name="blur_type_select">Select blur type</string>-->
+    <!--<string-array name="blur_types">-->
+        <!--<item>None</item>-->
+        <!--<item>Normal</item>-->
+        <!--<item>Solid</item>-->
+        <!--<item>Outer</item>-->
+        <!--<item>Inner</item>-->
+    <!--</string-array>-->
+    <!--<string name="brush_color">Brush color</string>-->
+    <!--<string name="color_pick">Pick a color</string>-->
+
+    <!--&lt;!&ndash; toasts &ndash;&gt;-->
+    <!--<string name="invalid_file">File format is invalid</string>-->
+    <!--<string name="file_not_found">File not found</string>-->
+    <!--<string name="sd_card_not_writeable">SD card not available for recording</string>-->
+    <!--<string name="sd_card_not_available">SD card not available</string>-->
+    <!--<string name="wallpaper_setted">Wallpaper was successfully setted</string>-->
+    <!--<string name="wallpaper_error">Wallpaper was not setted. Error occured</string>-->
+
+    <!--&lt;!&ndash; settings &ndash;&gt;-->
+    <!--<string name="settings_version">version</string>-->
+    <!--<string name="settings_orientation">orientation</string>-->
+    <!--<string name="settings_last_picture">lastPicture</string>-->
+    <!--<string name="settings_brush_size">brushSize</string>-->
+    <!--<string name="settings_brush_color">brushColor</string>-->
+    <!--<string name="settings_brush_blur_style">brushBlurStyle</string>-->
+    <!--<string name="settings_brush_blur_radius">brushBlurRadius</string>-->
+    <!--<string name="settings_brush_type">brushType</string>-->
+    <!--<string name="settings_force_open_file">forceOpenFile</string>-->
+
+    <!--&lt;!&ndash; language &ndash;&gt;-->
+    <!--<string-array name="languages">-->
+        <!--<item>English</item>-->
+        <!--<item>Русский</item>-->
+    <!--</string-array>-->
+    <!--<string-array name="locales">-->
+        <!--<item>en</item>-->
+        <!--<item>ru</item>-->
+    <!--</string-array>-->
+
+    <!--&lt;!&ndash; backup options &ndash;&gt;-->
+    <!--<string-array name="backup_opened_options">-->
+        <!--<item>Only from other folders</item>-->
+        <!--<item>Always</item>-->
+        <!--<item>Never</item>-->
+    <!--</string-array>-->
+    <!--<string-array name="backup_opened_options_codes">-->
+        <!--<item>10</item>-->
+        <!--<item>20</item>-->
+        <!--<item>100</item>-->
+    <!--</string-array>-->
+
+    <!--&lt;!&ndash; exit options &ndash;&gt;-->
+    <!--<string-array name="before_exit_options">-->
+        <!--<item>Submit to save file</item>-->
+        <!--<item>Save working file</item>-->
+        <!--<item>No action</item>-->
+    <!--</string-array>-->
+    <!--<string-array name="before_exit_options_codes">-->
+        <!--<item>10</item>-->
+        <!--<item>20</item>-->
+        <!--<item>100</item>-->
+    <!--</string-array>-->
+
+    <!--&lt;!&ndash; volume shortcuts options &ndash;&gt;-->
+    <!--<string-array name="volume_buttons_options">-->
+        <!--<item>Change brush size</item>-->
+        <!--<item>Undo/Redo</item>-->
+    <!--</string-array>-->
+    <!--<string-array name="volume_buttons_options_codes">-->
+        <!--<item>10</item>-->
+        <!--<item>20</item>-->
+    <!--</string-array>-->
+
+    <!--&lt;!&ndash; preferences &ndash;&gt;-->
+    <!--<string name="preferences_interface_category">Interface</string>-->
+    <!--<string name="preferences_behavior_category">Behavior</string>-->
+    <!--<string name="preferences_shortcuts_category">Shortcuts</string>-->
+    <!--<string name="preferences_backup_category">Backup</string>-->
+    <!--<string name="preferences_about_category">About</string>-->
+
+    <!--<string name="preferences_language">preferencesLanguage</string>-->
+    <!--<string name="preferences_language_title">Language</string>-->
+    <!--<string name="preferences_language_summary">Set interface language. Restart needed</string>-->
+
+    <!--<string name="preferences_last_file">lastFile</string>-->
+    <!--<string name="preferences_last_file_title">Open last file</string>-->
+    <!--<string name="preferences_last_file_summary">Open last working file on startup</string>-->
+
+    <!--<string name="preferences_backup_openeded_file">backupOpenningFile</string>-->
+    <!--<string name="preferences_backup_openeded_file_title">Opened files backup</string>-->
+    <!--<string name="preferences_backup_openeded_file_summary">Copy opened files in the application folder</string>-->
+
+    <!--<string name="preferences_tooltips">preferencesTooltips</string>-->
+    <!--<string name="preferences_tooltips_title">Show tooltips</string>-->
+    <!--<string name="preferences_tooltips_summary">Show tricks and tips on startup</string>-->
+
+    <!--<string name="preferences_shake">preferencesShake</string>-->
+    <!--<string name="preferences_shake_title">Shake to clear</string>-->
+    <!--<string name="preferences_shake_summary">Clear canvas during device shaking</string>-->
+
+    <!--<string name="preferences_about">preferencesAbout</string>-->
+    <!--<string name="preferences_about_title">About</string>-->
+    <!--<string name="preferences_about_summary">Information about application</string>-->
+
+    <!--<string name="preferences_before_exit">preferencesBeforeExit</string>-->
+    <!--<string name="preferences_before_exit_title">Action before exit</string>-->
+    <!--<string name="preferences_before_exit_summary">Action before application exit</string>-->
+
+    <!--<string name="preferences_volume_shortcuts">preferencesVolumeShortcuts</string>-->
+    <!--<string name="preferences_volume_shortcuts_title">Volume buttons</string>-->
+    <!--<string name="preferences_volume_shortcuts_summary">Set action for volume buttons</string>-->
+    <!--<string name="title_activity_test">Test</string>-->
+    <!--&lt;!&ndash; Pretty Painter End&ndash;&gt;-->
+
+    <!-- HomeScreen Menu-->
+    <string name="home_menu_challenge">出題</string>
+    <string name="home_menu_guess">猜題</string>
+    <string name="home_menu_gallery">Gallery</string>
+    <string name="home_menu_practice">練習模式</string>
+    <string name="home_menu_setting">設定</string>
+    <string name="home_menu_achievement">成就</string>
+    <!-- HomeScreen Menu END-->
+
 
     <!-- menu -->
     <string name="menu_brush">Brush</string>
@@ -97,6 +238,8 @@
     <string name="settings_brush_blur_radius">brushBlurRadius</string>
     <string name="settings_brush_type">brushType</string>
     <string name="settings_force_open_file">forceOpenFile</string>
+    <string name="settings_downloadBitmap">downloadBitmap</string>
+    <string name="settings_downloadBitmapSrc">downloadBitmapSrc</string>
 
     <!-- language -->
     <string-array name="languages">

@@ -1,81 +1,281 @@
-<?xml version="1.0" encoding="utf-8"?>
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/TableLayout1"
-    android:layout_width="320dp"
-    android:layout_height="200dp"
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="350dp" android:layout_height="300dp"
     android:background="@drawable/settingbackground"
-    android:gravity="center">
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:id="@+id/popUp">
 
-    <TableRow
-        android:gravity="center"
-        android:padding="5dp">
+    <TableLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
-        <Button
-            android:id="@+id/friend"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="好友" />
+        <TableRow>
+            <com.andexert.library.RippleView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                rv_centered="true">
 
-        <Button
-            android:id="@+id/gallery"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Gallery" />
+                <ImageButton
+                    android:id="@+id/friendListBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/friendlistbtn"
+                    android:background="@drawable/button_in_setting"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:elevation="2dp" />
+            </com.andexert.library.RippleView>
 
-        <Button
-            android:id="@+id/share"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="分享" />
-    </TableRow>
+            <com.andexert.library.RippleView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                rv_centered="true">
 
-    <TableRow
-        android:gravity="center"
-        android:padding="0dp">
+                <ImageButton
+                    android:id="@+id/galleryBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/gallerybtn"
+                    android:background="@drawable/button_in_setting"
+                    android:layout_marginRight="30dp"
+                    android:elevation="2dp" />
+            </com.andexert.library.RippleView>
 
-        <Button
-            android:id="@+id/save"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="儲存" />
+            <com.andexert.library.RippleView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                rv_centered="true">
 
-        <Button
-            android:id="@+id/frame"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="模板" />
+                <ImageButton
+                    android:id="@+id/shareBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/sharebtn"
+                    android:background="@drawable/button_in_setting"
+                    android:layout_marginRight="30dp"
+                    android:elevation="2dp"
+                    />
+            </com.andexert.library.RippleView>
 
-        <Button
-            android:id="@+id/importpic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="匯入圖片" />
+        </TableRow>
 
-    </TableRow>
+        <TableRow>
 
-    <TableRow
-        android:gravity="center"
-        android:padding="5dp">
+            <TextView
+                android:id="@+id/friendListtxt"
+                android:text="好友列表"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="30dp"/>
 
-        <Button
-            android:id="@+id/setting"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="個人設定" />
+            <TextView
+                android:id="@+id/gallerytxt"
+                android:text="GALLERY"
+                android:layout_marginTop="5dp"/>
 
-        <Button
-            android:id="@+id/info"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="使用說明" />
+            <TextView
+                android:id="@+id/sharetxt"
+                android:text="分享"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="10dp"/>
+        </TableRow>
 
-        <Button
-            android:id="@+id/clear"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="清除畫布" />
+        <TableRow
+            android:layout_marginTop="10dp">
+            <com.andexert.library.RippleView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                rv_centered="true">
+
+                <ImageButton
+                    android:id="@+id/saveBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/save"
+                    android:background="@drawable/button_in_setting"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:elevation="2dp"
+                    />
+            </com.andexert.library.RippleView>
+
+            <com.andexert.library.RippleView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                rv_centered="true">
+
+                <ImageButton
+                    android:id="@+id/frameBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/frame"
+                    android:background="@drawable/button_in_setting"
+                    android:layout_marginRight="30dp"
+                    android:elevation="2dp"
+                    />
+            </com.andexert.library.RippleView>
+
+            <com.andexert.library.RippleView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                rv_centered="true">
+
+                <ImageButton
+                    android:id="@+id/importPicBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/importpicbtn"
+                    android:background="@drawable/button_in_setting"
+                    android:layout_marginRight="30dp"
+                    android:elevation="2dp"
+                    />
+            </com.andexert.library.RippleView>
 
 
-    </TableRow>
+            <com.andexert.library.RippleView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                rv_centered="true">
 
-</TableLayout>
+                <ImageButton
+                    android:id="@+id/keepdrawing"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/keepdrawing"
+                    android:background="@drawable/button_in_setting"
+                    android:layout_marginRight="30dp"
+                    android:elevation="2dp"
+                    android:onClick="ToDoSomething"
+                    />
+            </com.andexert.library.RippleView>
+
+
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:id="@+id/savetxt"
+                android:text="儲存"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="40dp"/>
+
+            <TextView
+                android:id="@+id/frametxt"
+                android:text="模板"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="10dp"/>
+
+            <TextView
+                android:id="@+id/importpictxt"
+                android:text="匯入圖片"
+                android:layout_marginTop="5dp"/>
+
+
+            <TextView
+                android:id="@+id/keeptxt"
+                android:text="繼續畫"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="40dp"/>
+        </TableRow>
+
+        <TableRow
+            android:layout_marginTop="10dp">
+            <com.andexert.library.RippleView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                rv_centered="true">
+
+                <ImageButton
+                    android:id="@+id/personalSettingBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/personalsetbtn"
+                    android:background="@drawable/button_in_setting"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:elevation="2dp"
+                    />
+            </com.andexert.library.RippleView>
+
+            <com.andexert.library.RippleView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                rv_centered="true">
+
+                <ImageButton
+                    android:id="@+id/infoBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/infobtn"
+                    android:background="@drawable/button_in_setting"
+                    android:layout_marginRight="30dp"
+                    android:elevation="2dp"
+                    />
+            </com.andexert.library.RippleView>
+
+            <com.andexert.library.RippleView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                rv_centered="true">
+
+                <ImageButton
+                    android:id="@+id/clearBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/delete"
+                    android:background="@drawable/button_in_setting"
+                    android:layout_marginRight="30dp"
+                    android:elevation="2dp"
+                    android:onClick="ToDoSomething"
+                    />
+
+
+            </com.andexert.library.RippleView>
+
+            <com.andexert.library.RippleView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                rv_centered="true">
+
+                <ImageButton
+                    android:id="@+id/uploadBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/pass"
+                    android:background="@drawable/button_in_setting"
+                    android:layout_marginRight="30dp"
+                    android:elevation="2dp"
+                    android:onClick="ToDoSomething"
+                    />
+
+            </com.andexert.library.RippleView>
+
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:id="@+id/personalsettxt"
+                android:text="個人設定"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="30dp"/>
+
+            <TextView
+                android:id="@+id/infotxt"
+                android:text="使用說明"
+                android:layout_marginTop="5dp"/>
+
+            <TextView
+                android:id="@+id/cleartxt"
+                android:text="清除畫布"
+                android:layout_marginTop="5dp"/>
+
+            <TextView
+                android:id="@+id/uploadtxt"
+                android:text="傳給下一人"
+                android:layout_marginTop="5dp"/>
+        </TableRow>
+    </TableLayout>
+
+</LinearLayout>

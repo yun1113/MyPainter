@@ -2,6 +2,7 @@ package sidemenu;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -15,9 +16,12 @@ import android.app.AlertDialog;
 import android.widget.Toast;
 
 import com.example.painter.R;
+import com.example.painter.SessionManager;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.HashMap;
 
 import db_connect.DBConnector;
 
@@ -30,25 +34,33 @@ public class AddFriendFragment extends ContentFragment {
     ImageButton addBtn;
     Boolean friendExist = false;
     String friendName = "";
+    String friendEmail = "";
     Bundle bundle;
+
+    private String user_id;
+    private String user_name;
+    SessionManager session;
+    HashMap user;
+
 
     private Runnable mutiThread = new Runnable() {
         public void run() {
-            // 運行網路連線的程式，用來驗證有無該user
+            // 嚙畿嚙踝蕭嚙踝蕭嚙踝蕭s嚙線嚙踝蕭嚙緹嚙踝蕭嚙璀嚙諄剁蕭嚙踝蕭嚙課佗蕭嚙盤嚙踝蕭user
             try {
                 DBConnector dbConnector = new DBConnector("connect1.php");
-                String result = dbConnector.executeQuery(String.format("SELECT * FROM test"));
-                Log.d("Test", result);
+                String result = dbConnector.executeQuery(String.format("SELECT * FROM user_list WHERE user_name='%s'",friendNameEdt.getText().toString()));
+                Log.d("Search_User_Result", result);
 
-                JSONArray jsonArray = new JSONArray(result);
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject jsonData = jsonArray.getJSONObject(i);
-                    if (friendNameEdt.getText().toString().equals(jsonData.getString("name"))) {
-                        friendName = jsonData.getString("name");
-                        friendExist = true;
-                        break;
-                    }
-                }
+                  JSONArray jsonArray = new JSONArray(result);
+//                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonData = jsonArray.getJSONObject(0);
+//                    if (friendNameEdt.getText().toString().equals(jsonData.getString("user_name"))) {
+                        friendName = jsonData.getString("user_name");
+                        friendEmail = jsonData.getString("user_email");
+                        friendExist = true; //嚙諉使用者存嚙箭
+//                        break;
+//                    }
+//                }
 
                 Message msg = messageHandler.obtainMessage();
                 msg.what = 1;
@@ -62,29 +74,27 @@ public class AddFriendFragment extends ContentFragment {
 
     private Runnable sendRequestThread = new Runnable() {
         public void run() {
-            // 運行網路連線的程式
+            // 嚙畿嚙踝蕭嚙踝蕭嚙踝蕭s嚙線嚙踝蕭嚙緹嚙踝蕭
             try {
                 DBConnector dbConnector = new DBConnector("insert_db.php");
-                Log.d("CY_Query_String", String.format("INSERT INTO addfriendlist (user_id, friend_id)" +
-                        "VALUES ('%s','%s')", bundle.getString("account"), friendName));
 
-                String result = dbConnector.executeQuery(String.format("INSERT INTO addfriendlist (user_id,friend_id )" +
-                        "VALUES ('%s','%s')", bundle.getString("account"), friendName));
-                Log.d("CY", result);
-                if (result.equals("\"success\"")) {
-                    Log.d("CY", "Insert success");
+                String result = dbConnector.executeQuery(String.format("INSERT INTO add_friend_list (user_id,user_name,friend_id,friend_name )" +
+                        "VALUES ('%s','%s','%s','%s')", user_id,user_name, friendEmail,friendName));
+                Log.d("Send_Result", result);
 
-                    AlertDialog.Builder build = new AlertDialog.Builder(getActivity());
-                    build.setTitle("加入好友");
-                    build.setMessage("add success");
-                    build.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                        }
-                    });
-                    build.show();
+                JSONObject jObj = new JSONObject(result);
+                int resultInt = jObj.getInt("response");
+                if (resultInt == 1) {
+                    Message msg = alertHandler.obtainMessage();
+                    msg.what = 1;
+                    msg.sendToTarget();
+                } else {
+                    Message msg = alertHandler.obtainMessage();
+                    msg.what = 2;
+                    msg.sendToTarget();
                 }
-                Log.d("CY2", "\"success\"");
+
+                Log.d("CY", "\"success\"");
             } catch (Exception e) {
                 Log.e("log_tag", e.toString());
             }
@@ -98,12 +108,44 @@ public class AddFriendFragment extends ContentFragment {
         public void handleMessage(Message msg) {
             // TODO Auto-generated method stub
             super.handleMessage(msg);
-
             if (friendExist) {
                 friendTxv.setText(friendName);
                 addBtn.setVisibility(View.VISIBLE);
             } else {
                 friendTxv.setText("Can't find this user!");
+            }
+        }
+    };
+
+    // Call AlertDialog
+    android.os.Handler alertHandler = new android.os.Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            // TODO Auto-generated method stub
+            super.handleMessage(msg);
+            AlertDialog.Builder build = new AlertDialog.Builder(getActivity());
+            if (msg.what == 1) {
+                build.setTitle("Add Friend Success")
+                        .setMessage("add success")
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                friendNameEdt.setText("");
+                                friendTxv.setText("");
+                                addBtn.setVisibility(View.INVISIBLE);
+                            }
+                        }).show();
+            } else if (msg.what == 2) {
+                build.setTitle("Add Friend Fail")
+                        .setMessage("add fail")
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                friendNameEdt.setText("");
+                                friendTxv.setText("");
+                                addBtn.setVisibility(View.INVISIBLE);
+                            }
+                        }).show();
             }
         }
     };
@@ -117,6 +159,10 @@ public class AddFriendFragment extends ContentFragment {
         friendTxv = (TextView) view.findViewById(R.id.friendTxv);
 
         bundle = getArguments();
+        session = new SessionManager(getActivity().getApplicationContext());
+        user = session.getUserDetails();
+        user_id = (String) user.get(SessionManager.KEY_EMAIL);
+        user_name = (String) user.get(SessionManager.KEY_NAME);
 
         searchBtn = (ImageButton) view.findViewById(R.id.searchBtn);
         searchBtn.setOnClickListener(new View.OnClickListener() {

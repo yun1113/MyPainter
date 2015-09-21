@@ -5,23 +5,12 @@
     android:orientation="horizontal"
     android:padding="16dp">
 
-    <FrameLayout
+
+    <ImageView
+        android:id="@+id/imageView"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_marginRight="16dp">
-
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="60dp"
-            android:layout_height="60dp" />
-
-        <ImageView
-            android:id="@+id/check_icon"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:src="@drawable/check_sm"
-            android:visibility="gone" />
-    </FrameLayout>
+        android:layout_marginRight="16dp" />
 
     <TextView
         android:id="@+id/textView"

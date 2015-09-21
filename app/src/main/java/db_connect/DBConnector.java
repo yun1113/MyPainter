@@ -1,7 +1,6 @@
 package db_connect;
 
 import android.util.Log;
-
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -17,6 +16,11 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+
 public class DBConnector {
 
     static String connectPHP;
@@ -28,23 +32,23 @@ public class DBConnector {
     public static String executeQuery(String query_string) {
         String result = "";
         try {
-            // 使用的是Apache的功能，首先建立一個HttpClient的實體，並且使用Post的方式
+            // 嚙誕用迎蕭嚙瞌Apache嚙踝蕭嚙穀嚙踝蕭A嚙踝蕭嚙踝蕭嚙諍立一嚙踝蕭HttpClient嚙踝蕭嚙踝蕭嚙踝蕭A嚙衛且嚙誕伐蕭Post嚙踝蕭嚙質式
             HttpClient httpClient = new DefaultHttpClient();
-            HttpPost httpPost = new HttpPost(String.format("http://140.115.80.233/android_connect/%s",connectPHP));
+            HttpPost httpPost = new HttpPost(String.format("http://140.115.87.44/android_connect/%s",connectPHP));
 
-            //將之後要POST的參數名和參數值放入容器中
+            //嚙瞇嚙踝蕭嚙踝蕭nPOST嚙踝蕭嚙諸數名嚙瞎嚙諸數值抬蕭J嚙箴嚙踝蕭嚙踝蕭
             ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
             params.add(new BasicNameValuePair("query_string", query_string));
 
-            //實際送出請求，並取得傳回狀態等資訊。
+            //嚙踝蕭痚e嚙碼嚙請求嚙璀嚙衛剁蕭嚙緻嚙褒回嚙踝蕭嚙璀嚙踝蕭嚙踝蕭T嚙瘠
             httpPost.setEntity(new UrlEncodedFormEntity(params, HTTP.UTF_8));
             HttpResponse httpResponse = httpClient.execute(httpPost);
 
-            //取得收到的內容。
+            //嚙踝蕭嚙緻嚙踝蕭嚙趣的嚙踝蕭嚙箴嚙瘠
             HttpEntity httpEntity = httpResponse.getEntity();
             InputStream inputStream = httpEntity.getContent();
 
-            //所取得的Content利用StringBuilder轉換為字串
+            //嚙課剁蕭嚙緻嚙踝蕭Content嚙瞋嚙踝蕭StringBuilder嚙賞換嚙踝蕭嚙緝嚙踝蕭
             BufferedReader bufReader = new BufferedReader(new InputStreamReader(inputStream, "utf-8"), 8);
             StringBuilder builder = new StringBuilder();
             String line = null;

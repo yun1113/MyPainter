@@ -1,5 +1,8 @@
 package sidemenu;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Message;
@@ -9,18 +12,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.amulyakhare.textdrawable.util.ColorGenerator;
+import com.example.painter.Canvas;
 import com.example.painter.R;
+import com.example.painter.SessionManager;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import db_connect.DBConnector;
@@ -28,7 +34,7 @@ import friendlist.DataSource;
 import textdrawable.TextDrawable;
 
 
-// ¦h¤H³s½u
+// ï¿½hï¿½Hï¿½sï¿½u
 public class MultiConnectionFragment extends ContentFragment implements AdapterView.OnItemClickListener {
 
     Bundle bundle;
@@ -36,25 +42,84 @@ public class MultiConnectionFragment extends ContentFragment implements AdapterV
     private static final int HIGHLIGHT_COLOR = 0x999be6ff;
     private DataSource mDataSource;
     private ListView mListView;
+    private Button mConnectBtn;
+    private List<ListData> mDataList = new ArrayList();
+    private List<ListData> connectDataList = new ArrayList();
+    private int connectCount = 0;
+    final int MAX_CONNECT = 4;
 
+    private String user_id;
+    SessionManager session;
+    HashMap user;
     // declare the color generator and drawable builder
     private ColorGenerator mColorGenerator = ColorGenerator.MATERIAL;
     private TextDrawable.IBuilder mDrawableBuilder;
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        Log.d("Change Fragment Start", "Multiconnection");
+
+        // change xml layout to view
+        View v = inflater.inflate(R.layout.friend_connect_frame, container, false);
+        mListView = (ListView) v.findViewById(R.id.list_content);
+        mConnectBtn = (Button) v.findViewById(R.id.connectBtn);
+        mDataSource = new DataSource(getActivity());
+        mDrawableBuilder = TextDrawable.builder().rect();
+        bundle = getArguments();
+        getListData();
+
+        session = new SessionManager(getActivity().getApplicationContext());
+        user = session.getUserDetails();
+        user_id = (String) user.get(SessionManager.KEY_EMAIL);
+
+        mListView.setAdapter(sampleAdapter);
+        mListView.setOnItemClickListener(this);
+
+        mConnectBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                for (int i = 0; i < mDataList.size(); i++) {
+                    if (mDataList.get(i).isChecked) {
+                        connectCount++;
+                        connectDataList.add(mDataList.get(i));
+                    }
+                }
+                if (connectCount > MAX_CONNECT) {
+                    Message msg = alertHandler.obtainMessage();
+                    msg.what = 1;
+                    msg.sendToTarget();
+                } else {
+                    Thread thread = new Thread(createConnectThread);
+                    thread.start();
+                }
+            }
+        });
+
+        Log.d("Change Fragment End", "Multiconnection");
+        return v;
+    }
+
+    private void getListData() {
+        Thread thread = new Thread(mutiThread);
+        thread.start();
+    }
+
     // list of data items
-    private List<ListData> mDataList = new ArrayList();
     private Runnable mutiThread = new Runnable() {
         public void run() {
-            // ¹B¦æºô¸ô³s½uªºµ{¦¡¡A¥Î¥HÀò±oFriend List
             try {
                 DBConnector dbConnector = new DBConnector("connect1.php");
-                String result = dbConnector.executeQuery(String.format("SELECT * FROM friendlist where friendlist_id='%s'", bundle.getString("account")));
-                Log.d("Test", result);
+                String result = dbConnector.executeQuery(String.format("SELECT * FROM friend_list where user_id ='%s'", user_id));
+                Log.d("Query_Result", result);
 
                 JSONArray jsonArray = new JSONArray(result);
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject jsonData = jsonArray.getJSONObject(i);
-                    mDataList.add(new ListData(jsonData.getString("user_id"),jsonData.getString("state")));
+                    if (jsonData.getString("friend_status").equals("on")) {
+                        mDataList.add(new ListData(jsonData.getString("friend_name"), jsonData.getString("friend_status")));
+                    }
                 }
 
                 Message msg = messageHandler.obtainMessage();
@@ -67,6 +132,71 @@ public class MultiConnectionFragment extends ContentFragment implements AdapterV
         }
     };
 
+    // ï¿½Ø¥ß³sï¿½uï¿½ï¿½ï¿½
+    private Runnable createConnectThread = new Runnable() {
+        public void run() {
+            try {
+
+                DBConnector dbConnector = new DBConnector("insert_db.php");
+                String[] user = new String[MAX_CONNECT];
+                for (int i = 0; i < MAX_CONNECT; i++) {
+                    if (i < connectCount){
+                        user[i] = connectDataList.get(i).data;
+                        dbConnector.executeQuery(String.format("UPDATE friend_list SET friend_status='busy' WHERE friend_id = '%s'",user[i]));
+                    }
+                    else
+                        user[i] = "";
+                }
+                dbConnector.executeQuery(String.format("UPDATE friend_list SET friend_status='busy' WHERE friend_id = '%s'", user_id));
+                String result = dbConnector.executeQuery(String.format("INSERT INTO nowconnect(user_1,user_2,user_3,user_4,user_5)" +
+                        " VALUES ('%s','%s','%s','%s','%s')", user_id, user[0], user[1], user[2], user[3]));
+                Log.d("Send_Result", result);
+
+                JSONObject jObj = new JSONObject(result);
+                int resultInt = jObj.getInt("response");
+                if (resultInt == 1) {
+                    Message msg = alertHandler.obtainMessage();
+                    msg.what = 2;
+                    msg.sendToTarget();
+                }
+            } catch (Exception e) {
+                Log.e("log_tag", e.toString());
+            }
+        }
+    };
+
+    // Call AlertDialog
+    android.os.Handler alertHandler = new android.os.Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            // TODO Auto-generated method stub
+            super.handleMessage(msg);
+            AlertDialog.Builder build = new AlertDialog.Builder(getActivity());
+            if (msg.what == 1) {
+                build.setTitle("Too more connect")
+                        .setMessage("You can connect to most 5 people only.")
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                connectDataList.clear();
+                                connectCount = 0;
+                            }
+                        }).show();
+
+            } else if (msg.what == 2) {
+                build.setTitle("Connect Successful")
+                        .setMessage("Connect Successful")
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent();
+                                intent.setClass(getActivity(), Canvas.class);
+                                startActivity(intent);
+                            }
+                        }).show();
+            }
+        }
+    };
 
     SampleAdapter sampleAdapter = new SampleAdapter(mDataList);
 
@@ -80,35 +210,10 @@ public class MultiConnectionFragment extends ContentFragment implements AdapterV
         }
     };
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
-        Log.d("CY", "Create Friend list start");
-
-        // change xml layout to view
-        View v = inflater.inflate(R.layout.contentframe, container, false);
-        mListView = (ListView) v.findViewById(R.id.list_content);
-        mDataList.add(new ListData("user_id","online")); // test
-        mDataList.add(new ListData("user_id2","busy")); // test
-        mDataSource = new DataSource(getActivity());
-        mDrawableBuilder = TextDrawable.builder().rect();
-        bundle = getArguments();
-        getListData();
-
-        mListView.setAdapter(sampleAdapter);
-        mListView.setOnItemClickListener(this);
-        Log.d("CY", "Create Friend list end");
-        return v;
-    }
-
-    private void getListData() {
-        Thread thread = new Thread(mutiThread);
-        thread.start();
-    }
 
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         ListData item = (ListData) mListView.getItemAtPosition(position);
+
     }
 
     private static class ListData {
@@ -134,21 +239,13 @@ public class MultiConnectionFragment extends ContentFragment implements AdapterV
         private ImageView imageView;
         private TextView textView;
         private ImageView checkIcon;
-        private ImageView online;
-        private ImageView offline;
-        private ImageView busy;
 
         private ViewHolder(View view) {
             this.view = view;
 
             imageView = (ImageView) view.findViewById(R.id.imageView);
             checkIcon = (ImageView) view.findViewById(R.id.check_icon);
-
             textView = (TextView) view.findViewById(R.id.textView);
-
-            online = (ImageView) view.findViewById(R.id.online);
-            offline = (ImageView) view.findViewById(R.id.offline);
-            busy = (ImageView) view.findViewById(R.id.busy);
         }
     }
 
@@ -190,7 +287,6 @@ public class MultiConnectionFragment extends ContentFragment implements AdapterV
 
             // provide support for selected state
             updateCheckedState(holder, item);
-            updateItemState(holder, item);
             holder.imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -205,7 +301,7 @@ public class MultiConnectionFragment extends ContentFragment implements AdapterV
             return convertView;
         }
 
-        // ¤Ä¿ïª¬ºA
+        // ï¿½Ä¿ïª¬ï¿½A
         private void updateCheckedState(ViewHolder holder, ListData item) {
             holder.imageView.setImageDrawable(mDrawableBuilder.build(" ", 0xff616161));
             if (item.isChecked) {
@@ -214,30 +310,6 @@ public class MultiConnectionFragment extends ContentFragment implements AdapterV
             } else {
                 holder.view.setBackgroundColor(Color.TRANSPARENT);
                 holder.checkIcon.setVisibility(View.GONE);
-            }
-        }
-
-        // ¤W½uª¬ºA
-        private void updateItemState(ViewHolder holder, ListData item) {
-
-            switch (item.state){
-                case"online":
-                    holder.online.setVisibility(View.VISIBLE);
-                    holder.offline.setVisibility(View.GONE);
-                    holder.busy.setVisibility(View.GONE);
-                    break;
-                case"offline":
-                    holder.online.setVisibility(View.GONE);
-                    holder.offline.setVisibility(View.VISIBLE);
-                    holder.busy.setVisibility(View.GONE);
-                    break;
-                case"busy":
-                    holder.online.setVisibility(View.GONE);
-                    holder.offline.setVisibility(View.GONE);
-                    holder.busy.setVisibility(View.VISIBLE);
-                    break;
-                default:
-                    break;
             }
         }
 

@@ -1,9 +1,12 @@
 package com.example.painter;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Locale;
 
 import android.app.Activity;
@@ -14,6 +17,7 @@ import android.app.WallpaperManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
@@ -27,32 +31,74 @@ import android.graphics.Color;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.AsyncTask;
+
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.PaintDrawable;
+
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.Message;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
+
+import android.util.Base64;
+
 import android.view.Display;
 import android.view.KeyEvent;
+
+import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import db_connect.DBConnector;
+
 import painter.BrushPreset;
 import painter.ColorPickerDialog;
 import painter.FileSystem;
 import painter.PainterCanvas;
 import painter.PainterPreferences;
 import painter.PainterSettings;
+
+import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.PopupWindow;
+import android.widget.Toast;
+
+import android.widget.ImageButton;
+import android.widget.PopupWindow;
+import android.widget.Toast;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 
 public class Canvas extends ActionBarActivity {
 
@@ -96,6 +142,13 @@ public class Canvas extends ActionBarActivity {
     private boolean mOpenLastFile = true;
 
     private int mVolumeButtonsShortcuts;
+    private String ba1;
+    SessionManager session;
+    HashMap user;
+    ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+
+    Bitmap getBitmap;
+    boolean notInRoom = true;
 
     private class SaveTask extends AsyncTask<Void, Void, String> {
         private ProgressDialog dialog = ProgressDialog.show(Canvas.this,
@@ -181,7 +234,11 @@ public class Canvas extends ActionBarActivity {
 
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
+        session = new SessionManager(getApplicationContext());
+        user = session.getUserDetails();
+
         setContentView(R.layout.activity_canvas);
+
         mCanvas = (PainterCanvas) findViewById(R.id.canvas);
 
         try {
@@ -195,30 +252,29 @@ public class Canvas extends ActionBarActivity {
         loadSettings();
 
         mBrushSize = (SeekBar) findViewById(R.id.brush_size);
-        mBrushSize
-                .setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        mBrushSize.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
-                    public void onStopTrackingTouch(SeekBar seekBar) {
-                        if (seekBar.getProgress() > 0) {
-                            mCanvas.setPresetSize(seekBar.getProgress());
-                        }
-                    }
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                if (seekBar.getProgress() > 0) {
+                    mCanvas.setPresetSize(seekBar.getProgress());
+                }
+            }
 
-                    public void onStartTrackingTouch(SeekBar seekBar) {
-                        resetPresets();
-                    }
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                resetPresets();
+            }
 
-                    public void onProgressChanged(SeekBar seekBar,
-                                                  int progress, boolean fromUser) {
-                        if (progress > 0) {
-                            if (fromUser) {
-                                mCanvas.setPresetSize(seekBar.getProgress());
-                            }
-                        } else {
-                            mBrushSize.setProgress(1);
-                        }
+            public void onProgressChanged(SeekBar seekBar,
+                                          int progress, boolean fromUser) {
+                if (progress > 0) {
+                    if (fromUser) {
+                        mCanvas.setPresetSize(seekBar.getProgress());
                     }
-                });
+                } else {
+                    mBrushSize.setProgress(1);
+                }
+            }
+        });
 
         mBrushBlurRadius = (SeekBar) findViewById(R.id.brush_blur_radius);
         mBrushBlurRadius
@@ -280,7 +336,25 @@ public class Canvas extends ActionBarActivity {
 
         updateControls();
         setActivePreset(mCanvas.getCurrentPreset().type);
+
+//        Thread thread = new Thread(checkThread);
+//        thread.start();
     }
+
+    private Runnable checkThread = new Runnable() {
+        public void run() {
+            try {
+                int count = 0;
+                while (notInRoom) {
+                    Thread.sleep(3000);
+                    Log.d("CY_Test", "" + count);
+                    count++;
+                }
+            } catch (Exception e) {
+                Log.e("log_tag", e.toString());
+            }
+        }
+    };
 
     @Override
     protected void onResume() {
@@ -305,6 +379,87 @@ public class Canvas extends ActionBarActivity {
         mVolumeButtonsShortcuts = Integer.parseInt(preferences.getString(
                 getString(R.string.preferences_volume_shortcuts),
                 String.valueOf(SHORTCUTS_VOLUME_BRUSH_SIZE)));
+
+        ImageButton btn = (ImageButton) findViewById(R.id.settingbtn);
+        btn.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        getPopupWindow();
+                    }
+                }
+        );
+    }
+
+    private void getPopupWindow() {
+
+        LayoutInflater inflater = (LayoutInflater) Canvas.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View layout = inflater.inflate(R.layout.popup, null);
+        PopupWindow popupwindow = new PopupWindow(layout, 350, 300, true);
+        popupwindow.setTouchable(true);
+        popupwindow.setOutsideTouchable(true);
+        popupwindow.setFocusable(true);
+        popupwindow.setBackgroundDrawable(new BitmapDrawable());
+        popupwindow.update();
+
+        popupwindow.showAtLocation(layout, Gravity.CENTER, 0, 0);
+
+        popupwindow.setTouchInterceptor(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_OUTSIDE) {
+                    //popupwindow.dismiss();
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        ImageButton personalsettingBtn = (ImageButton) layout.findViewById(R.id.personalSettingBtn);
+        personalsettingBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(Canvas.this, PersonalSetting.class);
+                startActivity(intent);
+            }
+        });
+
+        ImageButton friendBtn = (ImageButton) layout.findViewById(R.id.friendListBtn);
+        friendBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            /*    EditText accountEdt;
+                accountEdt = (EditText) findViewById(R.id.accountEdit);
+                Intent intent = new Intent();
+                Bundle bundle=new Bundle(); //建立一個bundle實體，將intent裡的所有資訊放在裡面
+                bundle.putString("account", accountEdt.getText().toString());
+                intent.putExtras(bundle); //透過這我們將bundle附在intent上，隨著intent送出而送出
+              
+                intent.setClass(Canvas.this, FriendTest.class);
+                startActivity(intent);*/
+
+                Intent intent = new Intent();
+                intent.setClass(Canvas.this, FriendTest.class);
+                startActivity(intent);
+            }
+        });
+
+        ImageButton galleryBtn = (ImageButton) layout.findViewById(R.id.galleryBtn);
+        galleryBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                Bundle bundle = new Bundle();
+
+                bundle.putInt("state", 1);
+                intent.putExtras(bundle);
+
+                intent.setClass(Canvas.this, Gallery.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -322,9 +477,6 @@ public class Canvas extends ActionBarActivity {
             case R.id.menu_brush:
                 enterBrushSetup();
                 break;
-            case R.id.menu_save:
-                savePicture(ACTION_SAVE_AND_RETURN);
-                break;
             case R.id.menu_clear:
                 if (mCanvas.isChanged()) {
                     showDialog(R.id.dialog_clear);
@@ -341,14 +493,24 @@ public class Canvas extends ActionBarActivity {
             case R.id.menu_open:
                 open();
                 break;
-            case R.id.menu_undo:
-                mCanvas.undo();
-                break;
             case R.id.menu_preferences:
                 showPreferences();
                 break;
             case R.id.menu_set_wallpaper:
                 new SetWallpaperTask().execute();
+                break;
+            case R.id.SaveButton:
+                savePicture(ACTION_SAVE_AND_RETURN);
+                break;
+            case R.id.UndoButton:
+                mCanvas.undo();
+                break;
+            case R.id.clearBtn:
+                if (mCanvas.isChanged()) {
+                    showDialog(R.id.dialog_clear);
+                } else {
+                    clear();
+                }
                 break;
         }
         return true;
@@ -358,18 +520,18 @@ public class Canvas extends ActionBarActivity {
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
 
-        MenuItem undo = menu.findItem(R.id.menu_undo);
+        MenuItem undo = menu.findItem(R.id.UndoButton);
         if (mCanvas.canUndo()) {
-            undo.setTitle(R.string.menu_undo);
-            undo.setIcon(R.drawable.ic_menu_undo);
+//            undo.setTitle(R.string.menu_undo);
+//            undo.setIcon(R.drawable.ic_menu_undo);
             undo.setEnabled(true);
         } else if (mCanvas.canRedo()) {
-            undo.setTitle(R.string.menu_redo);
-            undo.setIcon(R.drawable.ic_menu_redo);
+//            undo.setTitle(R.string.menu_redo);
+//            undo.setIcon(R.drawable.ic_menu_redo);
             undo.setEnabled(true);
         } else {
-            undo.setTitle(R.string.menu_undo);
-            undo.setIcon(R.drawable.ic_menu_undo);
+//            undo.setTitle(R.string.menu_undo);
+//            undo.setIcon(R.drawable.ic_menu_undo);
             undo.setEnabled(false);
         }
         return true;
@@ -509,9 +671,7 @@ public class Canvas extends ActionBarActivity {
                                 Bitmap bitmap = null;
 
                                 try {
-                                    bitmap = BitmapFactory.decodeFile(picture
-                                            .getAbsolutePath());
-
+                                    bitmap = BitmapFactory.decodeFile(picture.getAbsolutePath());
                                     Bitmap.Config bitmapConfig = bitmap.getConfig();
                                     if (bitmapConfig != Bitmap.Config.ARGB_8888) {
                                         bitmap = null;
@@ -539,9 +699,9 @@ public class Canvas extends ActionBarActivity {
                                                             String.valueOf(BACKUP_OPENED_ONLY_FROM_OTHER)));
 
                                     String pictureName = null;
-
                                     switch (backupOption) {
                                         case BACKUP_OPENED_ONLY_FROM_OTHER:
+                                            Log.d("CY", "BACKUP_OPENED_ONLY_FROM_OTHER");
                                             if (!picture
                                                     .getParentFile()
                                                     .getName()
@@ -615,30 +775,121 @@ public class Canvas extends ActionBarActivity {
             if (new File(mSettings.lastPicture).exists()) {
                 savedBitmap = BitmapFactory.decodeFile(mSettings.lastPicture);
                 mIsNewFile = false;
+                mSettings.lastPicture = null;
             } else {
                 mSettings.lastPicture = null;
             }
         }
 
+        if (mSettings.downloadBitmap) {
+            byte[] decodedString = Base64.decode(mSettings.downloadBitmapSrc, Base64.DEFAULT);
+            savedBitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            Bitmap.Config bitmapConfig = savedBitmap.getConfig();
+        }
+        mSettings.downloadBitmap = false;
+        mSettings.downloadBitmapSrc = null;
         return savedBitmap;
     }
 
+    public void ToDoSomething(View v) {
+        switch (v.getId()) {
+            case R.id.SaveButton:
+                savePicture(ACTION_SAVE_AND_RETURN);
+                break;
+            case R.id.UndoButton:
+                mCanvas.undo();
+                break;
+            case R.id.clearBtn:
+                if (mCanvas.isChanged()) {
+                    showDialog(R.id.dialog_clear);
+                } else {
+                    clear();
+                }
+                break;
+            case R.id.uploadBtn:
+                String pictureName = getUniquePictureName(getSaveDir());
+                saveBitmap(pictureName);
+
+                Bitmap bm = BitmapFactory.decodeFile(pictureName);
+                ByteArrayOutputStream bao = new ByteArrayOutputStream();
+                bm.compress(Bitmap.CompressFormat.JPEG, 100, bao);
+                byte[] ba = bao.toByteArray();
+
+                ba1 = Base64.encodeToString(ba, Base64.DEFAULT);
+                nameValuePairs.add(new BasicNameValuePair("base64", ba1));
+                nameValuePairs.add(new BasicNameValuePair("ImageName", pictureName));
+                nameValuePairs.add(new BasicNameValuePair("Account", String.format("'%s'", (String) user.get(SessionManager.KEY_EMAIL))));
+
+                Thread thread = new Thread(uploadThread);
+                thread.start();
+
+                break;
+            case R.id.keepdrawing:
+                Log.d("CY", "keepdrawing");
+                downloadPic();
+                break;
+        }
+    }
+
+    private Runnable uploadThread = new Runnable() {
+        public void run() {
+            try {
+                HttpClient httpClient = new DefaultHttpClient();
+                HttpPost httpPost = new HttpPost("http://140.115.87.44/android_connect/uploadphoto.php");
+                httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+                HttpResponse response = httpClient.execute(httpPost);
+                String st = EntityUtils.toString(response.getEntity());
+                Log.d("Result", "" + st);
+            } catch (Exception e) {
+                Log.e("log_tag", e.toString());
+            }
+        }
+    };
+
     public void setPreset(View v) {
         switch (v.getId()) {
-            case R.id.preset_pencil:
+            case R.id.Pencil:
                 mCanvas.setPreset(new BrushPreset(BrushPreset.PENCIL, mCanvas
                         .getCurrentPreset().color));
                 break;
-            case R.id.preset_brush:
+            case R.id.Brush:
                 mCanvas.setPreset(new BrushPreset(BrushPreset.BRUSH, mCanvas
                         .getCurrentPreset().color));
                 break;
-            case R.id.preset_marker:
+            case R.id.Marker:
                 mCanvas.setPreset(new BrushPreset(BrushPreset.MARKER, mCanvas
                         .getCurrentPreset().color));
                 break;
-            case R.id.preset_pen:
-                mCanvas.setPreset(new BrushPreset(BrushPreset.PEN, mCanvas
+            case R.id.Eraser:
+                mCanvas.setPreset(new BrushPreset(BrushPreset.ERASER, mCanvas
+                        .getCurrentPreset().color));
+                break;
+            case R.id.Black:
+                mCanvas.setPreset(new BrushPreset(BrushPreset.BLACK, mCanvas
+                        .getCurrentPreset().color));
+                break;
+            case R.id.Red:
+                mCanvas.setPreset(new BrushPreset(BrushPreset.RED, mCanvas
+                        .getCurrentPreset().color));
+                break;
+            case R.id.Orange:
+                mCanvas.setPreset(new BrushPreset(BrushPreset.ORANGE, mCanvas
+                        .getCurrentPreset().color));
+                break;
+            case R.id.Yellow:
+                mCanvas.setPreset(new BrushPreset(BrushPreset.YELLOW, mCanvas
+                        .getCurrentPreset().color));
+                break;
+            case R.id.Green:
+                mCanvas.setPreset(new BrushPreset(BrushPreset.GREEN, mCanvas
+                        .getCurrentPreset().color));
+                break;
+            case R.id.Blue:
+                mCanvas.setPreset(new BrushPreset(BrushPreset.BLUE, mCanvas
+                        .getCurrentPreset().color));
+                break;
+            case R.id.Purple:
+                mCanvas.setPreset(new BrushPreset(BrushPreset.PURPLE, mCanvas
                         .getCurrentPreset().color));
                 break;
         }
@@ -934,7 +1185,7 @@ public class Canvas extends ActionBarActivity {
     private void setActivePreset(int preset) {
         if (preset > 0 && preset != BrushPreset.CUSTOM) {
             LinearLayout wrapper = (LinearLayout) mPresetsBar.getChildAt(0);
-            highlightActivePreset(wrapper.getChildAt(preset - 1));
+            //highlightActivePreset(wrapper.getChildAt(preset - 1));
         }
     }
 
@@ -1024,7 +1275,7 @@ public class Canvas extends ActionBarActivity {
                 getString(R.string.settings_orientation),
                 ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        if (getRequestedOrientation() != mSettings.orientation) {
+        if (getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
             setRequestedOrientation(mSettings.orientation);
         }
 
@@ -1032,7 +1283,7 @@ public class Canvas extends ActionBarActivity {
                 getString(R.string.settings_last_picture), null);
 
         int type = settings.getInt(getString(R.string.settings_brush_type),
-                BrushPreset.PEN);
+                BrushPreset.PENCIL);
 
         if (type == BrushPreset.CUSTOM) {
             mSettings.preset = new BrushPreset(settings.getFloat(
@@ -1052,6 +1303,10 @@ public class Canvas extends ActionBarActivity {
 
         mSettings.forceOpenFile = settings.getBoolean(
                 getString(R.string.settings_force_open_file), false);
+        mSettings.downloadBitmap = settings.getBoolean(
+                getString(R.string.settings_downloadBitmap), false);
+        mSettings.downloadBitmapSrc = settings.getString(
+                getString(R.string.settings_downloadBitmapSrc), null);
     }
 
     private String getSaveDir() {
@@ -1106,7 +1361,10 @@ public class Canvas extends ActionBarActivity {
                 mSettings.preset.type);
         editor.putBoolean(getString(R.string.settings_force_open_file),
                 mSettings.forceOpenFile);
-
+        editor.putBoolean(getString(R.string.settings_downloadBitmap),
+                mSettings.downloadBitmap);
+        editor.putString(getString(R.string.settings_downloadBitmapSrc),
+                mSettings.downloadBitmapSrc);
         editor.commit();
     }
 
@@ -1115,11 +1373,44 @@ public class Canvas extends ActionBarActivity {
         deleteFile(SETTINGS_STORAGE);
     }
 
+    private void downloadPic() {
+        Log.d("CY", "downloadPic");
+        if (!isStorageAvailable()) {
+            return;
+        }
+        if (mCanvas.isChanged()) {
+            showDialog(R.id.dialog_open);
+        } else {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        String user_id = (String) user.get(SessionManager.KEY_EMAIL);
+                        DBConnector dbConnector = new DBConnector("connect1.php");
+                        String result = dbConnector.executeQuery(String.format("SELECT * FROM gallerylist where gallery_id='%s'", user_id));
+                        Log.d("Query_Result", result);
+
+                        JSONArray jsonArray = new JSONArray(result);
+                        JSONObject jsonData = jsonArray.getJSONObject(0);
+                        Log.d("CY", jsonData.getString("image"));
+                        mSettings.downloadBitmapSrc = jsonData.getString("image");
+                        mSettings.downloadBitmap = true;
+                        saveSettings();
+                        restart();
+
+                    } catch (Exception e) {
+                        Log.e("log_tag", e.toString());
+                    }
+                }
+            }).start();
+        }
+    }
+
+
     private void open() {
         if (!isStorageAvailable()) {
             return;
         }
-
         mSettings.forceOpenFile = true;
 
         if (mCanvas.isChanged()) {

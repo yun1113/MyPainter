@@ -6,6 +6,7 @@ import android.graphics.Color;
 public class BrushPreset {
 	public float size = 2;
 	public int color = Color.BLACK;
+	public int color2 = Color.BLUE;
 	public Blur blurStyle = null;
 	public int blurRadius = 0;
 	public int type = CUSTOM;
@@ -13,34 +14,77 @@ public class BrushPreset {
 	public static final int PENCIL = 1;
 	public static final int BRUSH = 2;
 	public static final int MARKER = 3;
-	public static final int PEN = 4;
+	public static final int ERASER = 4;
 	public static final int CUSTOM = 5;
+	public static final int BLACK = 6;
+	public static final int RED = 7;
+	public static final int ORANGE = 8;
+	public static final int YELLOW = 9;
+	public static final int GREEN = 10;
+	public static final int BLUE = 11;
+	public static final int PURPLE = 12;
+	public static final int PEN = 13;
 
 	public static final int BLUR_NORMAL = 1;
 	public static final int BLUR_SOLID = 2;
 	public static final int BLUR_OUTER = 3;
 	public static final int BLUR_INNER = 4;
 
-	public BrushPreset() {
-	}
 
 	public BrushPreset(int type, int color) {
 		switch (type) {
-		case PENCIL:
-			set(2, color, Blur.INNER, 10);
-			break;
-		case BRUSH:
-			set(15, color, Blur.NORMAL, 18);
-			break;
-		case MARKER:
-			set(20, color);
-			break;
-		case PEN:
-			set(2, color);
-			break;
-		case CUSTOM:
-			setColor(color);
-			break;
+			case PENCIL:
+				if(this.color==0xFFFFFFFF){
+					this.color=this.color2;
+				}
+				set(2, color, Blur.INNER, 10);
+				break;
+			case BRUSH:
+				if(this.color==0xFFFFFFFF){
+					this.color=this.color2;
+				}
+				set(15, color, Blur.NORMAL, 18);
+				break;
+			case MARKER:
+				if(this.color==0xFFFFFFFF){
+					this.color=this.color2;
+				}
+				set(20, color);
+				break;
+			case PEN:
+				if(this.color==0xFFFFFFFF){
+					this.color=this.color2;
+				}
+				set(20, color);
+				break;
+			case ERASER:
+				this.color2=this.color;
+				set(10, 0xFFFFFFFF);
+				break;
+			case CUSTOM:
+				setColor(color);
+				break;
+			case BLACK:
+				setColor(0xFF000000);
+				break;
+			case RED:
+				setColor(0xFFFF0000);
+				break;
+			case ORANGE:
+				setColor(0xFFFFA500);
+				break;
+			case YELLOW:
+				setColor(0xFFFFFF00);
+				break;
+			case GREEN:
+				setColor(0xFF008000);
+				break;
+			case BLUE:
+				setColor(0xFF0000FF);
+				break;
+			case PURPLE:
+				setColor(0xFF8b008b);
+				break;
 		}
 		setType(type);
 	}
@@ -130,21 +174,21 @@ public class BrushPreset {
 		}
 
 		switch (blurStyle) {
-		case BLUR_NORMAL:
-			this.blurStyle = Blur.NORMAL;
-			break;
-		case BLUR_SOLID:
-			this.blurStyle = Blur.SOLID;
-			break;
-		case BLUR_OUTER:
-			this.blurStyle = Blur.OUTER;
-			break;
-		case BLUR_INNER:
-			this.blurStyle = Blur.INNER;
-			break;
-		default:
-			this.blurStyle = null;
-			break;
+			case BLUR_NORMAL:
+				this.blurStyle = Blur.NORMAL;
+				break;
+			case BLUR_SOLID:
+				this.blurStyle = Blur.SOLID;
+				break;
+			case BLUR_OUTER:
+				this.blurStyle = Blur.OUTER;
+				break;
+			case BLUR_INNER:
+				this.blurStyle = Blur.INNER;
+				break;
+			default:
+				this.blurStyle = null;
+				break;
 		}
 		this.blurRadius = blurRadius;
 	}

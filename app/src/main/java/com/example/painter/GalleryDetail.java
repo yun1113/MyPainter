@@ -16,10 +16,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.support.v7.widget.Toolbar;
+import android.widget.TextView;
+
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.HashMap;
 
 import db_connect.DBConnector;
 import gallerymaterial.BaseActivity;
@@ -27,13 +31,20 @@ import gallerymaterial.BaseActivity;
 public class GalleryDetail extends BaseActivity {
 
     public static final String EXTRA_IMAGE = "DetailActivity:image";
+    SessionManager session;
+    HashMap user;
 
-    public static void launch(FragmentActivity activity, View transitionView, int index) {
+    public static void launch(FragmentActivity activity, View transitionView, int index, Bundle bundle, int page) {
         ActivityOptionsCompat options =
                 ActivityOptionsCompat.makeSceneTransitionAnimation(
                         activity, transitionView, EXTRA_IMAGE);
+
         Intent intent = new Intent(activity, GalleryDetail.class);
         intent.putExtra(EXTRA_IMAGE, index);
+        intent.putExtra("bundle", bundle);
+        Log.d("CY_GID", bundle.getString("gallery_id"));
+        intent.putExtra("G_id", bundle.getString("gallery_id"));
+        intent.putExtra("page", page);
         ActivityCompat.startActivity(activity, intent, options.toBundle());
     }
 
@@ -41,12 +52,33 @@ public class GalleryDetail extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
-        //toolbar.setNavigationIcon(R.drawable.ic_launcher);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.undo));
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //What to do on back clicked
+                Back();
+            }
+        });
+
+        session = new SessionManager(getApplicationContext());
+        user = session.getUserDetails();
 
         ImageView image = (ImageView) findViewById(R.id.image);
-        new ImageDownloadTask(image,getIntent().getIntExtra(EXTRA_IMAGE,0)).execute();
+        TextView text = (TextView) findViewById(R.id.text);
+        new ImageDownloadTask(image, text, getIntent().getIntExtra(EXTRA_IMAGE, 0), getIntent().getStringExtra("G_id")).execute();
+    }
+
+    void Back() {
+
+        Bundle bundle = getIntent().getBundleExtra("bundle");
+
+        Intent intent = new Intent();
+        intent.putExtras(bundle);
+        intent.setClass(this, Gallery.class);
+        startActivity(intent);
     }
 
     @Override
@@ -75,12 +107,16 @@ public class GalleryDetail extends BaseActivity {
 
     private class ImageDownloadTask extends AsyncTask<String, Void, Bitmap> {
         ImageView imageView;
-        int index ;
+        TextView text;
+        int index;
+        String gallery_id;
 
         // Constructor
-        public ImageDownloadTask(ImageView imageView, int i) {
+        public ImageDownloadTask(ImageView imageView, TextView text, int index, String gallery_id) {
             this.imageView = imageView;
-            index = i;
+            this.text = text;
+            this.index = index;
+            this.gallery_id = gallery_id;
         }
 
         @Override
@@ -93,8 +129,13 @@ public class GalleryDetail extends BaseActivity {
         protected Bitmap doInBackground(String... addresses) {
             Bitmap bitmap = null;
             try {
-                String result = DBConnector.executeQuery("SELECT * FROM test1");
-                Log.d("Test", result);
+                DBConnector dbConnector = new DBConnector("connect1.php");
+                String result = "";
+                if (getIntent().getIntExtra("page", 0) == 0) {
+                    result = dbConnector.executeQuery(String.format("SELECT * FROM gallerylist where gallery_id = '%s'", gallery_id));
+                } else {
+                    result = dbConnector.executeQuery(String.format("SELECT * FROM gallery_c_list where user_id = '%s'", gallery_id));
+                }
 
                 JSONArray jsonArray = new JSONArray(result);
                 //for (int i = 0; i < jsonArray.length(); i++) {
@@ -102,7 +143,7 @@ public class GalleryDetail extends BaseActivity {
 
                 byte[] decodedString = Base64.decode(jsonData.getString("image"), Base64.DEFAULT);
                 bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-
+                text.setText(jsonData.getString("name"));
                 //}
 
             } catch (Exception e) {

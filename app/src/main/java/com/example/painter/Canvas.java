@@ -147,8 +147,7 @@ public class Canvas extends ActionBarActivity {
     HashMap user;
     ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 
-    Bitmap getBitmap;
-    boolean notInRoom = true;
+    boolean check = true;
 
     private class SaveTask extends AsyncTask<Void, Void, String> {
         private ProgressDialog dialog = ProgressDialog.show(Canvas.this,
@@ -337,24 +336,53 @@ public class Canvas extends ActionBarActivity {
         updateControls();
         setActivePreset(mCanvas.getCurrentPreset().type);
 
-//        Thread thread = new Thread(checkThread);
-//        thread.start();
+        Thread thread = new Thread(checkThread);
+        thread.start();
     }
 
     private Runnable checkThread = new Runnable() {
         public void run() {
             try {
-                int count = 0;
-                while (notInRoom) {
-                    Thread.sleep(3000);
-                    Log.d("CY_Test", "" + count);
-                    count++;
+                while (check) {
+                    Log.d("CY", "Thread start");
+                    Thread.sleep(10000);
+                    String user_name = (String) user.get(SessionManager.KEY_NAME);
+                    DBConnector dbConnector = new DBConnector("connect.php");
+                    String result = dbConnector.executeQuery(String.format("SELECT * FROM `pass2` WHERE next='%s'", user_name));
+                    Log.d("CY", result);
+
+                    if (new JSONObject(result).getInt("response") == 1) {
+                        // user in list
+                        Log.d("CY", "user in list");
+                        Message msg = messageHandler.obtainMessage();
+                        msg.what = 1;
+                        msg.sendToTarget();
+                    }
                 }
             } catch (Exception e) {
                 Log.e("log_tag", e.toString());
             }
         }
     };
+
+    android.os.Handler messageHandler = new android.os.Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            // TODO Auto-generated method stub
+            super.handleMessage(msg);
+            Log.d("CY", "handler");
+            AlertDialog.Builder build = new AlertDialog.Builder(Canvas.this);
+            build.setTitle("New Paint Request")
+                    .setMessage("Your friend send you a paint request.")
+                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            downloadPic();
+                        }
+                    }).show();
+        }
+    };
+
 
     @Override
     protected void onResume() {
@@ -784,7 +812,7 @@ public class Canvas extends ActionBarActivity {
         if (mSettings.downloadBitmap) {
             byte[] decodedString = Base64.decode(mSettings.downloadBitmapSrc, Base64.DEFAULT);
             savedBitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-            Bitmap.Config bitmapConfig = savedBitmap.getConfig();
+            //Bitmap.Config bitmapConfig = savedBitmap.getConfig();
         }
         mSettings.downloadBitmap = false;
         mSettings.downloadBitmapSrc = null;
@@ -805,6 +833,9 @@ public class Canvas extends ActionBarActivity {
                 } else {
                     clear();
                 }
+                break;
+            case R.id.shareBtn:
+                share();
                 break;
             case R.id.uploadBtn:
                 String pictureName = getUniquePictureName(getSaveDir());
@@ -1385,16 +1416,24 @@ public class Canvas extends ActionBarActivity {
                 @Override
                 public void run() {
                     try {
-                        String user_id = (String) user.get(SessionManager.KEY_EMAIL);
+                        String user_name = (String) user.get(SessionManager.KEY_NAME);
                         DBConnector dbConnector = new DBConnector("connect1.php");
-                        String result = dbConnector.executeQuery(String.format("SELECT * FROM gallerylist where gallery_id='%s'", user_id));
+                        String result = dbConnector.executeQuery(String.format("SELECT * FROM `pass2` WHERE next='%s'", user_name));
                         Log.d("Query_Result", result);
+
+                        DBConnector dbConnector2 = new DBConnector("insert_db.php");
+                        String result2 = dbConnector2.executeQuery(String.format("DELETE FROM `pass2` WHERE next='%s'", user_name));
+                        Log.d("Query_Result2", result2);
 
                         JSONArray jsonArray = new JSONArray(result);
                         JSONObject jsonData = jsonArray.getJSONObject(0);
                         Log.d("CY", jsonData.getString("image"));
                         mSettings.downloadBitmapSrc = jsonData.getString("image");
                         mSettings.downloadBitmap = true;
+
+                        check = false;
+                        Thread.sleep(10000);
+
                         saveSettings();
                         restart();
 

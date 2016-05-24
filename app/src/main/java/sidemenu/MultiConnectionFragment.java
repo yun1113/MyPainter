@@ -1,4 +1,4 @@
-package sidemenu;
+﻿package sidemenu;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -48,7 +48,8 @@ public class MultiConnectionFragment extends ContentFragment implements AdapterV
     private int connectCount = 0;
     final int MAX_CONNECT = 4;
 
-    private String user_id;
+    private String user_id, user_name;
+
     SessionManager session;
     HashMap user;
     // declare the color generator and drawable builder
@@ -73,6 +74,7 @@ public class MultiConnectionFragment extends ContentFragment implements AdapterV
         session = new SessionManager(getActivity().getApplicationContext());
         user = session.getUserDetails();
         user_id = (String) user.get(SessionManager.KEY_EMAIL);
+        user_name = (String) user.get(SessionManager.KEY_NAME);
 
         mListView.setAdapter(sampleAdapter);
         mListView.setOnItemClickListener(this);
@@ -80,6 +82,19 @@ public class MultiConnectionFragment extends ContentFragment implements AdapterV
         mConnectBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
+
+
+//                for (int i = 0; i < connectDataList.size(); i++) {
+//                    Log.d("CY" + i, connectDataList.get(i).data);
+//                }
+//
+//                for (int i = 0; i < mDataList.size(); i++) {
+//                    if (mDataList.get(i).isChecked) {
+//                        connectCount++;
+//                        connectDataList.add(mDataList.get(i));
+//                    }
+//                }
+
                 for (int i = 0; i < mDataList.size(); i++) {
                     if (mDataList.get(i).isChecked) {
                         connectCount++;
@@ -140,6 +155,15 @@ public class MultiConnectionFragment extends ContentFragment implements AdapterV
                 DBConnector dbConnector = new DBConnector("insert_db.php");
                 String[] user = new String[MAX_CONNECT];
                 for (int i = 0; i < MAX_CONNECT; i++) {
+                    if (i < connectCount) {
+                        user[i] = connectDataList.get(i).data;
+                        dbConnector.executeQuery(String.format("UPDATE friend_list SET friend_status='busy' WHERE friend_id = '%s'", user[i]));
+                    } else
+                        user[i] = "";
+                }
+                dbConnector.executeQuery(String.format("UPDATE friend_list SET friend_status='busy' WHERE friend_id = '%s'", user_id));
+                String result = dbConnector.executeQuery(String.format("INSERT INTO nowconnect(user_1,user_2,user_3,user_4,user_5)" +
+                        " VALUES ('%s','%s','%s','%s','%s')", user_name, user[0], user[1], user[2], user[3]));
                     if (i < connectCount){
                         user[i] = connectDataList.get(i).data;
                         dbConnector.executeQuery(String.format("UPDATE friend_list SET friend_status='busy' WHERE friend_id = '%s'",user[i]));
@@ -307,9 +331,15 @@ public class MultiConnectionFragment extends ContentFragment implements AdapterV
             if (item.isChecked) {
                 holder.view.setBackgroundColor(HIGHLIGHT_COLOR);
                 holder.checkIcon.setVisibility(View.VISIBLE);
+
+                connectCount++;
+                connectDataList.add(item);
             } else {
                 holder.view.setBackgroundColor(Color.TRANSPARENT);
                 holder.checkIcon.setVisibility(View.GONE);
+
+                connectCount--;
+                connectDataList.remove(item);
             }
         }
 

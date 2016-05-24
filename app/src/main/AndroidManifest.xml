@@ -46,22 +46,22 @@
             android:name=".PersonalSetting"
             android:label="@string/title_activity_personal_setting"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".Gallery"
-            android:label="@string/title_activity_gallery"
-            android:screenOrientation="portrait" />
+
         <activity
             android:name=".Sign_up"
             android:label="@string/title_activity_sign_up"
             android:screenOrientation="portrait" />
+
         <activity
-            android:name=".Friends"
-            android:label="@string/title_activity_friends"
+            android:name=".Gallery"
+            android:label="@string/title_activity_gallery"
             android:screenOrientation="portrait" />
+
         <activity
             android:name=".Canvas"
             android:label="@string/title_activity_canvas"
             android:screenOrientation="landscape" />
+
         <!--<activity-->
             <!--android:name=".Gallery"-->
             <!--android:label="@string/title_activity_gallery"-->
@@ -76,6 +76,8 @@
             android:parentActivityName=".Gallery" />
         <activity
             android:name=".FriendTest"
+            android:label="@string/title_activity_friend_test"></activity>
+
             android:label="@string/title_activity_friend_test"
             android:parentActivityName=".Friends" />
         <activity
@@ -83,5 +85,7 @@
             android:label="@string/title_activity_frame" />
         <!--</activity>-->
             <!--android:label="@string/title_activity_friend_test"></activity>-->
+
     </application>
+
 </manifest>

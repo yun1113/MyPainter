@@ -181,6 +181,9 @@
     <!--<string name="title_activity_test">Test</string>-->
     <!--&lt;!&ndash; Pretty Painter End&ndash;&gt;-->
 
+  
+
+
 
     <!-- menu -->
     <string name="menu_brush">Brush</string>
@@ -317,6 +320,7 @@
     <string name="title_activity_test">Test</string>
     <!-- Pretty Painter End-->
 
+
     <!-- HomeScreen Menu-->
     <string name="home_menu_challenge">出題</string>
     <string name="home_menu_guess">猜題</string>
@@ -328,6 +332,5 @@
     <!-- HomeScreen Menu END-->
 
     <string name="pass_done">接力完成!</string>
-
 
 </resources>
